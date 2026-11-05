@@ -17,20 +17,8 @@ Es una copia independiente de la plataforma de Open Fight Latam (MMA), adaptada 
 
 ### 2. Obtener el proyecto
 
-**Si tienes el archivo `showbox.bundle`** (repositorio git completo, con su historial):
-
 ```bash
-git clone showbox.bundle showbox
-```
-
-```bash
-cd showbox
-```
-
-**Si ya está en GitHub** (ver «Subirlo a tu GitHub» más abajo):
-
-```bash
-git clone https://github.com/TU-USUARIO/showbox.git
+git clone https://github.com/ThomasTg7/showbox.git
 ```
 
 ```bash
@@ -77,23 +65,6 @@ pnpm dev --port 3002
 El seed carga datos de **ejemplo** (boxeadores y veladas ficticias en Quito, la próxima a unas 3 semanas de la fecha en que lo corres) para que todas las pantallas tengan contenido. Para empezar con la base vacía, no corras `pnpm db:seed`.
 
 Para apagar: `Ctrl + C` en la terminal de `pnpm dev` y luego `docker compose down` (los datos se conservan; `docker compose down -v` los borra).
-
-### Subirlo a tu GitHub
-
-1. En <https://github.com/new> crea un repositorio vacío llamado `showbox` (privado, **sin** README ni .gitignore).
-2. Dentro de la carpeta del proyecto (la que clonaste del `.bundle`):
-
-```bash
-git remote remove origin
-```
-
-```bash
-git remote add origin https://github.com/TU-USUARIO/showbox.git
-```
-
-```bash
-git push -u origin main
-```
 
 ### Problemas comunes
 
