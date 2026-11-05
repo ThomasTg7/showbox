@@ -145,7 +145,7 @@ function post(overrides: Partial<PostDTO> = {}): PostDTO {
   return {
     id: "p1",
     slug: "pérez-gana",
-    title: 'Cevallos gana por "sumisión"',
+    title: 'Cevallos gana por "nocaut"',
     excerpt: "Crónica de la noche.",
     category: { slug: "resultados", name: "Resultados" },
     featured: false,
@@ -358,7 +358,7 @@ describe("articleJsonLd", () => {
     expect(data).toMatchObject({
       "@context": "https://schema.org",
       "@type": "NewsArticle",
-      headline: 'Cevallos gana por "sumisión"',
+      headline: 'Cevallos gana por "nocaut"',
       description: "Crónica de la noche.",
       datePublished: "2031-05-11T05:00:00.000Z",
       dateModified: "2031-05-12T10:00:00.000Z",
