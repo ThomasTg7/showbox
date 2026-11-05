@@ -1,0 +1,14 @@
+.git/
+.claude/
+.env*
+.superpowers/
+.storage/
+.next*/
+node_modules/
+deploy/backups/
+*.log
+coverage/
+test-results/
+playwright-report/
+blob-report/
+.lighthouseci/

@@ -1,0 +1,205 @@
+/* ShowBox's fight-night surfaces, distinct from the administration workspace. */
+.sb-site {
+  --radius: 0px;
+  --sb-gradient-red: #FF1226;
+}
+
+.sb-site a:focus-visible,
+.sb-site button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 5px;
+}
+
+.sb-header {
+  border-top: 3px solid var(--color-brand-bright);
+}
+
+/* Titulares de acento: el rojo del logo, con un leve degradado como el brillo de los afiches. */
+.sb-site .sb-gradient-text,
+.sb-site .text-accent-bright:not(svg) {
+  color: transparent;
+  background-image: linear-gradient(180deg, #ff3b47 0%, var(--color-brand-bright) 55%, #c20d1a 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.sb-site .sb-gradient-text svg,
+.sb-site .text-accent-bright svg { color: var(--color-brand-bright); }
+
+/* «SHOW» del logo: blanco que se apaga hacia un gris plata. */
+.sb-chrome-text {
+  color: transparent;
+  background-image: linear-gradient(180deg, #fff 0%, #fff 45%, #bdbdbd 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.sb-site .sb-gradient-button {
+  background-image: linear-gradient(180deg, var(--color-brand-bright), var(--color-brand-press));
+  color: white;
+}
+
+@media (forced-colors: active) {
+  .sb-site .sb-gradient-text,
+  .sb-chrome-text,
+  .sb-site .text-accent-bright:not(svg) { color: LinkText; background-image: none; }
+}
+
+.sb-nav-link {
+  position: relative;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.sb-nav-link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: var(--color-brand-bright);
+  transform: scaleX(0) skewX(-20deg);
+  transform-origin: left;
+  transition: transform 220ms var(--ease-sb);
+}
+
+.sb-nav-link:hover::after,
+.sb-nav-link[aria-current="page"]::after {
+  transform: scaleX(1) skewX(-20deg);
+}
+
+.sb-hero {
+  background: #000;
+}
+
+.sb-hero-image { object-position: var(--hero-desktop-position); }
+
+@media (max-width: 767px) {
+  .sb-hero-image { object-position: var(--hero-mobile-position); }
+}
+
+.sb-hero-pulse {
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 18%, rgba(255, 220, 200, .10), transparent 70%),
+    radial-gradient(ellipse at 80% 45%, rgba(142, 27, 23, .45), transparent 62%),
+    radial-gradient(ellipse at 15% 70%, rgba(142, 27, 23, .35), transparent 60%);
+}
+
+.sb-hero-rule {
+  height: 4px;
+  width: 72px;
+  background: var(--color-brand-bright);
+  transform: skewX(-20deg);
+}
+
+/* ─── Escenario de afiche: humo, focos y grano ─────────────────────────────────────────────── */
+
+.sb-smoke {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255, 235, 220, .09), transparent 70%),
+    radial-gradient(ellipse 60% 70% at 85% 35%, rgba(142, 27, 23, .55), transparent 70%),
+    radial-gradient(ellipse 55% 60% at 10% 60%, rgba(110, 18, 16, .5), transparent 70%),
+    radial-gradient(ellipse 90% 60% at 50% 100%, #000 30%, transparent 80%),
+    #0a0605;
+}
+
+/* Hileras de focos del techo de la arena (como los de los afiches). */
+.sb-spotlights {
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 246, 230, .95) 0 1.5px, rgba(255, 220, 180, .35) 2.5px, transparent 7px),
+    radial-gradient(circle at 50% 50%, rgba(255, 246, 230, .8) 0 1px, rgba(255, 220, 180, .25) 2px, transparent 6px);
+  background-size: 74px 120px, 46px 90px;
+  background-position: 12px 18%, 30px 52%;
+  background-repeat: repeat-x;
+  -webkit-mask-image: radial-gradient(ellipse 60% 100% at 50% 0%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 100% at 50% 0%, #000 30%, transparent 75%);
+  animation: sb-flicker 5s ease-in-out infinite;
+}
+
+/* Grano de película de los afiches: ruido SVG fijo, sin peso de imagen. */
+.sb-grain {
+  opacity: .16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Rótulo de afiche: caja roja con letras muy espaciadas («K L E B E R»). */
+.sb-label {
+  display: inline-block;
+  background: var(--color-brand-ember);
+  color: #fff;
+  font-family: var(--font-cond);
+  font-variation-settings: "wdth" 100;
+  font-weight: 800;
+  letter-spacing: .5em;
+  padding: .3em .2em .3em .7em;
+  text-transform: uppercase;
+}
+
+/* Fecha de afiche: condensada, cursiva y pesada («SÁBADO - 14 - NOVIEMBRE»). */
+.sb-poster-date {
+  font-family: var(--font-cond);
+  font-style: italic;
+  font-variation-settings: "wdth" 62, "wght" 900;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+
+/* Línea espaciada del recinto («Q U O R U M  P A S E O …»). */
+.sb-spaced {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+}
+
+.sb-photo-card {
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sb-photo-card img {
+  transition: transform 400ms var(--ease-sb);
+}
+
+.sb-photo-card:hover img {
+  transform: scale(1.03);
+}
+
+.sb-editorial {
+  color: #000;
+  background: #fff;
+}
+
+.sb-editorial a:focus-visible,
+.sb-editorial button:focus-visible {
+  outline-color: var(--color-brand);
+}
+
+.sb-editorial [data-slot="post-card-meta"] {
+  color: var(--color-brand-press);
+}
+
+.sb-editorial article {
+  background: #f4f2f1;
+}
+
+.sb-editorial article h3,
+.sb-editorial article h2 {
+  color: #000;
+}
+
+.sb-editorial article [data-slot="post-card-excerpt"],
+.sb-editorial article [data-slot="post-card-meta"] span {
+  color: #5f5856;
+}
+
+.sb-editorial [data-slot="post-card-body"] {
+  background: #f4f2f1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-spotlights { animation: none; }
+}

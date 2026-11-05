@@ -1,0 +1,181 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Celular o tablet con poca altura visible (p. ej. un iPhone con las barras de Safari): la ficha compacta su texto. */
+@custom-variant short (@media (max-width: 1023.98px) and (max-height: 760px));
+
+@theme {
+  --color-bg: #000000;
+  --color-surface: #121010;
+  --color-surface-2: #1d1817;
+  --color-border: #3a302e;
+  --color-text: #ffffff;
+  /* Rojo ShowBox: el del logo (#FF1226) para texto y detalles sobre negro; uno apenas más profundo para fondos con texto blanco (AA). */
+  --color-brand: #E3101F;
+  --color-brand-bright: #FF1226;
+  --color-accent-bright: #FF3B47;
+  /* Rojo ladrillo de las barras y rótulos de los afiches («KLEBER», «8-1-1»). */
+  --color-brand-ember: #8E1B17;
+  --color-brand-hover: #c20d1a;
+  --color-brand-press: #a10b16;
+  --color-silver: #c9c9c9;
+  --color-red: #E3101F;
+  --color-blue: #1e6fd9;
+
+  --font-display: var(--font-archivo), "Arial Black", Impact, sans-serif;
+  --font-display--font-variation-settings: "wdth" 108, "wght" 900;
+  --font-cond: var(--font-archivo), "Arial Narrow", sans-serif;
+  --font-cond--font-variation-settings: "wdth" 78;
+  --font-body: var(--font-montserrat), system-ui, sans-serif;
+
+  --ease-sb: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/*
+ * Tokens semánticos de shadcn/ui, mapeados a la paleta ShowBox.
+ * El panel admin es siempre oscuro (no hay modo claro), así que se
+ * definen una sola vez en :root en vez de duplicarlos bajo `.dark`.
+ * `--radius: 0` mantiene los bordes rectos de la identidad visual en
+ * todos los componentes de shadcn (tablas, diálogos, inputs, etc.).
+ * `--muted-foreground`/`--chart-2` usan el gris de marca (#a8a2a0) en
+ * hexadecimal directo, no `var(--color-muted)`: ese nombre ya lo genera
+ * Tailwind a partir de `--muted` (abajo) para todo el ecosistema shadcn
+ * (`bg-muted`, etc.); reusarlo como color de marca chocaba con eso.
+ */
+:root {
+  color-scheme: dark;
+
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-surface-2);
+  --popover-foreground: var(--color-text);
+  --primary: var(--color-brand);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-surface-2);
+  --secondary-foreground: var(--color-text);
+  --muted: var(--color-surface-2);
+  --muted-foreground: #a8a2a0;
+  --accent: var(--color-surface-2);
+  --accent-foreground: var(--color-text);
+  --destructive: #ff7185;
+  --destructive-foreground: #ffffff;
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: var(--color-accent-bright);
+  --chart-1: var(--color-brand);
+  --chart-2: #a8a2a0;
+  --chart-3: var(--color-blue);
+  --chart-4: var(--color-red);
+  --chart-5: var(--color-surface-2);
+  --radius: 0px;
+  --sidebar: var(--color-surface);
+  --sidebar-foreground: var(--color-text);
+  --sidebar-primary: var(--color-brand);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--color-surface-2);
+  --sidebar-accent-foreground: var(--color-text);
+  --sidebar-border: var(--color-border);
+  --sidebar-ring: var(--color-accent-bright);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+@theme inline {
+  --font-heading: var(--font-cond);
+  --font-sans: var(--font-body);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+
+/*
+ * Objetivos táctiles ≥ 44×44 px (CLAUDE.md) en pantallas táctiles. Se aplica
+ * por `data-slot` para que valga también en componentes que shadcn regenere.
+ */
+@media (pointer: coarse) {
+  [data-slot="button"],
+  [data-slot="input"],
+  [data-slot="native-select"],
+  [data-slot="select-trigger"],
+  [data-slot="tabs-trigger"],
+  [data-slot="sidebar-menu-button"],
+  [data-slot="sidebar-trigger"],
+  /* La X de diálogos y paneles: Radix le pone su propio data-slot encima del de Button. */
+  [data-slot="dialog-close"][data-size^="icon"],
+  [data-slot="sheet-close"][data-size^="icon"] {
+    min-height: 2.75rem;
+  }
+
+  [data-slot="sidebar-trigger"],
+  [data-slot="button"][data-size^="icon"],
+  [data-slot="dialog-close"][data-size^="icon"],
+  [data-slot="sheet-close"][data-size^="icon"] {
+    min-width: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Cinta continua (texto del home, patrocinadores): la pista lleva su contenido dos veces y se desplaza media pista. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}

@@ -1,0 +1,3 @@
+# Limpieza diaria a las 04:00 (hora del servidor): papelera de 30 días, subidas abandonadas e imágenes sin uso.
+# La app responde 401 sin el secreto. Igual que el cron de Vercel (vercel.json).
+0 4 * * * sh /usr/local/bin/purge.sh

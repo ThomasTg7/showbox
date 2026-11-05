@@ -1,0 +1,76 @@
+/* A quiet workspace using the ShowBox identity without decorative motion on data. */
+.sb-admin,
+body:has(.sb-admin) {
+  --radius: .5rem;
+  --sidebar: #000;
+  --sidebar-accent: #2a1212;
+  background: #0b0909;
+}
+
+body:has(.sb-admin) [data-slot="sidebar-menu-button"] {
+  min-height: 44px;
+  border-radius: 6px;
+  transition: transform 180ms var(--ease-sb);
+}
+
+body:has(.sb-admin) [data-slot="sidebar-menu-button"]:hover {
+  transform: translateX(2px);
+}
+
+body:has(.sb-admin) [data-slot="sidebar-menu-button"][data-active="true"] {
+  color: #fff;
+  background: #2a1212;
+  border-left: 3px solid var(--color-brand-bright);
+}
+
+body:has(.sb-admin) [data-slot="input"],
+body:has(.sb-admin) [data-slot="textarea"],
+body:has(.sb-admin) [data-slot="select-trigger"],
+body:has(.sb-admin) [data-slot="native-select"] {
+  background: #141111;
+  min-height: 44px;
+}
+
+body:has(.sb-admin) [data-slot="card"] {
+  background: #141111;
+  border-color: #3a302e;
+}
+
+body:has(.sb-admin) [data-slot="button"] {
+  min-height: 44px;
+  border-radius: 5px;
+}
+
+body:has(.sb-admin) [data-slot="button"][data-size^="icon"],
+body:has(.sb-admin) [data-slot="sidebar-trigger"] {
+  min-width: 44px;
+}
+
+body:has(.sb-admin) [data-slot="table-head"] {
+  font-size: .75rem;
+  color: #cfc6c4;
+  background: #1a1413;
+}
+
+body:has(.sb-admin) [data-slot="dialog-content"],
+body:has(.sb-admin) [data-slot="popover-content"] {
+  border-radius: 8px;
+}
+
+.sb-admin-toolbar {
+  background: #0f0b0b;
+  border-bottom: 1px solid #3a302e;
+}
+
+.sb-admin-section {
+  border: 1px solid #3a302e;
+  background: #141111;
+  border-radius: 8px;
+}
+
+.sb-admin-title {
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.1;
+}

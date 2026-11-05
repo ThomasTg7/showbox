@@ -1,0 +1,21 @@
+# La imagen de producción se construye desde la raíz del repo (deploy/Dockerfile): lo que no hace falta, afuera.
+.git
+.github
+.claude
+.superpowers
+.lighthouseci
+node_modules
+.next
+.next-*
+out
+test-results
+playwright-report
+.storage
+.env
+.env.*
+!.env.example
+deploy/.env
+*.tsbuildinfo
+docs
+maqueta
+e2e

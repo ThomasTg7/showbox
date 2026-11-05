@@ -1,0 +1,85 @@
+/* All custom motion changes only transform and opacity. */
+@keyframes sb-page-enter {
+  /* A transformed page wrapper becomes the containing block for fixed scroll pins. */
+  from { opacity: .8; }
+  to { opacity: 1; }
+}
+
+@keyframes sb-brand-enter {
+  from { opacity: 0; transform: translateY(24px) scale(.94); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sb-stroke-enter {
+  from { opacity: 0; transform: translate(-60px, 0) skewX(-20deg); }
+  to { opacity: 1; transform: none; }
+}
+
+.sb-page-enter {
+  animation: sb-page-enter 280ms var(--ease-sb) both;
+}
+
+.sb-intro-logo { animation: sb-brand-enter 650ms var(--ease-sb) both; }
+.sb-intro-mark { animation: sb-stroke-enter 800ms var(--ease-sb) both; }
+
+/* Focos de la arena: titilan apenas, solo con opacidad. */
+@keyframes sb-flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: .82; }
+  50% { opacity: .95; }
+  70% { opacity: .78; }
+}
+
+/* Golpe de entrada para titulares de afiche: llega desde un costado con un leve sesgo. */
+@keyframes sb-punch-in {
+  from { opacity: 0; transform: translateX(-28px) skewX(-8deg); }
+  to { opacity: 1; transform: none; }
+}
+
+.sb-punch-in { animation: sb-punch-in 520ms var(--ease-sb) both; }
+
+.sb-intro-leaving {
+  opacity: 0;
+  transform: translateY(-16px);
+}
+
+@keyframes sb-watch-dialog-enter {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes sb-watch-dialog-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(.98); }
+}
+
+@keyframes sb-watch-overlay-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sb-watch-dialog[data-state="open"] {
+  animation: sb-watch-dialog-enter 360ms var(--ease-sb) both;
+}
+
+.sb-watch-dialog[data-state="closed"] {
+  animation: sb-watch-dialog-exit 220ms ease-in both;
+}
+
+.sb-watch-overlay[data-state="open"] {
+  animation: sb-watch-overlay-enter 320ms ease-out both;
+}
+
+.sb-watch-overlay[data-state="closed"] {
+  animation: sb-watch-overlay-enter 220ms ease-in reverse both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-watch-dialog[data-state],
+  .sb-watch-overlay[data-state] { animation: none; }
+
+  .sb-page-enter,
+  .sb-punch-in,
+  .sb-intro-logo,
+  .sb-intro-mark { animation: none; transform: none; }
+}

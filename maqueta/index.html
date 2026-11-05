@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guerra Campal — Maqueta Home</title>
+<script>
+  // Activa animaciones solo si el usuario no pidió movimiento reducido.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('anim');
+    setTimeout(() => { if (!window.gsap) document.documentElement.classList.remove('anim'); }, 3500);
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #000000;
+  --surface: #0F0F0F;
+  --surface-2: #1A1A1A;
+  --border: #2A2A2A;
+  --text: #FFFFFF;
+  --muted: #A3A3A3;
+  --yellow: #FFB400;
+  --yellow-hover: #FFC633;
+  --yellow-press: #E0A000;
+  --red: #D7263D;
+  --blue: #1E6FD9;
+  --font-display: 'Anton', Impact, sans-serif;
+  --font-cond: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --gutter: clamp(16px, 4vw, 64px);
+  --max: 1320px;
+  --ease: cubic-bezier(.2,.8,.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); overflow-x: clip; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+body::after { /* grano de película */
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: .06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.display { font-family: var(--font-display); text-transform: uppercase; line-height: .9; letter-spacing: .01em; }
+.cond { font-family: var(--font-cond); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.y { color: var(--yellow); }
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  font-family: var(--font-cond); font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
+  font-size: 15px; padding: 15px 28px; position: relative; overflow: hidden; isolation: isolate;
+  transition: color .35s var(--ease), transform .2s var(--ease);
+}
+.btn:active { transform: scale(.97); }
+.btn--primary { background: var(--yellow); color: #000; }
+.btn--primary::before { content: ""; position: absolute; inset: 0; background: #fff; transform: translateX(-101%); transition: transform .45s var(--ease); z-index: -1; }
+.btn--primary:hover::before { transform: translateX(0); }
+.btn--ghost { border: 2px solid #fff; color: #fff; }
+.btn--ghost::before { content: ""; position: absolute; inset: 0; background: #fff; transform: translateY(101%); transition: transform .4s var(--ease); z-index: -1; }
+.btn--ghost:hover { color: #000; }
+.btn--ghost:hover::before { transform: translateY(0); }
+.btn .arrow { transition: transform .3s var(--ease); }
+.btn:hover .arrow { transform: translateX(4px); }
+
+/* ---------- Loader ---------- */
+.loader { display: none; }
+.anim .loader {
+  display: grid; place-items: center; position: fixed; inset: 0; z-index: 1000; background: var(--bg);
+}
+.loader-mark { font-family: var(--font-display); font-size: clamp(90px, 18vw, 220px); line-height: 1; display: flex; overflow: hidden; }
+.loader-mark span { display: inline-block; }
+.loader-bar { position: absolute; bottom: 0; left: 0; height: 6px; width: 100%; background: var(--yellow); transform-origin: left; transform: scaleX(0); }
+
+/* ---------- Header ---------- */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 76px;
+  display: flex; align-items: center; transition: background .4s, transform .45s var(--ease), border-color .4s;
+  border-bottom: 1px solid transparent;
+}
+.header.solid { background: rgba(0,0,0,.92); backdrop-filter: blur(10px); border-color: var(--border); }
+.header.hidden { transform: translateY(-100%); }
+.header .wrap { display: flex; align-items: center; gap: 40px; width: 100%; }
+.logo { font-family: var(--font-display); font-size: 34px; line-height: 1; display: flex; align-items: center; gap: 0; letter-spacing: .02em; }
+.logo .g { color: #fff; } .logo .c { color: var(--yellow); }
+.nav { display: flex; gap: 30px; margin-right: auto; }
+.nav a { font-family: var(--font-cond); font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: 15px; position: relative; padding: 8px 0; color: #ddd; transition: color .25s; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--yellow); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); }
+.nav a:hover { color: #fff; }
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); transform-origin: left; }
+.nav a.active { color: #fff; }
+.header-actions { display: flex; align-items: center; gap: 18px; }
+.icon-btn { width: 40px; height: 40px; display: grid; place-items: center; transition: color .2s; }
+.icon-btn:hover { color: var(--yellow); }
+.header .btn { padding: 11px 20px; font-size: 14px; }
+.burger { display: none; }
+
+/* Barra de evento fija (estilo UFC) */
+.eventbar {
+  position: fixed; left: 0; right: 0; top: 0; z-index: 99; background: var(--surface); border-bottom: 1px solid var(--border);
+  transform: translateY(-100%); transition: transform .45s var(--ease);
+}
+.eventbar.show { transform: translateY(76px); }
+.header.hidden ~ .eventbar.show { transform: translateY(0); }
+.eventbar .wrap { display: flex; align-items: center; gap: 24px; height: 56px; }
+.eventbar .ev-name { font-family: var(--font-display); font-size: 22px; }
+.eventbar .ev-meta { color: var(--muted); font-family: var(--font-cond); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 14px; margin-right: auto; }
+.eventbar .btn { padding: 9px 18px; font-size: 13px; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; height: 100vh; min-height: 680px; overflow: hidden; background: radial-gradient(ellipse 60% 55% at 50% 38%, #2a1f06 0%, #0b0b0b 55%, #000 100%); }
+.hero-octagon { position: absolute; left: 50%; top: 44%; width: min(110vh, 1100px); aspect-ratio: 1; translate: -50% -50%; opacity: .5; }
+.hero-bigtext {
+  position: absolute; left: 0; right: 0; top: 10%; text-align: center; white-space: nowrap;
+  font-family: var(--font-display); font-size: 24vw; line-height: .85; color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,.07); pointer-events: none; user-select: none;
+}
+.hero-spot { position: absolute; left: 50%; top: -20%; width: 70vw; height: 90vh; translate: -50% 0; background: radial-gradient(ellipse at top, rgba(255,180,0,.18), transparent 65%); filter: blur(10px); pointer-events: none; }
+.fighter { position: absolute; bottom: 0; height: 88vh; aspect-ratio: 2/3; z-index: 2; }
+.fighter--red { left: max(-2vw, calc(50% - 70vh)); }
+.fighter--blue { right: max(-2vw, calc(50% - 70vh)); }
+.fighter-inner { width: 100%; height: 100%; }
+.fighter svg { width: 100%; height: 100%; }
+.fighter--red svg { color: var(--red); filter: drop-shadow(14px 0 30px rgba(255,180,0,.22)); }
+.fighter--blue svg { color: var(--blue); transform: scaleX(-1); filter: drop-shadow(14px 0 30px rgba(255,180,0,.22)); }
+.hero-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 45%; background: linear-gradient(to top, #000 8%, transparent); z-index: 3; pointer-events: none; }
+.hero-content { position: absolute; left: 0; right: 0; bottom: 7vh; z-index: 4; text-align: center; padding: 0 var(--gutter); }
+.hero-tag { display: inline-flex; gap: 10px; align-items: center; font-family: var(--font-cond); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 14px; margin-bottom: 18px; }
+.hero-tag .pill { background: var(--yellow); color: #000; padding: 4px 10px; }
+.hero-title { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 40px); font-size: clamp(64px, 11vw, 168px); }
+.hero-title .name { display: inline-flex; overflow: hidden; padding-top: .06em; }
+.hero-title .name span { display: inline-block; }
+.hero-title .vs { font-size: .38em; color: var(--yellow); position: relative; }
+.hero-meta { font-family: var(--font-cond); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #ddd; font-size: clamp(14px, 1.4vw, 18px); margin-top: 14px; }
+.hero-meta b { color: var(--yellow); font-weight: 700; }
+.countdown { display: flex; justify-content: center; gap: 4px; margin: 26px 0 30px; }
+.countdown div { background: rgba(255,255,255,.04); border: 1px solid var(--border); backdrop-filter: blur(6px); min-width: 82px; padding: 10px 8px 8px; }
+.countdown strong { font-family: var(--font-display); font-size: 38px; line-height: 1; display: block; font-weight: 400; font-variant-numeric: tabular-nums; }
+.countdown small { font-family: var(--font-cond); font-weight: 700; letter-spacing: .14em; font-size: 11px; color: var(--muted); }
+.hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.scroll-hint { position: absolute; right: var(--gutter); bottom: 7vh; z-index: 4; writing-mode: vertical-rl; font-family: var(--font-cond); font-weight: 700; letter-spacing: .3em; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 12px; }
+.scroll-hint::after { content: ""; width: 1px; height: 60px; background: linear-gradient(var(--yellow), transparent); animation: drip 1.8s infinite; }
+@keyframes drip { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* ---------- Marquee ---------- */
+.marquee { background: var(--yellow); color: #000; overflow: hidden; padding: 14px 0; position: relative; z-index: 5; transform: rotate(-1.2deg) scale(1.02); margin: -18px 0 0; }
+.marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+.marquee span { font-family: var(--font-display); font-size: 28px; padding: 0 22px; white-space: nowrap; display: flex; align-items: center; gap: 44px; }
+.marquee span::after { content: "✦"; font-size: 18px; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---------- Secciones ---------- */
+section { position: relative; }
+.section { padding: clamp(72px, 10vw, 140px) 0; }
+.sec-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 44px; flex-wrap: wrap; }
+.sec-title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(40px, 6vw, 78px); line-height: .9; }
+.sec-kicker { font-family: var(--font-cond); font-weight: 800; text-transform: uppercase; letter-spacing: .2em; font-size: 13px; color: var(--yellow); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.sec-kicker::before { content: ""; width: 28px; height: 3px; background: var(--yellow); }
+.link-more { font-family: var(--font-cond); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; font-size: 14px; display: inline-flex; gap: 8px; align-items: center; border-bottom: 2px solid var(--yellow); padding-bottom: 4px; }
+.link-more:hover .arrow { transform: translateX(4px); }
+.link-more .arrow { transition: transform .3s var(--ease); }
+
+/* ---------- Cartelera ---------- */
+.card-sec { background: #fff; color: #000; }
+.card-sec .sec-kicker { color: #000; }
+.card-sec .sec-kicker::before { background: var(--yellow); }
+.tabs { display: flex; gap: 0; border-bottom: 2px solid #e5e5e5; margin-bottom: 8px; }
+.tab { font-family: var(--font-cond); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; font-size: 15px; padding: 14px 22px; color: #888; position: relative; }
+.tab::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 4px; background: var(--yellow); transform: scaleX(0); transition: transform .35s var(--ease); }
+.tab.active { color: #000; }
+.tab.active::after { transform: scaleX(1); }
+.panel { display: none; }
+.panel.active { display: block; }
+.fight { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; padding: 26px 0; border-bottom: 1px solid #e8e8e8; position: relative; }
+.fight:hover .corner--red .mini { transform: translateX(8px) scale(1.04); }
+.fight:hover .corner--blue .mini { transform: translateX(-8px) scale(1.04); }
+.corner { display: flex; align-items: center; gap: 18px; }
+.corner--blue { flex-direction: row-reverse; text-align: right; }
+.mini { width: 96px; height: 120px; flex: none; background: linear-gradient(#f3f3f3, #e4e4e4); overflow: hidden; transition: transform .45s var(--ease); position: relative; }
+.mini svg { width: 100%; height: 118%; margin-top: 4px; }
+.corner--red .mini { color: var(--red); border-bottom: 4px solid var(--red); }
+.corner--blue .mini { color: var(--blue); border-bottom: 4px solid var(--blue); }
+.corner--blue .mini svg { transform: scaleX(-1); }
+.f-rank { font-family: var(--font-cond); font-weight: 700; color: #777; font-size: 14px; }
+.f-name { font-family: var(--font-display); font-size: clamp(22px, 2.6vw, 34px); line-height: 1; text-transform: uppercase; }
+.f-rec { font-family: var(--font-cond); font-weight: 600; font-size: 15px; color: #555; letter-spacing: .04em; display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.corner--blue .f-rec { justify-content: flex-end; }
+.flag { width: 22px; height: 15px; object-fit: cover; }
+.f-mid { text-align: center; min-width: 170px; }
+.f-div { font-family: var(--font-cond); font-weight: 800; letter-spacing: .12em; font-size: 12px; color: #666; text-transform: uppercase; }
+.f-vs { font-family: var(--font-display); font-size: 34px; margin: 4px 0; }
+.title-badge { display: inline-flex; align-items: center; gap: 6px; background: #000; color: var(--yellow); font-family: var(--font-cond); font-weight: 800; letter-spacing: .1em; font-size: 11px; padding: 4px 9px; }
+.f-rounds { font-family: var(--font-cond); font-weight: 600; font-size: 12px; color: #888; letter-spacing: .1em; margin-top: 6px; }
+.card-meta { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 36px; font-family: var(--font-cond); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: 15px; }
+.card-meta div span { display: block; color: #888; font-size: 12px; letter-spacing: .14em; }
+
+/* ---------- Noticias ---------- */
+.news-grid { display: grid; grid-template-columns: 1.9fr 1fr; gap: 28px; }
+.ph { position: relative; overflow: hidden; background: #111; }
+.ph-img { position: absolute; inset: 0; transition: transform .8s var(--ease); }
+.ph-img svg { position: absolute; bottom: -6%; height: 112%; left: 50%; translate: -50% 0; }
+.ph-label { position: absolute; top: 12px; right: 12px; font-family: var(--font-cond); font-weight: 700; font-size: 11px; letter-spacing: .12em; color: rgba(255,255,255,.35); border: 1px dashed rgba(255,255,255,.2); padding: 3px 7px; z-index: 2; }
+a:hover .ph-img { transform: scale(1.06); }
+.feature { display: block; background: var(--surface); }
+.feature .ph { aspect-ratio: 16/9; }
+.feature-body { padding: 30px 32px 34px; border-top: 5px solid var(--yellow); margin: -40px 36px 0; background: var(--surface); position: relative; z-index: 2; }
+.tag { font-family: var(--font-cond); font-weight: 800; letter-spacing: .14em; font-size: 12px; color: var(--yellow); text-transform: uppercase; }
+.feature h3 { font-family: var(--font-display); font-size: clamp(30px, 3.6vw, 50px); line-height: .95; text-transform: uppercase; margin: 10px 0 12px; }
+.feature p { color: var(--muted); max-width: 60ch; }
+.top-stories { background: var(--surface); padding: 30px 28px; border-top: 5px solid var(--yellow); }
+.top-stories h3 { font-family: var(--font-display); font-size: 34px; text-transform: uppercase; margin-bottom: 14px; }
+.story { display: grid; grid-template-columns: 38px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border); align-items: start; }
+.story:last-child { border: 0; }
+.story .num { background: var(--yellow); color: #000; font-family: var(--font-display); font-size: 20px; height: 38px; display: grid; place-items: center; transition: transform .3s var(--ease); }
+.story:hover .num { transform: rotate(-8deg) scale(1.08); }
+.story .t { font-family: var(--font-cond); font-weight: 700; text-transform: uppercase; letter-spacing: .03em; font-size: 17px; line-height: 1.15; transition: color .2s; }
+.story:hover .t { color: var(--yellow); }
+.story .tag { font-size: 11px; color: var(--muted); display: block; margin-bottom: 3px; }
+
+/* ---------- Carrusel "No te lo pierdas" ---------- */
+.rail-sec { background: var(--surface); }
+.rail { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; scrollbar-width: none; cursor: grab; }
+.rail::-webkit-scrollbar { display: none; }
+.rail.dragging { cursor: grabbing; scroll-snap-type: none; }
+.rail-card { flex: 0 0 min(300px, 78vw); scroll-snap-align: start; background: #000; }
+.rail-card .ph { aspect-ratio: 4/5; }
+.rail-card .pill { text-transform: uppercase; position: absolute; top: 12px; left: 12px; background: var(--yellow); color: #000; font-family: var(--font-cond); font-weight: 800; font-size: 11px; letter-spacing: .1em; padding: 4px 8px; z-index: 2; }
+.rail-card .play { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 64px; height: 64px; border-radius: 50%; border: 2px solid #fff; display: grid; place-items: center; z-index: 2; transition: background .3s, transform .3s var(--ease); }
+.rail-card:hover .play { background: var(--yellow); border-color: var(--yellow); color: #000; transform: scale(1.1); }
+.rail-card .cap { padding: 16px 16px 20px; font-family: var(--font-cond); font-weight: 700; text-transform: uppercase; font-size: 17px; line-height: 1.15; border-top: 3px solid var(--yellow); }
+.rail-nav { display: flex; gap: 8px; }
+.rail-nav button { width: 46px; height: 46px; border: 2px solid var(--border); display: grid; place-items: center; transition: border-color .2s, background .2s, color .2s; }
+.rail-nav button:hover { border-color: var(--yellow); background: var(--yellow); color: #000; }
+
+/* ---------- Peleadores (scroll horizontal fijado) ---------- */
+.hscroll { overflow: hidden; }
+.hscroll-head { padding-top: clamp(72px, 9vh, 120px); }
+.hscroll-head .sec-head { margin-bottom: 28px; }
+.hscroll-track { display: flex; gap: 24px; padding: 0 var(--gutter) clamp(72px, 10vw, 120px); width: max-content; }
+.fcard { width: 340px; flex: none; background: linear-gradient(170deg, #1c1c1c, #0a0a0a 70%); border: 1px solid var(--border); position: relative; overflow: hidden; transition: border-color .3s; }
+.fcard:hover { border-color: var(--yellow); }
+.fcard .ph-fig { height: clamp(220px, 38vh, 380px); position: relative; overflow: hidden; }
+.fcard .ph-fig svg { position: absolute; bottom: -4%; left: 50%; translate: -50% 0; height: 108%; transition: transform .7s var(--ease); color: var(--yellow); }
+.fcard:hover .ph-fig svg { transform: scale(1.05) translateY(-8px); }
+.fcard .ph-fig::after { content: ""; position: absolute; inset: auto 0 0 0; height: 50%; background: linear-gradient(transparent, #0c0c0c); }
+.fcard .champ { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--yellow); color: #000; font-family: var(--font-cond); font-weight: 800; font-size: 11px; letter-spacing: .12em; padding: 4px 9px; }
+.fcard .bgnum { position: absolute; top: 6px; right: 14px; font-family: var(--font-display); font-size: 120px; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(255,180,0,.25); }
+.fcard-body { padding: 0 24px 24px; position: relative; z-index: 2; margin-top: -40px; }
+.fcard .nick { font-family: var(--font-cond); font-weight: 700; color: var(--yellow); letter-spacing: .1em; font-size: 14px; }
+.fcard .name { font-family: var(--font-display); font-size: 40px; line-height: .95; text-transform: uppercase; margin: 4px 0 6px; }
+.fcard .div { font-family: var(--font-cond); font-weight: 600; letter-spacing: .1em; color: var(--muted); font-size: 13px; text-transform: uppercase; display: flex; gap: 8px; align-items: center; }
+.fcard .rec { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 18px; border-top: 1px solid var(--border); }
+.fcard .rec div { padding: 14px 0 0; text-align: center; }
+.fcard .rec div + div { border-left: 1px solid var(--border); }
+.fcard .rec strong { font-family: var(--font-display); font-size: 36px; line-height: 1; display: block; font-weight: 400; }
+.fcard .rec small { font-family: var(--font-cond); font-weight: 700; letter-spacing: .14em; font-size: 11px; color: var(--muted); }
+.fcard .rec div:first-child strong { color: var(--yellow); }
+.fcard.more { display: grid; place-items: center; text-align: center; background: var(--yellow); color: #000; border: 0; }
+.fcard.more .display { font-size: 58px; }
+
+/* ---------- Banda de números con parallax ---------- */
+.stats-band { background: var(--yellow); color: #000; overflow: hidden; padding: 90px 0; }
+.stats-bigline { font-family: var(--font-display); font-size: 16vw; line-height: .8; white-space: nowrap; color: transparent; -webkit-text-stroke: 2px rgba(0,0,0,.14); position: absolute; top: 50%; translate: 0 -50%; left: 0; pointer-events: none; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; }
+.stat strong { font-family: var(--font-display); font-size: clamp(64px, 9vw, 130px); line-height: .9; display: block; font-weight: 400; }
+.stat span { font-family: var(--font-cond); font-weight: 800; letter-spacing: .14em; font-size: 15px; text-transform: uppercase; border-top: 3px solid #000; display: inline-block; padding-top: 8px; }
+
+/* ---------- Rankings ---------- */
+.rank-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.rank-card { background: var(--surface); border: 1px solid var(--border); }
+.rank-top { display: grid; grid-template-columns: 1fr 120px; background: linear-gradient(120deg, #1a1405, #0f0f0f 60%); border-bottom: 3px solid var(--yellow); min-height: 150px; overflow: hidden; }
+.rank-top .info { padding: 22px; }
+.rank-top .belt { text-transform: uppercase; font-family: var(--font-cond); font-weight: 800; letter-spacing: .12em; color: var(--yellow); font-size: 12px; display: flex; gap: 6px; align-items: center; }
+.rank-top .div { font-family: var(--font-display); font-size: 30px; text-transform: uppercase; line-height: 1; margin: 8px 0 6px; }
+.rank-top .champ-name { font-family: var(--font-cond); font-weight: 700; font-size: 20px; text-transform: uppercase; }
+.rank-top .fig { position: relative; }
+.rank-top .fig svg { position: absolute; bottom: -10px; height: 170px; right: -10px; color: var(--yellow); }
+.rank-list li { list-style: none; display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; padding: 13px 22px; border-bottom: 1px solid var(--border); font-family: var(--font-cond); font-weight: 700; font-size: 17px; text-transform: uppercase; letter-spacing: .03em; transition: background .2s, padding .3s var(--ease); }
+.rank-list li:hover { background: var(--surface-2); padding-left: 28px; }
+.rank-list .pos { color: var(--muted); }
+.mv { font-size: 13px; letter-spacing: .04em; }
+.mv.up { color: #3ecf6e; } .mv.down { color: #ff5a5a; } .mv.new { color: #000; background: var(--yellow); padding: 1px 6px; font-size: 11px; } .mv.eq { color: #555; }
+.rank-switch { display: inline-flex; border: 2px solid var(--border); }
+.rank-switch button { font-family: var(--font-cond); font-weight: 800; letter-spacing: .1em; font-size: 14px; padding: 10px 20px; text-transform: uppercase; color: var(--muted); }
+.rank-switch button.active { background: var(--yellow); color: #000; }
+
+/* ---------- Entradas ---------- */
+.tickets { overflow: hidden; background: #000; }
+.tickets-bg { position: absolute; inset: -20% 0; background: linear-gradient(115deg, transparent 0 48%, var(--yellow) 48% 100%); opacity: 1; }
+.tickets .wrap { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.tickets h2 { font-size: clamp(56px, 8vw, 118px); }
+.tickets p.lead { color: var(--muted); max-width: 44ch; margin: 18px 0 28px; font-size: 17px; }
+.tiers { display: grid; gap: 12px; }
+.tier { background: #000; color: #fff; display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 22px 26px; border-left: 6px solid var(--yellow); transition: transform .35s var(--ease), box-shadow .35s; }
+.tier:hover { transform: translateX(-10px); box-shadow: 10px 10px 0 rgba(0,0,0,.35); }
+.tier .n { font-family: var(--font-display); font-size: 30px; text-transform: uppercase; line-height: 1; }
+.tier .d { font-family: var(--font-cond); font-weight: 600; letter-spacing: .06em; color: var(--muted); font-size: 14px; text-transform: uppercase; }
+.tier .p { font-family: var(--font-display); font-size: 34px; color: var(--yellow); }
+.tier.hot { border-left-color: var(--red); }
+.tier.hot .n::after { content: "Quedan pocas"; font-family: var(--font-cond); font-weight: 800; letter-spacing: .1em; font-size: 11px; background: var(--red); color: #fff; padding: 3px 7px; margin-left: 10px; vertical-align: middle; }
+
+/* ---------- Patrocinadores ---------- */
+.sponsors { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 36px 0; overflow: hidden; }
+.sponsors-label { text-align: center; font-family: var(--font-cond); font-weight: 800; letter-spacing: .24em; font-size: 12px; color: var(--muted); margin-bottom: 26px; }
+.sp-track { display: flex; width: max-content; animation: marquee 40s linear infinite; }
+.sponsors:hover .sp-track { animation-play-state: paused; }
+.sp { padding: 0 48px; font-size: 30px; color: #555; white-space: nowrap; transition: color .3s; display: flex; align-items: center; }
+.sp:hover { color: #fff; }
+
+/* ---------- Footer ---------- */
+footer { padding: 80px 0 40px; }
+.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
+.foot-logo { font-family: var(--font-display); font-size: 92px; line-height: .85; }
+.foot-grid h4 { font-family: var(--font-cond); font-weight: 800; letter-spacing: .16em; font-size: 13px; color: var(--yellow); margin-bottom: 16px; }
+.foot-grid ul { list-style: none; display: grid; gap: 10px; }
+.foot-grid a { color: var(--muted); font-family: var(--font-cond); font-weight: 600; font-size: 17px; text-transform: uppercase; letter-spacing: .04em; transition: color .2s; }
+.foot-grid a:hover { color: #fff; }
+.socials { display: flex; gap: 10px; margin-top: 22px; }
+.socials a { width: 42px; height: 42px; border: 1px solid var(--border); display: grid; place-items: center; color: #fff; transition: all .25s; }
+.socials a:hover { background: var(--yellow); border-color: var(--yellow); color: #000; }
+.foot-bottom { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: #666; font-size: 14px; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- Estados iniciales de animación ---------- */
+.anim [data-reveal] { opacity: 0; transform: translateY(46px); }
+.anim .hero-content > *, .anim .fighter, .anim .hero-bigtext, .anim .scroll-hint { opacity: 0; }
+
+/* ---------- Menú móvil ---------- */
+.mnav { position: fixed; inset: 0; z-index: 98; background: #000; display: flex; flex-direction: column; justify-content: center; padding: 0 var(--gutter); clip-path: inset(0 0 100% 0); transition: clip-path .6s var(--ease); }
+.mnav.open { clip-path: inset(0 0 0 0); }
+.mnav a { font-family: var(--font-display); font-size: 13vw; text-transform: uppercase; line-height: 1.05; }
+.mnav a:hover { color: var(--yellow); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1040px) {
+  .nav, .header .btn { display: none; }
+  .burger { display: grid; }
+  .header .wrap { justify-content: space-between; }
+  .news-grid, .tickets .wrap { grid-template-columns: 1fr; }
+  .rank-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .tickets-bg { background: linear-gradient(170deg, transparent 0 40%, var(--yellow) 40% 100%); }
+  .eventbar .ev-meta { display: none; }
+  .eventbar .wrap { justify-content: space-between; }
+}
+@media (max-width: 900px) {
+  .hscroll-track { width: auto; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .hscroll-track::-webkit-scrollbar { display: none; }
+  .fcard { width: 280px; scroll-snap-align: start; }
+}
+@media (max-width: 700px) {
+  .fighter { height: 60vh; bottom: 30vh; }
+  .fighter--red { left: -18vw; } .fighter--blue { right: -18vw; }
+  .hero-title { font-size: 17vw; flex-direction: column; gap: 0; }
+  .hero-title .vs { font-size: .4em; margin: 2px 0; }
+  .countdown div { min-width: 66px; }
+  .countdown strong { font-size: 30px; }
+  .scroll-hint { display: none; }
+  .fight { grid-template-columns: 1fr; gap: 10px; }
+  .corner--blue { flex-direction: row; text-align: left; }
+  .corner--blue .f-rec { justify-content: flex-start; }
+  .f-mid { order: -1; text-align: left; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .f-vs { font-size: 18px; margin: 0; }
+  .mini { width: 70px; height: 88px; }
+  .feature-body { margin: -30px 12px 0; padding: 22px; }
+  .foot-grid { grid-template-columns: 1fr; }
+  .eventbar .ev-name { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .sp-track, .scroll-hint::after { animation: none; }
+  * { transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Silueta de peleador en guardia (marcador de foto 2:3). Guantes usan currentColor = color de esquina -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3a3a3a"/>
+      <stop offset=".55" stop-color="#1c1c1c"/>
+      <stop offset="1" stop-color="#0c0c0c"/>
+    </linearGradient>
+    <linearGradient id="skinLight" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#cfcfcf"/>
+      <stop offset="1" stop-color="#9a9a9a"/>
+    </linearGradient>
+  </defs>
+  <symbol id="fighter" viewBox="0 0 400 600">
+    <path fill="url(#skin)" d="M50 600 L62 320 Q70 238 140 222 L178 208 L178 168 L222 168 L222 208 L260 222 Q330 238 338 320 L350 600 Z"/>
+    <ellipse fill="url(#skin)" cx="200" cy="118" rx="44" ry="54"/>
+    <path fill="none" stroke="url(#skin)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" d="M112 262 L98 372 L158 282"/>
+    <path fill="none" stroke="url(#skin)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" d="M288 262 L302 372 L244 276"/>
+    <ellipse fill="currentColor" cx="158" cy="248" rx="37" ry="43"/>
+    <ellipse fill="currentColor" cx="244" cy="242" rx="37" ry="43"/>
+    <rect x="124" y="282" width="68" height="15" rx="5" fill="#111"/>
+    <rect x="210" y="276" width="68" height="15" rx="5" fill="#111"/>
+  </symbol>
+  <symbol id="fighterLight" viewBox="0 0 400 600">
+    <path fill="url(#skinLight)" d="M50 600 L62 320 Q70 238 140 222 L178 208 L178 168 L222 168 L222 208 L260 222 Q330 238 338 320 L350 600 Z"/>
+    <ellipse fill="url(#skinLight)" cx="200" cy="118" rx="44" ry="54"/>
+    <path fill="none" stroke="url(#skinLight)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" d="M112 262 L98 372 L158 282"/>
+    <path fill="none" stroke="url(#skinLight)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" d="M288 262 L302 372 L244 276"/>
+    <ellipse fill="currentColor" cx="158" cy="248" rx="37" ry="43"/>
+    <ellipse fill="currentColor" cx="244" cy="242" rx="37" ry="43"/>
+    <rect x="124" y="282" width="68" height="15" rx="5" fill="#222"/>
+    <rect x="210" y="276" width="68" height="15" rx="5" fill="#222"/>
+  </symbol>
+</svg>
+
+<!-- Loader -->
+<div class="loader" aria-hidden="true">
+  <div class="loader-mark"><span>G</span><span class="y">C</span></div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="wrap">
+    <a href="#" class="logo" aria-label="Guerra Campal inicio"><span class="g">G</span><span class="c">C</span></a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#cartelera" class="active">Eventos</a>
+      <a href="#peleadores">Peleadores</a>
+      <a href="#rankings">Rankings</a>
+      <a href="#noticias">Noticias</a>
+      <a href="#entradas">Entradas</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      </button>
+      <a href="#entradas" class="btn btn--primary">Comprar entradas</a>
+      <button class="icon-btn burger" aria-label="Menú" id="burger">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="eventbar" id="eventbar">
+  <div class="wrap">
+    <span class="ev-name">GUERRA CAMPAL <span class="y">5</span></span>
+    <span class="ev-meta">Sáb 24 Oct · 21:00 hrs · Arena Santiago</span>
+    <a href="#entradas" class="btn btn--primary">Entradas</a>
+  </div>
+</div>
+
+<nav class="mnav" id="mnav" aria-label="Menú móvil">
+  <a href="#cartelera">Eventos</a>
+  <a href="#peleadores">Peleadores</a>
+  <a href="#rankings">Rankings</a>
+  <a href="#noticias">Noticias</a>
+  <a href="#entradas" class="y">Entradas</a>
+</nav>
+
+<main>
+<!-- HERO: careo del evento principal -->
+<section class="hero" id="hero">
+  <svg class="hero-octagon" viewBox="0 0 100 100" aria-hidden="true">
+    <polygon points="30,2 70,2 98,30 98,70 70,98 30,98 2,70 2,30" fill="none" stroke="#FFB400" stroke-opacity=".18" stroke-width=".25"/>
+    <polygon points="33,9 67,9 91,33 91,67 67,91 33,91 9,67 9,33" fill="none" stroke="#fff" stroke-opacity=".06" stroke-width=".2"/>
+  </svg>
+  <div class="hero-spot"></div>
+  <div class="hero-bigtext" aria-hidden="true">GUERRA CAMPAL</div>
+
+  <div class="fighter fighter--red"><div class="fighter-inner"><svg><use href="#fighter"/></svg></div></div>
+  <div class="fighter fighter--blue"><div class="fighter-inner"><svg><use href="#fighter"/></svg></div></div>
+  <div class="hero-fade"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag"><span class="pill">Guerra Campal 5</span> Pelea por el título · Peso Ligero</div>
+    <h1 class="hero-title display">
+      <span class="name" data-split>Pérez</span>
+      <span class="vs">VS</span>
+      <span class="name" data-split>Soto</span>
+    </h1>
+    <p class="hero-meta">Sáb 24 Oct · <b>21:00 hrs</b> · Arena Santiago</p>
+    <div class="countdown" id="countdown" aria-label="Cuenta regresiva">
+      <div><strong data-cd="d">00</strong><small>DÍAS</small></div>
+      <div><strong data-cd="h">00</strong><small>HRS</small></div>
+      <div><strong data-cd="m">00</strong><small>MIN</small></div>
+      <div><strong data-cd="s">00</strong><small>SEG</small></div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#entradas" class="btn btn--primary">Comprar entradas <span class="arrow">→</span></a>
+      <a href="#cartelera" class="btn btn--ghost">Ver cartelera completa</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Guerra Campal 5</span><span>24 de Octubre</span><span>Arena Santiago</span><span>Entradas a la venta</span><span>Pérez vs Soto</span>
+    <span>Guerra Campal 5</span><span>24 de Octubre</span><span>Arena Santiago</span><span>Entradas a la venta</span><span>Pérez vs Soto</span>
+  </div>
+</div>
+
+<!-- CARTELERA -->
+<section class="section card-sec" id="cartelera">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div>
+        <div class="sec-kicker">Próximo evento</div>
+        <h2 class="sec-title">Cartelera<br>Guerra Campal 5</h2>
+      </div>
+      <a href="#" class="link-more">Ver evento <span class="arrow">→</span></a>
+    </div>
+
+    <div class="tabs" role="tablist" data-reveal>
+      <button class="tab active" data-tab="estelar" role="tab">Cartelera estelar</button>
+      <button class="tab" data-tab="prelim" role="tab">Preliminares</button>
+    </div>
+
+    <div class="panel active" id="estelar">
+      <div class="fight" data-row>
+        <div class="corner corner--red">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">C</div><div class="f-name">Matías Pérez</div><div class="f-rec"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile">12-2-0</div></div>
+        </div>
+        <div class="f-mid"><div class="f-div">Peso Ligero</div><div class="f-vs">VS</div><span class="title-badge">★ Pelea por el título</span><div class="f-rounds">5 × 5 MIN</div></div>
+        <div class="corner corner--blue">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">#1</div><div class="f-name">Diego Soto</div><div class="f-rec">10-1-0<img class="flag" src="https://flagcdn.com/w40/ar.png" alt="Argentina"></div></div>
+        </div>
+      </div>
+      <div class="fight" data-row>
+        <div class="corner corner--red">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">#2</div><div class="f-name">Camila Rojas</div><div class="f-rec"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile">7-1-0</div></div>
+        </div>
+        <div class="f-mid"><div class="f-div">Peso Paja Femenino</div><div class="f-vs">VS</div><div class="f-rounds">3 × 5 MIN</div></div>
+        <div class="corner corner--blue">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">#4</div><div class="f-name">Valentina Ruiz</div><div class="f-rec">6-2-0<img class="flag" src="https://flagcdn.com/w40/pe.png" alt="Perú"></div></div>
+        </div>
+      </div>
+      <div class="fight" data-row>
+        <div class="corner corner--red">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">#3</div><div class="f-name">Ignacio Fuentes</div><div class="f-rec"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile">9-3-1</div></div>
+        </div>
+        <div class="f-mid"><div class="f-div">Peso Wélter</div><div class="f-vs">VS</div><div class="f-rounds">3 × 5 MIN</div></div>
+        <div class="corner corner--blue">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">#5</div><div class="f-name">Bruno Andrade</div><div class="f-rec">8-2-0<img class="flag" src="https://flagcdn.com/w40/br.png" alt="Brasil"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="prelim">
+      <div class="fight" data-row>
+        <div class="corner corner--red">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">&nbsp;</div><div class="f-name">Tomás Vera</div><div class="f-rec"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile">4-0-0</div></div>
+        </div>
+        <div class="f-mid"><div class="f-div">Peso Pluma</div><div class="f-vs">VS</div><div class="f-rounds">3 × 5 MIN</div></div>
+        <div class="corner corner--blue">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">&nbsp;</div><div class="f-name">Luis Paredes</div><div class="f-rec">5-2-0<img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile"></div></div>
+        </div>
+      </div>
+      <div class="fight" data-row>
+        <div class="corner corner--red">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">AMATEUR</div><div class="f-name">Sebastián Mora</div><div class="f-rec"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile">3-1-0</div></div>
+        </div>
+        <div class="f-mid"><div class="f-div">Peso Gallo</div><div class="f-vs">VS</div><div class="f-rounds">3 × 3 MIN</div></div>
+        <div class="corner corner--blue">
+          <div class="mini"><svg><use href="#fighterLight"/></svg></div>
+          <div><div class="f-rank">AMATEUR</div><div class="f-name">Kevin Salas</div><div class="f-rec">2-0-0<img class="flag" src="https://flagcdn.com/w40/ve.png" alt="Venezuela"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-meta" data-reveal>
+      <div><span>Apertura de puertas</span>19:30 hrs</div>
+      <div><span>Preliminares</span>20:00 hrs</div>
+      <div><span>Estelar</span>21:30 hrs</div>
+      <div><span>Término estimado</span>00:30 hrs</div>
+      <div><span>Lugar</span>Arena Santiago · Av. Ejemplo 1234</div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTICIAS -->
+<section class="section" id="noticias">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div><div class="sec-kicker">Lo último</div><h2 class="sec-title">Noticias</h2></div>
+      <a href="#" class="link-more">Todas las noticias <span class="arrow">→</span></a>
+    </div>
+    <div class="news-grid">
+      <a href="#" class="feature" data-reveal>
+        <div class="ph">
+          <div class="ph-img" style="background: radial-gradient(ellipse at 30% 20%, #3b2c08, #0b0b0b 70%);">
+            <svg style="color:var(--red);left:34%" width="340"><use href="#fighter"/></svg>
+            <svg style="color:var(--blue);left:66%;transform:scaleX(-1)" width="340"><use href="#fighter"/></svg>
+          </div>
+          <span class="ph-label">FOTO 16:9 · 1600×900</span>
+        </div>
+        <div class="feature-body">
+          <span class="tag">Guerra Campal 5</span>
+          <h3>Pérez defiende el cinturón ante Soto</h3>
+          <p>El campeón de peso ligero enfrenta al retador #1 en la pelea más esperada del año. Todo lo que tienes que saber antes del 24 de octubre.</p>
+        </div>
+      </a>
+      <aside class="top-stories" data-reveal>
+        <h3>Top <span class="y">Noticias</span></h3>
+        <a href="#" class="story"><span class="num">1</span><div><span class="tag">Resultados</span><span class="t">Así fue: Rojas somete en el primer round</span></div></a>
+        <a href="#" class="story"><span class="num">2</span><div><span class="tag">Anuncio</span><span class="t">Cartelera completa de Guerra Campal 5 confirmada</span></div></a>
+        <a href="#" class="story"><span class="num">3</span><div><span class="tag">Entrevista</span><span class="t">Soto: "Vengo a llevarme el cinturón a Argentina"</span></div></a>
+        <a href="#" class="story"><span class="num">4</span><div><span class="tag">Rankings</span><span class="t">Fuentes sube al #3 del peso wélter</span></div></a>
+        <a href="#" class="story"><span class="num">5</span><div><span class="tag">Detrás de cámaras</span><span class="t">Un día en el campamento del campeón</span></div></a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- NO TE LO PIERDAS -->
+<section class="section rail-sec">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div><div class="sec-kicker">Videos y galerías</div><h2 class="sec-title">No te lo pierdas</h2></div>
+      <div class="rail-nav"><button id="railPrev" aria-label="Anterior">←</button><button id="railNext" aria-label="Siguiente">→</button></div>
+    </div>
+    <div class="rail" id="rail" data-reveal>
+      <a href="#" class="rail-card"><div class="ph"><div class="ph-img" style="background:linear-gradient(160deg,#2a2a2a,#050505)"><svg style="color:var(--yellow)" width="300"><use href="#fighter"/></svg></div><span class="pill">GC 4</span><span class="play">▶</span></div><div class="cap">KO de la noche: Fuentes en 0:47</div></a>
+      <a href="#" class="rail-card"><div class="ph"><div class="ph-img" style="background:linear-gradient(160deg,#3a2a04,#050505)"><svg style="color:var(--red)" width="300"><use href="#fighter"/></svg></div><span class="pill">Entrevista</span><span class="play">▶</span></div><div class="cap">Rojas post pelea: "Voy por el título"</div></a>
+      <a href="#" class="rail-card"><div class="ph"><div class="ph-img" style="background:linear-gradient(160deg,#1d1d1d,#050505)"><svg style="color:var(--blue)" width="300"><use href="#fighter"/></svg></div><span class="pill">Pesaje</span><span class="play">▶</span></div><div class="cap">Resultados del pesaje oficial GC 4</div></a>
+      <a href="#" class="rail-card"><div class="ph"><div class="ph-img" style="background:linear-gradient(160deg,#2f2f2f,#050505)"><svg style="color:var(--yellow)" width="300"><use href="#fighter"/></svg></div><span class="pill">Galería</span></div><div class="cap">Las mejores fotos de Guerra Campal 4</div></a>
+      <a href="#" class="rail-card"><div class="ph"><div class="ph-img" style="background:linear-gradient(160deg,#3a2a04,#050505)"><svg style="color:var(--red)" width="300"><use href="#fighter"/></svg></div><span class="pill">GC 4</span><span class="play">▶</span></div><div class="cap">Sumisión del año: triángulo de Vera</div></a>
+      <a href="#" class="rail-card"><div class="ph"><div class="ph-img" style="background:linear-gradient(160deg,#1d1d1d,#050505)"><svg style="color:var(--blue)" width="300"><use href="#fighter"/></svg></div><span class="pill">Careos</span><span class="play">▶</span></div><div class="cap">Careos cara a cara: Pérez vs Soto</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- PELEADORES: scroll horizontal fijado -->
+<section class="hscroll" id="peleadores">
+  <div class="wrap hscroll-head">
+    <div class="sec-head" data-reveal>
+      <div><div class="sec-kicker">El plantel</div><h2 class="sec-title">Peleadores</h2></div>
+      <a href="#" class="link-more">Ver todos <span class="arrow">→</span></a>
+    </div>
+  </div>
+  <div class="hscroll-track" id="htrack">
+    <a href="#" class="fcard"><div class="ph-fig"><span class="champ">★ Campeón</span><span class="bgnum">C</span><svg><use href="#fighter"/></svg></div><div class="fcard-body"><div class="nick">"El Toro"</div><div class="name">Matías Pérez</div><div class="div"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="">Peso Ligero · 70 kg / 155 lb</div><div class="rec"><div><strong data-count="12">12</strong><small>VICT.</small></div><div><strong data-count="2">2</strong><small>DERR.</small></div><div><strong data-count="0">0</strong><small>EMP.</small></div></div></div></a>
+    <a href="#" class="fcard"><div class="ph-fig"><span class="bgnum">1</span><svg><use href="#fighter"/></svg></div><div class="fcard-body"><div class="nick">"La Sombra"</div><div class="name">Diego Soto</div><div class="div"><img class="flag" src="https://flagcdn.com/w40/ar.png" alt="">Peso Ligero · 70 kg / 155 lb</div><div class="rec"><div><strong data-count="10">10</strong><small>VICT.</small></div><div><strong data-count="1">1</strong><small>DERR.</small></div><div><strong data-count="0">0</strong><small>EMP.</small></div></div></div></a>
+    <a href="#" class="fcard"><div class="ph-fig"><span class="champ">★ Campeona</span><span class="bgnum">C</span><svg><use href="#fighter"/></svg></div><div class="fcard-body"><div class="nick">"La Leona"</div><div class="name">Camila Rojas</div><div class="div"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="">Paja Fem. · 52 kg / 115 lb</div><div class="rec"><div><strong data-count="7">7</strong><small>VICT.</small></div><div><strong data-count="1">1</strong><small>DERR.</small></div><div><strong data-count="0">0</strong><small>EMP.</small></div></div></div></a>
+    <a href="#" class="fcard"><div class="ph-fig"><span class="bgnum">3</span><svg><use href="#fighter"/></svg></div><div class="fcard-body"><div class="nick">"Martillo"</div><div class="name">Ignacio Fuentes</div><div class="div"><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="">Peso Wélter · 77 kg / 170 lb</div><div class="rec"><div><strong data-count="9">9</strong><small>VICT.</small></div><div><strong data-count="3">3</strong><small>DERR.</small></div><div><strong data-count="1">1</strong><small>EMP.</small></div></div></div></a>
+    <a href="#" class="fcard"><div class="ph-fig"><span class="bgnum">5</span><svg><use href="#fighter"/></svg></div><div class="fcard-body"><div class="nick">"Pitbull"</div><div class="name">Bruno Andrade</div><div class="div"><img class="flag" src="https://flagcdn.com/w40/br.png" alt="">Peso Wélter · 77 kg / 170 lb</div><div class="rec"><div><strong data-count="8">8</strong><small>VICT.</small></div><div><strong data-count="2">2</strong><small>DERR.</small></div><div><strong data-count="0">0</strong><small>EMP.</small></div></div></div></a>
+    <a href="#" class="fcard more"><div><div class="display">Todo el<br>plantel</div><div class="cond" style="margin-top:14px">48 peleadores →</div></div></a>
+  </div>
+</section>
+
+<!-- BANDA DE NÚMEROS -->
+<section class="stats-band">
+  <div class="stats-bigline" id="bigline" aria-hidden="true">GUERRA CAMPAL · GUERRA CAMPAL · GUERRA CAMPAL</div>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat" data-reveal><strong data-count="5">5</strong><span>Eventos</span></div>
+      <div class="stat" data-reveal><strong data-count="48">48</strong><span>Peleas</span></div>
+      <div class="stat" data-reveal><strong data-count="31">31</strong><span>Finalizaciones</span></div>
+      <div class="stat" data-reveal><strong data-count="17">17</strong><span>KO / TKO</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RANKINGS -->
+<section class="section" id="rankings">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div><div class="sec-kicker">Actualizado 20 sep 2026</div><h2 class="sec-title">Rankings</h2></div>
+      <div class="rank-switch"><button class="active">Pro</button><button>Amateur</button></div>
+    </div>
+    <div class="rank-grid">
+      <div class="rank-card" data-reveal>
+        <div class="rank-top"><div class="info"><div class="belt">★ Campeón</div><div class="div">Peso Ligero</div><div class="champ-name">Matías Pérez</div></div><div class="fig"><svg><use href="#fighter"/></svg></div></div>
+        <ol class="rank-list">
+          <li><span class="pos">1</span>Diego Soto<span class="mv eq">—</span></li>
+          <li><span class="pos">2</span>Pablo Herrera<span class="mv up">▲1</span></li>
+          <li><span class="pos">3</span>Andrés Muñoz<span class="mv down">▼1</span></li>
+          <li><span class="pos">4</span>Felipe Lagos<span class="mv new">NUEVO</span></li>
+        </ol>
+      </div>
+      <div class="rank-card" data-reveal>
+        <div class="rank-top"><div class="info"><div class="belt">★ Campeón</div><div class="div">Peso Wélter</div><div class="champ-name">Rodrigo Díaz</div></div><div class="fig"><svg><use href="#fighter"/></svg></div></div>
+        <ol class="rank-list">
+          <li><span class="pos">1</span>Martín Castro<span class="mv eq">—</span></li>
+          <li><span class="pos">2</span>Javier Núñez<span class="mv eq">—</span></li>
+          <li><span class="pos">3</span>Ignacio Fuentes<span class="mv up">▲2</span></li>
+          <li><span class="pos">4</span>Cristóbal Vidal<span class="mv down">▼1</span></li>
+        </ol>
+      </div>
+      <div class="rank-card" data-reveal>
+        <div class="rank-top"><div class="info"><div class="belt">★ Libra por libra</div><div class="div">P4P</div><div class="champ-name">Matías Pérez</div></div><div class="fig"><svg><use href="#fighter"/></svg></div></div>
+        <ol class="rank-list">
+          <li><span class="pos">2</span>Camila Rojas<span class="mv up">▲1</span></li>
+          <li><span class="pos">3</span>Rodrigo Díaz<span class="mv down">▼1</span></li>
+          <li><span class="pos">4</span>Diego Soto<span class="mv eq">—</span></li>
+          <li><span class="pos">5</span>Martín Castro<span class="mv new">NUEVO</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENTRADAS -->
+<section class="section tickets" id="entradas">
+  <div class="tickets-bg" id="ticketsBg"></div>
+  <div class="wrap">
+    <div data-reveal>
+      <div class="sec-kicker">Guerra Campal 5 · 24 Oct</div>
+      <h2 class="display">Asegura<br>tu <span class="y">lugar</span></h2>
+      <p class="lead">Entradas a la venta en nuestra ticketera oficial. También en puntos de venta físicos en Santiago.</p>
+      <a href="#" class="btn btn--primary">Ir a la ticketera <span class="arrow">↗</span></a>
+    </div>
+    <div class="tiers">
+      <a href="#" class="tier" data-reveal><div><div class="n">General</div><div class="d">Galería · Acceso 19:30</div></div><div class="p">$15.000</div></a>
+      <a href="#" class="tier" data-reveal><div><div class="n">Preferencial</div><div class="d">Platea numerada</div></div><div class="p">$25.000</div></a>
+      <a href="#" class="tier hot" data-reveal><div><div class="n">Ringside</div><div class="d">Primera fila · Meet &amp; greet</div></div><div class="p">$45.000</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- PATROCINADORES -->
+<section class="sponsors" aria-label="Patrocinadores">
+  <div class="sponsors-label">Patrocinadores oficiales</div>
+  <div class="sp-track">
+    <span class="sp display">IronGym</span><span class="sp cond" style="font-size:34px">KAIZEN FIGHTWEAR</span><span class="sp display">Proteína+</span><span class="sp cond" style="font-size:34px">BARBERÍA NORTE</span><span class="sp display">Energy X</span><span class="sp cond" style="font-size:34px">CLÍNICA DEPORTIVA</span>
+    <span class="sp display">IronGym</span><span class="sp cond" style="font-size:34px">KAIZEN FIGHTWEAR</span><span class="sp display">Proteína+</span><span class="sp cond" style="font-size:34px">BARBERÍA NORTE</span><span class="sp display">Energy X</span><span class="sp cond" style="font-size:34px">CLÍNICA DEPORTIVA</span>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo"><span>G</span><span class="y">C</span></div>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1z"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3a5 5 0 0 0 4 4.4v3.2a8 8 0 0 1-4-1.2V16a6 6 0 1 1-6-6c.3 0 .7 0 1 .1v3.3a2.8 2.8 0 1 0 1.9 2.6V3z"/></svg></a>
+        </div>
+      </div>
+      <div><h4>EXPLORAR</h4><ul><li><a href="#">Eventos</a></li><li><a href="#">Peleadores</a></li><li><a href="#">Rankings</a></li><li><a href="#">Noticias</a></li></ul></div>
+      <div><h4>PROMOTORA</h4><ul><li><a href="#">Sobre nosotros</a></li><li><a href="#">Quiero pelear</a></li><li><a href="#">Patrocinar</a></li><li><a href="#">Contacto</a></li></ul></div>
+      <div><h4>AYUDA</h4><ul><li><a href="#">Entradas</a></li><li><a href="#">Preguntas frecuentes</a></li><li><a href="#">Privacidad</a></li></ul></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Guerra Campal. Todos los derechos reservados.</span><span>Maqueta de diseño · contenido ficticio</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(() => {
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const animOn = document.documentElement.classList.contains('anim') && window.gsap;
+
+  /* ---- Cuenta regresiva ---- */
+  const target = new Date('2026-10-24T21:00:00-03:00').getTime();
+  const cd = Object.fromEntries($$('[data-cd]').map(el => [el.dataset.cd, el]));
+  const pad = n => String(n).padStart(2, '0');
+  const tick = () => {
+    let s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+    cd.d.textContent = pad(Math.floor(s / 86400)); s %= 86400;
+    cd.h.textContent = pad(Math.floor(s / 3600)); s %= 3600;
+    cd.m.textContent = pad(Math.floor(s / 60));
+    cd.s.textContent = pad(s % 60);
+  };
+  tick(); setInterval(tick, 1000);
+
+  /* ---- Pestañas de cartelera ---- */
+  $$('.tab').forEach(tab => tab.addEventListener('click', () => {
+    $$('.tab').forEach(t => t.classList.toggle('active', t === tab));
+    $$('.panel').forEach(p => p.classList.toggle('active', p.id === tab.dataset.tab));
+    if (animOn) gsap.fromTo(`#${tab.dataset.tab} .fight`, { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: .08, duration: .6, ease: 'power3.out' });
+  }));
+
+  /* ---- Rankings pro/amateur (solo visual) ---- */
+  $$('.rank-switch button').forEach(b => b.addEventListener('click', () => {
+    $$('.rank-switch button').forEach(x => x.classList.toggle('active', x === b));
+    if (animOn) gsap.fromTo('.rank-card', { opacity: .3, y: 16 }, { opacity: 1, y: 0, stagger: .06, duration: .5 });
+  }));
+
+  /* ---- Carrusel arrastrable ---- */
+  const rail = $('#rail');
+  const step = () => rail.querySelector('.rail-card').offsetWidth + 20;
+  $('#railNext').onclick = () => rail.scrollBy({ left: step(), behavior: 'smooth' });
+  $('#railPrev').onclick = () => rail.scrollBy({ left: -step(), behavior: 'smooth' });
+  let down = false, sx = 0, sl = 0, moved = false;
+  rail.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sl = rail.scrollLeft; rail.classList.add('dragging'); });
+  window.addEventListener('pointerup', () => { down = false; rail.classList.remove('dragging'); });
+  rail.addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 4) moved = true; rail.scrollLeft = sl - dx; });
+  rail.addEventListener('click', e => { if (moved) e.preventDefault(); }, true);
+
+  /* ---- Menú móvil ---- */
+  const mnav = $('#mnav');
+  $('#burger').onclick = () => mnav.classList.toggle('open');
+  $$('#mnav a').forEach(a => a.addEventListener('click', () => mnav.classList.remove('open')));
+
+  /* ---- Header: sólido al bajar, se oculta al bajar y aparece al subir ---- */
+  const header = $('#header'), eventbar = $('#eventbar');
+  let lastY = 0;
+  const onScroll = y => {
+    header.classList.toggle('solid', y > 40);
+    header.classList.toggle('hidden', y > lastY && y > 300 && !mnav.classList.contains('open'));
+    eventbar.classList.toggle('show', y > window.innerHeight * .85);
+    lastY = y;
+  };
+
+  if (!animOn) {
+    window.addEventListener('scroll', () => onScroll(scrollY), { passive: true });
+    return;
+  }
+
+  /* ================= ANIMACIONES ================= */
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Scroll suave
+  const lenis = new Lenis({ lerp: .085, wheelMultiplier: 1 });
+  lenis.on('scroll', ({ scroll }) => { ScrollTrigger.update(); onScroll(scroll); });
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id.length > 1 && $(id)) { e.preventDefault(); lenis.scrollTo(id, { offset: -70, duration: 1.4 }); }
+  }));
+  lenis.stop();
+
+  // Dividir nombres del hero en letras
+  $$('[data-split]').forEach(el => { el.innerHTML = [...el.textContent].map(c => `<span>${c}</span>`).join(''); });
+
+  // Intro: loader + careo
+  const intro = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  intro
+    .from('.loader-mark span', { yPercent: 110, duration: .7, stagger: .1 })
+    .to('.loader-bar', { scaleX: 1, duration: .8, ease: 'power2.inOut' }, '-=.2')
+    .to('.loader-mark span', { yPercent: -110, duration: .5, stagger: .06, ease: 'power3.in' })
+    .to('.loader', { clipPath: 'inset(0 0 100% 0)', duration: .8, ease: 'power4.inOut' }, '-=.15')
+    .set('.loader', { display: 'none' })
+    .fromTo('.hero-bigtext', { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 1.6 }, '-=.5')
+    .fromTo('.hero-octagon', { scale: .6, opacity: 0, rotate: -22 }, { scale: 1, opacity: .5, rotate: 0, duration: 1.8 }, '<')
+    .fromTo('.fighter--red', { opacity: 0, xPercent: -40, filter: 'blur(12px)' }, { opacity: 1, xPercent: 0, filter: 'blur(0px)', duration: 1.3 }, '<.1')
+    .fromTo('.fighter--blue', { opacity: 0, xPercent: 40, filter: 'blur(12px)' }, { opacity: 1, xPercent: 0, filter: 'blur(0px)', duration: 1.3 }, '<')
+    .fromTo('.hero-tag', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .8 }, '-=.8')
+    .set('.hero-title', { opacity: 1 }, '<')
+    .from('.hero-title .name span', { yPercent: 115, duration: .9, stagger: .045 }, '<.05')
+    .fromTo('.hero-title .vs', { scale: 3.2, opacity: 0 }, { scale: 1, opacity: 1, duration: .55, ease: 'back.out(3)' }, '-=.55')
+    .to('.hero', { x: 6, duration: .05, repeat: 5, yoyo: true, ease: 'none' }, '<.35')
+    .fromTo(['.hero-meta', '.countdown', '.hero-ctas'], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .8, stagger: .1 }, '-=.3')
+    .fromTo('.scroll-hint', { opacity: 0 }, { opacity: 1, duration: .6 }, '-=.4')
+    .add(() => lenis.start());
+
+  // Parallax del hero al hacer scroll
+  const heroST = { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true };
+  gsap.to('.fighter--red', { xPercent: -30, yPercent: 12, scrollTrigger: heroST });
+  gsap.to('.fighter--blue', { xPercent: 30, yPercent: 12, scrollTrigger: heroST });
+  gsap.to('.hero-bigtext', { yPercent: 70, scrollTrigger: heroST });
+  gsap.to('.hero-octagon', { rotate: 50, scale: 1.35, scrollTrigger: heroST });
+  gsap.to('.hero-content', { yPercent: -40, opacity: 0, scrollTrigger: { ...heroST, end: '70% top' } });
+  gsap.to('.hero-spot', { opacity: 0, scrollTrigger: heroST });
+
+  // Parallax con el mouse (solo puntero fino)
+  if (matchMedia('(pointer: fine)').matches) {
+    const inners = $$('.fighter-inner');
+    const qx = inners.map(el => gsap.quickTo(el, 'x', { duration: 1, ease: 'power3' }));
+    const qy = inners.map(el => gsap.quickTo(el, 'y', { duration: 1, ease: 'power3' }));
+    const bx = gsap.quickTo('.hero-bigtext', 'x', { duration: 1.4, ease: 'power3' });
+    $('#hero').addEventListener('mousemove', e => {
+      const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5;
+      qx[0](nx * 40); qy[0](ny * 18);
+      qx[1](nx * 26); qy[1](ny * 12);
+      bx(nx * -60);
+    });
+  }
+
+  // Marquee: se inclina más según velocidad de scroll
+  const skew = gsap.quickTo('.marquee', 'skewY', { duration: .5, ease: 'power3' });
+  lenis.on('scroll', ({ velocity }) => skew(gsap.utils.clamp(-4, 4, velocity * -.15)));
+
+  // Revelados al entrar en pantalla
+  ScrollTrigger.batch('[data-reveal]', {
+    start: 'top 88%',
+    onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: 1, stagger: .1, ease: 'power3.out', overwrite: true }),
+  });
+  ScrollTrigger.batch('#estelar .fight', {
+    start: 'top 90%',
+    onEnter: els => gsap.fromTo(els, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .9, stagger: .12, ease: 'power3.out' }),
+  });
+
+  // Imagen destacada con parallax interno
+  gsap.fromTo('.feature .ph-img', { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.feature', start: 'top bottom', end: 'bottom top', scrub: true } });
+
+  // Contadores
+  $$('[data-count]').forEach(el => {
+    const end = +el.dataset.count, o = { v: 0 };
+    el.textContent = '0';
+    ScrollTrigger.create({
+      trigger: el, start: 'top 90%', once: true,
+      onEnter: () => gsap.to(o, { v: end, duration: 1.6, ease: 'power2.out', onUpdate: () => el.textContent = Math.round(o.v) }),
+    });
+  });
+
+  // Banda amarilla: texto gigante se desplaza con el scroll
+  gsap.fromTo('#bigline', { xPercent: 0 }, { xPercent: -35, ease: 'none', scrollTrigger: { trigger: '.stats-band', start: 'top bottom', end: 'bottom top', scrub: true } });
+
+  // Entradas: franja diagonal con parallax
+  gsap.fromTo('#ticketsBg', { yPercent: -10 }, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '#entradas', start: 'top bottom', end: 'bottom top', scrub: true } });
+
+  // Peleadores: sección fijada con desplazamiento horizontal (escritorio)
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 901px)', () => {
+    const track = $('#htrack');
+    const dist = () => Math.max(0, track.scrollWidth - innerWidth);
+    gsap.to(track, {
+      x: () => -dist(), ease: 'none',
+      scrollTrigger: { trigger: '#peleadores', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 },
+    });
+    // Cada card rota levemente al entrar
+    $$('.fcard', track).forEach((c, i) => gsap.from(c, { rotate: i % 2 ? 3 : -3, y: 40, opacity: .4, duration: 1, scrollTrigger: { trigger: '#peleadores', start: 'top 70%' } }));
+  });
+
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+})();
+</script>
+</body>
+</html>

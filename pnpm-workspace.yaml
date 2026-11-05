@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: true
+  # Quitar fondo corre en el navegador (onnxruntime-web): no hace falta compilar/bajar el binario de Node.
+  onnxruntime-node: false
+  protobufjs: false
+  sharp: false
+  unrs-resolver: false
