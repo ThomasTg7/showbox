@@ -27,9 +27,9 @@ describe("settings queries", () => {
   });
 
   it("returns what was saved, filling in fields it does not have", async () => {
-    await db.insert(siteSettings).values({ key: "socials", value: { instagram: "@openfightlatam" } });
+    await db.insert(siteSettings).values({ key: "socials", value: { instagram: "@showboxpromotions" } });
 
-    expect(await getSetting(db, "socials")).toEqual({ instagram: "@openfightlatam", tiktok: "", youtube: "", facebook: "", x: "" });
+    expect(await getSetting(db, "socials")).toEqual({ instagram: "@showboxpromotions", tiktok: "", youtube: "", facebook: "", x: "" });
   });
 
   it("falls back to the defaults when the stored value is no longer valid", async () => {

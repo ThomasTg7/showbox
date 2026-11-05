@@ -1,5 +1,5 @@
 # Caddy: HTTPS automático (Let's Encrypt) para los dominios de deploy/.env. Los nombres vienen de variables de entorno
-# (SITE_HOST=guerracampal.cl, ADMIN_HOST=admin.guerracampal.cl, …). Para probar sin dominio ni certificados, direcciones
+# (SITE_HOST=showbox.test, ADMIN_HOST=admin.showbox.test, …). Para probar sin dominio ni certificados, direcciones
 # `http://localhost:8080`, etc. (ver docs/vps-migration.md → «Probar en tu PC»).
 {
 	email {$ACME_EMAIL}
@@ -20,7 +20,7 @@
 }
 
 # `www` → el dominio principal. Con `SITE_URL` (lleva el esquema): `SITE_HOST` en producción no lo lleva, y un `Location` sin
-# esquema el navegador lo resuelve como ruta relativa (`www.guerracampal.cl/guerracampal.cl/…`).
+# esquema el navegador lo resuelve como ruta relativa (`www.showbox.test/showbox.test/…`).
 {$WWW_HOST} {
 	redir {$SITE_URL}{uri} permanent
 }

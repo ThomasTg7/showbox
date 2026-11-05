@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copia de la base (pg_dump, formato custom) en /backups/db; borra las de más de BACKUP_KEEP_DAYS días.
 # Corre una al arrancar y luego una cada 24 h; con `--once`, solo una (para probarla o antes de una actualización).
-# Restaurar: pg_restore --clean --if-exists -d guerra_campal <archivo> (ver docs/vps-migration.md).
+# Restaurar: pg_restore --clean --if-exists -d showbox <archivo> (ver docs/vps-migration.md).
 set -eu
 
 backup_once() {

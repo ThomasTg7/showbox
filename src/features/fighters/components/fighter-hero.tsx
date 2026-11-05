@@ -1,10 +1,11 @@
+import { ArenaBackdrop } from "@/components/brand/arena-backdrop";
 import { Flag } from "@/components/ui-gc/flag";
 import { Tag } from "@/components/ui-gc/tag";
 import { countryName, formatWeight } from "@/domain/units";
 import type { FighterProfileDTO } from "../dto";
 import { CAREER_STATUS_LABELS, divisionTitle } from "../labels";
+import { formatRecord } from "./record-summary";
 import { CountFigures, type CountFigure } from "./count-figures";
-import { FighterName } from "./fighter-name";
 import { FighterFigure } from "./fighter-photo";
 import { HeroParallax } from "./hero-parallax";
 
@@ -22,7 +23,8 @@ type FighterHeroProps = {
 export function FighterHero({ fighter, figures, rankingTags = [] }: FighterHeroProps) {
   return (
     <>
-      <section className="relative flex min-h-[100svh] flex-col overflow-hidden bg-black pt-[76px]" aria-labelledby="fighter-name">
+      <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-black pt-[76px]" aria-labelledby="fighter-name">
+        <ArenaBackdrop />
         <div className="mx-auto flex w-full max-w-[1320px] flex-1 flex-col px-[clamp(16px,4vw,64px)] lg:grid lg:grid-cols-[1.15fr_.85fr] lg:gap-8">
           <div className="relative z-10 order-2 pb-6 pt-2 short:pb-3 short:pt-0 lg:order-1 lg:self-end lg:pb-12 lg:pt-8">
             <div className="mb-5 flex flex-wrap gap-2 short:mb-2 short:gap-1.5" data-slot="fighter-tags">
@@ -35,11 +37,16 @@ export function FighterHero({ fighter, figures, rankingTags = [] }: FighterHeroP
               ))}
             </div>
             {fighter.nickname ? (
-              <p className="font-cond text-[clamp(16px,2.4vw,24px)] font-bold tracking-[.12em] text-accent-bright">“{fighter.nickname}”</p>
+              <p className="sb-spaced text-[clamp(11px,1.4vw,14px)] text-accent-bright">“{fighter.nickname}”</p>
             ) : null}
-            <h1 id="fighter-name" className="my-2 font-display text-[clamp(38px,7.5vw,104px)] uppercase leading-[.95] text-white short:my-1 short:text-[34px]">
-              <FighterName firstName={fighter.firstName} lastName={fighter.lastName} />
+            {/* Como los afiches: el nombre en un rótulo rojo espaciado y el apellido gigante, cromado. */}
+            <h1 id="fighter-name" className="sb-punch-in my-3 uppercase short:my-1">
+              <span className="sb-label text-[clamp(12px,1.6vw,17px)]">{fighter.firstName}</span>{" "}
+              <span className="sb-chrome-text mt-2 block font-display text-[clamp(34px,5.6vw,90px)] leading-[.9] tracking-[-.02em] [overflow-wrap:anywhere] short:text-[34px]">{fighter.lastName}</span>
             </h1>
+            <p data-slot="fighter-record-bar" aria-label={`Récord profesional ${formatRecord(fighter.proRecord)}`} className="mb-4 inline-flex bg-brand-ember px-5 py-1.5 font-display text-[clamp(22px,3vw,34px)] leading-none tracking-[.08em] text-white">
+              {formatRecord(fighter.proRecord)}
+            </p>
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-cond text-[15px] font-semibold uppercase tracking-[.08em] text-muted-foreground sm:text-base">
               <span className="flex items-center gap-2">
                 <Flag code={fighter.nationality} className="h-[18px] w-[27px]" />

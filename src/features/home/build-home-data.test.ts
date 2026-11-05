@@ -88,7 +88,7 @@ describe("buildHomeData", () => {
     expect(home.fighters).toEqual([]);
     expect(home.dontMiss).toEqual([]);
     expect(home.news).toEqual({ main: null, top: [] });
-    expect(home.stats).toEqual({ events: 0, bouts: 0, finishes: 0, koTko: 0 });
+    expect(home.stats).toEqual({ events: 0, bouts: 0, rounds: 0, koTko: 0 });
     expect(home.rankings).toEqual({ pro: [], amateur: [] });
     expect(home.sponsors).toEqual([]);
   });

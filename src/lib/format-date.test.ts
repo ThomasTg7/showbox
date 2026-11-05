@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatDateTime, formatLongDate, formatShortDate, formatTime } from "./format-date";
+import { formatDate, formatDateTime, formatLongDate, formatPosterDate, formatShortDate, formatTime } from "./format-date";
 
 // 2026-09-29 04:30 UTC = 2026-09-28 23:30 en Ecuador (UTC-5 todo el año).
 const lateNightInEcuador = new Date("2026-09-29T04:30:00.000Z");
@@ -30,5 +30,12 @@ describe("formatShortDate and formatLongDate", () => {
   it("writes the weekday and the day of Ecuador, not of the server", () => {
     expect(formatShortDate(saturdayNight)).toBe("sáb 24 oct");
     expect(formatLongDate(saturdayNight)).toBe("sábado 24 de octubre de 2026");
+  });
+});
+
+describe("formatPosterDate", () => {
+  it("writes the date like the fight posters: weekday - day - month, in Ecuador", () => {
+    expect(formatPosterDate(saturdayNight)).toBe("sábado - 24 - octubre");
+    expect(formatPosterDate(new Date("2026-11-15T04:30:00Z"))).toBe("sábado - 14 - noviembre");
   });
 });

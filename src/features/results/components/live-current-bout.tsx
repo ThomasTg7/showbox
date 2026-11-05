@@ -107,7 +107,7 @@ export function LiveCurrentBout({ bout, remaining, onSaved }: LiveCurrentBoutPro
         </span>
         <div className="flex items-center gap-3">
           <AdminFighterThumb fighter={bout.red} className="size-14 border-b-4 border-[#D7263D]" />
-          <p className="min-w-0 flex-1 text-center font-display text-3xl leading-none uppercase break-words">
+          <p className="min-w-0 flex-1 text-center font-display text-[clamp(18px,6vw,30px)] leading-none uppercase break-words">
             <span className="text-[#ff5468]">{bout.red.lastName}</span> <span className="text-base text-muted-foreground">vs</span> <span className="text-[#5b9dff]">{bout.blue.lastName}</span>
           </p>
           <AdminFighterThumb fighter={bout.blue} className="size-14 border-b-4 border-[#1E6FD9]" />

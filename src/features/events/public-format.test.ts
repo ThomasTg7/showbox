@@ -73,7 +73,7 @@ describe("youtubeEmbedUrl", () => {
 
   it("does not embed anything else", () => {
     expect(youtubeEmbedUrl("https://vimeo.com/123")).toBeNull();
-    expect(youtubeEmbedUrl("https://www.youtube.com/@openfightlatam")).toBeNull();
+    expect(youtubeEmbedUrl("https://www.youtube.com/@showboxpromotions")).toBeNull();
     expect(youtubeEmbedUrl("https://evil.example.com/watch?v=abc123")).toBeNull();
     expect(youtubeEmbedUrl("javascript:alert(1)")).toBeNull();
     expect(youtubeEmbedUrl("no es un enlace")).toBeNull();

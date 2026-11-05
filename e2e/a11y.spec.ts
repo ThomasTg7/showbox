@@ -63,7 +63,7 @@ test("una noticia con publicaciones de Instagram, TikTok y Facebook no tiene vio
   const { slug } = await insertPost(db, {
     slug: "noticia-e2e-a11y-redes",
     title: "Noticia E2E con redes",
-    body: { type: "doc", content: [embed("instagram", "C1a2B3c4D5e"), embed("tiktok", "7123456789012345678"), embed("facebook", "openfightlatam/posts/1234567890")] },
+    body: { type: "doc", content: [embed("instagram", "C1a2B3c4D5e"), embed("tiktok", "7123456789012345678"), embed("facebook", "showboxpromotions/posts/1234567890")] },
   });
   await open(page, `/noticias/${slug}`);
   await expect(page.getByRole("button", { name: "Ver en Instagram" })).toBeVisible();

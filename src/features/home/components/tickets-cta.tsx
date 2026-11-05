@@ -23,7 +23,7 @@ export function TicketsCta({ event }: { event: EventPageDTO }) {
           <p className="mb-3.5 flex items-center gap-2.5 font-cond text-[13px] font-extrabold uppercase tracking-[.32em] text-accent-bright before:block before:h-[4px] before:w-8 before:-skew-x-[20deg] before:bg-brand-bright">
             {event.name} · {formatShortDate(new Date(event.startsAt))}
           </p>
-          <h2 id="home-tickets-title" className="font-display text-[clamp(44px,6.6vw,96px)] uppercase leading-[.9] text-white">
+          <h2 id="home-tickets-title" className="font-display text-[clamp(36px,6.4vw,92px)] uppercase leading-[.9] text-white">
             Vive la
             <br />
             <span className="text-accent-bright">velada</span>

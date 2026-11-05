@@ -23,7 +23,7 @@ export function PostCover({ cover, sizes, priority = false, className }: PostCov
         />
       ) : (
         <div aria-hidden data-slot="post-cover-fallback" className="absolute inset-0 grid place-items-center">
-          <span className="font-display text-[clamp(72px,16vw,160px)] leading-none text-transparent [-webkit-text-stroke:2px_rgba(255,59,71,.45)]">{BRAND.shortName}</span>
+          <span className="font-display text-[clamp(22px,4.2vw,52px)] uppercase leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(255,59,71,.55)]">{BRAND.shortName}</span>
         </div>
       )}
     </div>

@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ofl
+      POSTGRES_DB: showbox
     volumes:
       - postgres-data:/var/lib/postgresql/data
 

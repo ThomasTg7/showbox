@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { archivo, montserrat } from "./fonts";
 import "./globals.css";
 import "./showbox-public.css";
-import "./sb-admin.css";
+import "./showbox-admin.css";
 import "./showbox-motion.css";
 
 export const metadata: Metadata = {

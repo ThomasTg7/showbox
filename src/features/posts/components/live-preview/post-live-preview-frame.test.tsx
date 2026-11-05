@@ -17,9 +17,9 @@ describe("live preview handshake", () => {
     expect(send).toHaveBeenCalledWith({ type: LIVE_PREVIEW_READY }, window.location.origin);
     act(() => vi.advanceTimersByTime(1000));
     expect(send.mock.calls.length).toBeGreaterThan(1);
-    const post = buildLivePreviewPost({ title: "Noticia OFL", excerpt: "", categoryId: "", categories: [], cover: null, gallery: [], body: EMPTY_POST_BODY, media: {}, publication: { status: "draft", publishAt: null }, now: new Date() });
+    const post = buildLivePreviewPost({ title: "Noticia ShowBox", excerpt: "", categoryId: "", categories: [], cover: null, gallery: [], body: EMPTY_POST_BODY, media: {}, publication: { status: "draft", publishAt: null }, now: new Date() });
     act(() => window.dispatchEvent(new MessageEvent("message", { origin: window.location.origin, source: window.parent, data: { type: LIVE_PREVIEW_MESSAGE, post } })));
-    expect(screen.getByRole("heading", { name: "Noticia OFL" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Noticia ShowBox" })).toBeVisible();
     const calls = send.mock.calls.length;
     act(() => vi.advanceTimersByTime(1000));
     expect(send).toHaveBeenCalledTimes(calls);

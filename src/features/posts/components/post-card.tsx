@@ -21,7 +21,7 @@ type PostCardProps = {
 
 // Interlineado del título ≥ 1: con menos, las tildes de las mayúsculas (É, Ó) suben sobre la categoría o la línea de arriba.
 const TITLE_CLASS = {
-  feature: "font-display text-[clamp(28px,3.6vw,50px)] uppercase leading-[1.04] text-white",
+  feature: "font-display text-[clamp(24px,2.8vw,40px)] uppercase leading-[1.04] text-white",
   default: "line-clamp-3 font-cond text-xl font-bold uppercase leading-[1.12] tracking-[.03em] text-white sm:text-[22px]",
   compact: "line-clamp-3 font-cond text-lg font-bold uppercase leading-[1.12] tracking-[.03em] text-white",
 } as const;

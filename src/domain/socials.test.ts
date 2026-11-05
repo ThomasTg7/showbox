@@ -6,7 +6,7 @@ describe("socialUrl", () => {
     expect(socialUrl("instagram", "@matias.cevallos")).toBe("https://www.instagram.com/matias.cevallos");
     expect(socialUrl("instagram", "matias.cevallos")).toBe("https://www.instagram.com/matias.cevallos");
     expect(socialUrl("tiktok", "@elToro")).toBe("https://www.tiktok.com/@elToro");
-    expect(socialUrl("x", "@openfightlatam")).toBe("https://x.com/openfightlatam");
+    expect(socialUrl("x", "@showboxpromotions")).toBe("https://x.com/showboxpromotions");
     expect(socialUrl("youtube", "@GuerraCampal")).toBe("https://www.youtube.com/@GuerraCampal");
   });
 

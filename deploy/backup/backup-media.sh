@@ -7,7 +7,7 @@ backup_once() {
   mkdir -p /backups/media
   # Errores revisados a mano: dentro de `backup_once || …` el shell ignora `set -e`.
   mc alias set local "${MINIO_URL:-http://minio:9000}" "${MINIO_ROOT_USER:?falta MINIO_ROOT_USER}" "${MINIO_ROOT_PASSWORD:?falta MINIO_ROOT_PASSWORD}" > /dev/null || return 1
-  mc mirror --overwrite --quiet "local/${S3_BUCKET:-guerra-campal}" /backups/media > /dev/null || return 1
+  mc mirror --overwrite --quiet "local/${S3_BUCKET:-showbox}" /backups/media > /dev/null || return 1
   echo "$(date -u +%FT%TZ) backup-media: $(du -sh /backups/media | cut -f1) en /backups/media"
 }
 

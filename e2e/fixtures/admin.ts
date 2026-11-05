@@ -1,10 +1,10 @@
 import { expect, type Page } from "@playwright/test";
 
 // Admin creado por e2e/global-setup.ts en la BD de e2e (se vacía en cada corrida).
-export const SEED_ADMIN_EMAIL = "seed-admin@openfightlatam.cl";
+export const SEED_ADMIN_EMAIL = "seed-admin@showbox.test";
 export const SEED_ADMIN_PASSWORD = "SeedPassword123!";
 // Otro admin solo para `admin-account.spec.ts`: cambia su contraseña, y el de arriba lo usan todos los demás specs.
-export const ACCOUNT_ADMIN_EMAIL = "cuenta-admin@openfightlatam.cl";
+export const ACCOUNT_ADMIN_EMAIL = "cuenta-admin@showbox.test";
 export const ACCOUNT_ADMIN_PASSWORD = "CuentaPassword123!";
 
 /** El panel vive en su subdominio (playwright.config.ts fija ADMIN_URL): `adminUrl("/boxeadores")`. */

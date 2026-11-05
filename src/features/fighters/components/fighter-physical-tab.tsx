@@ -16,7 +16,7 @@ export function FighterPhysicalTab() {
       </SelectField>
       <TextField name="gym" label="Gimnasio" autoComplete="off" />
       <TextField name="coach" label="Entrenador" autoComplete="off" />
-      <TextField name="baseDiscipline" label="Disciplina base" hint="Ej.: Boxeo, Jiu-jitsu, Lucha" autoComplete="off" />
+      <TextField name="baseDiscipline" label="Estilo de pelea" hint="Ej.: Fajador, Estilista, Contragolpeador" autoComplete="off" />
     </div>
   );
 }

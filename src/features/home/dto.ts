@@ -6,7 +6,7 @@ import type { SponsorDTO } from "@/features/sponsors/dto";
 
 // Todo lo que pasa por la caché se serializa en JSON: las fechas viajan como texto ISO.
 
-export type HomeStats = { events: number; bouts: number; finishes: number; koTko: number };
+export type HomeStats = { events: number; bouts: number; rounds: number; koTko: number };
 
 /** El evento que protagoniza la portada y la cartelera resumida, con el número de ranking de cada boxeador de la cartelera. */
 export type HomeEvent = { event: EventPageDTO; rankLabels: Record<string, string> };

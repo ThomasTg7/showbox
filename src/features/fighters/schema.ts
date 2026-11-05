@@ -47,7 +47,7 @@ export const fighterInputSchema = z
     stance: optionalEnum(["orthodox", "southpaw", "switch"], "Elige la guardia"),
     gym: optionalText(80, "El gimnasio"),
     coach: optionalText(80, "El entrenador"),
-    baseDiscipline: optionalText(60, "La disciplina base"),
+    baseDiscipline: optionalText(60, "El estilo de pelea"),
     bio: optionalText(BIO_MAX_LENGTH, "La biografía"),
     careerStatus: z.enum(["active", "inactive", "retired"], { error: "Elige el estado" }).default("active"),
     instagram: optionalText(200, "Instagram"),

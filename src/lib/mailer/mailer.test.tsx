@@ -23,10 +23,10 @@ describe("createConsoleMailer", () => {
 describe("createResendMailer", () => {
   it("sends through Resend with the configured sender", async () => {
     const send = vi.fn().mockResolvedValue({ data: { id: "1" }, error: null });
-    await createResendMailer({ from: "OFL <no-reply@x.cl>", client: { emails: { send } } }).send(message);
+    await createResendMailer({ from: "ShowBox <no-reply@x.cl>", client: { emails: { send } } }).send(message);
 
     expect(send).toHaveBeenCalledWith(
-      expect.objectContaining({ from: "OFL <no-reply@x.cl>", to: "admin@x.cl", subject: message.subject }),
+      expect.objectContaining({ from: "ShowBox <no-reply@x.cl>", to: "admin@x.cl", subject: message.subject }),
     );
   });
 

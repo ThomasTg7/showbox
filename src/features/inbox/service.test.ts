@@ -47,7 +47,7 @@ describe("inbox service", () => {
     vi.restoreAllMocks();
   });
 
-  const deps = (overrides: Partial<SubmitDeps> = {}): SubmitDeps => ({ db, mailer: recorder, notifyEmail: "avisos@openfightlatam.cl", ipHash: "ip-1", now: NOW, ...overrides });
+  const deps = (overrides: Partial<SubmitDeps> = {}): SubmitDeps => ({ db, mailer: recorder, notifyEmail: "avisos@showbox.test", ipHash: "ip-1", now: NOW, ...overrides });
 
   const saved = () => db.select().from(inboxMessages);
 
@@ -69,7 +69,7 @@ describe("inbox service", () => {
       });
       expect(row?.consentAt.toISOString()).toBe(NOW.toISOString());
       expect(recorder.sent).toHaveLength(1);
-      expect(recorder.sent[0]).toMatchObject({ to: "avisos@openfightlatam.cl", subject: "[ShowBox Promotions] Nueva postulación: Tomás Vera" });
+      expect(recorder.sent[0]).toMatchObject({ to: "avisos@showbox.test", subject: "[ShowBox Promotions] Nueva postulación: Tomás Vera" });
     });
 
     it("the notification email carries the data and a link to the inbox", async () => {
@@ -202,7 +202,7 @@ describe("inbox service", () => {
 
       const [row] = await saved();
       expect(row).toMatchObject({ kind: "sponsorship", name: "Kaizen Fightwear", email: "ana@kaizen.example.cl", phone: null, payload: { contactName: "Ana Quiñónez", message: "Queremos ser patrocinador oficial." } });
-      expect(recorder.sent[0]).toMatchObject({ to: "avisos@openfightlatam.cl", subject: "[ShowBox Promotions] Contacto de patrocinio: Kaizen Fightwear" });
+      expect(recorder.sent[0]).toMatchObject({ to: "avisos@showbox.test", subject: "[ShowBox Promotions] Contacto de patrocinio: Kaizen Fightwear" });
     });
 
     it("needs the company, a contact person and consent", async () => {

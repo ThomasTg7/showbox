@@ -44,7 +44,7 @@ export function FightersPin({ fighters }: { fighters: HomeFighterHighlight[] }) 
           <li className="w-[min(78vw,300px)] shrink-0 snap-start md:w-[340px]">
             <Link href="/boxeadores" className="grid h-full min-h-[300px] place-items-center bg-brand p-6 text-center text-white outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
               <span>
-                <span className="block font-display text-[clamp(44px,8vw,58px)] uppercase leading-[.9]">
+                <span className="block font-display text-[clamp(32px,7vw,54px)] uppercase leading-[.9]">
                   Todo el
                   <br />
                   plantel

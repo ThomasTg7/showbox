@@ -9,7 +9,7 @@ import type { HomeStats } from "../dto";
 const LABELS: { key: keyof HomeStats; label: string }[] = [
   { key: "events", label: "Eventos" },
   { key: "bouts", label: "Peleas" },
-  { key: "finishes", label: "Finalizaciones" },
+  { key: "rounds", label: "Rounds disputados" },
   { key: "koTko", label: "KO / TKO" },
 ];
 
@@ -65,16 +65,16 @@ export function StatsBand({ stats }: { stats: HomeStats }) {
       <div
         ref={bigLineRef}
         aria-hidden
-        className="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap font-display text-[16vw] leading-[.8] text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,.06)]"
+        className="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap font-display text-[13vw] leading-[.8] text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,.06)]"
       >
-        OFL · OFL · OFL
+        SHOWBOX · BOXEO · SHOWBOX · BOXEO
       </div>
       <div className="relative mx-auto w-full max-w-[1320px] px-[clamp(16px,4vw,64px)]">
         <dl ref={listRef} data-reveal className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
           {LABELS.map(({ key, label }) => (
             <div key={key} className="flex flex-col-reverse items-start">
-              <dt className="inline-block border-t-2 border-brand pt-3 font-cond text-sm font-semibold tracking-[.04em] text-accent-bright">{label}</dt>
-              <dd className="font-display text-[clamp(64px,9vw,130px)] leading-[.9] tabular-nums">
+              <dt className="inline-block border-t-[3px] border-brand-bright pt-3 font-cond text-xs font-extrabold uppercase tracking-[.24em] text-accent-bright">{label}</dt>
+              <dd className="sb-chrome-text font-display text-[clamp(52px,8vw,118px)] leading-[.9] tabular-nums">
                 <span data-count={stats[key]}>{stats[key]}</span>
               </dd>
             </div>

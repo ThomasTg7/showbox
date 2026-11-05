@@ -1,4 +1,4 @@
-# Guerra Campal en un VPS propio (Docker Compose). Guía: docs/vps-migration.md
+# ShowBox Promotions en un VPS propio (Docker Compose). Guía: docs/vps-migration.md
 #
 #   cp deploy/env.example deploy/.env        # y completa los valores
 #   docker compose -f deploy/docker-compose.prod.yml up -d postgres minio minio-setup
@@ -9,7 +9,7 @@
 # Qué corre: la app Next.js (standalone), Postgres 17, MinIO (imágenes, compatible S3), Umami (analítica sin cookies),
 # Caddy (HTTPS automático para el sitio, el panel, las imágenes y las estadísticas), un cron diario de limpieza y copias
 # diarias de la base y de las imágenes en BACKUP_DIR (por defecto deploy/backups): sácalas también fuera del servidor.
-name: guerracampal-prod
+name: showbox-prod
 
 services:
   postgres:
@@ -18,7 +18,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en deploy/.env}
-      POSTGRES_DB: ${POSTGRES_DB:-guerra_campal}
+      POSTGRES_DB: ${POSTGRES_DB:-showbox}
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d:ro
@@ -56,7 +56,7 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      S3_BUCKET: ${S3_BUCKET:-guerra-campal}
+      S3_BUCKET: ${S3_BUCKET:-showbox}
     entrypoint:
       - /bin/sh
       - -c
@@ -76,7 +76,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-guerra_campal}
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-showbox}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?define BETTER_AUTH_SECRET en deploy/.env}
       SITE_URL: ${SITE_URL}
       ADMIN_URL: ${ADMIN_URL}
@@ -102,7 +102,7 @@ services:
       - "3000"
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-guerra_campal}
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-showbox}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       SITE_URL: ${SITE_URL}
       ADMIN_URL: ${ADMIN_URL}
@@ -110,7 +110,7 @@ services:
       STORAGE_DRIVER: s3
       S3_ENDPOINT: ${S3_ENDPOINT}
       S3_REGION: ${S3_REGION:-us-east-1}
-      S3_BUCKET: ${S3_BUCKET:-guerra-campal}
+      S3_BUCKET: ${S3_BUCKET:-showbox}
       S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
       S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
       S3_PUBLIC_URL: ${S3_PUBLIC_URL}
@@ -192,7 +192,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB:-guerra_campal}
+      POSTGRES_DB: ${POSTGRES_DB:-showbox}
       BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}
     entrypoint: ["sh", "/usr/local/bin/backup-db.sh"]
     volumes:
@@ -208,7 +208,7 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      S3_BUCKET: ${S3_BUCKET:-guerra-campal}
+      S3_BUCKET: ${S3_BUCKET:-showbox}
     entrypoint: ["sh", "/usr/local/bin/backup-media.sh"]
     volumes:
       - ./backup/backup-media.sh:/usr/local/bin/backup-media.sh:ro

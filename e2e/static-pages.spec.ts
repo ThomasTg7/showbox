@@ -35,12 +35,12 @@ test("sin contenido guardado, Nosotros, Privacidad y Contacto no se indexan", as
 
 test("el Instagram guardado en Configuración queda enlazado en el footer", async ({ page }) => {
   await openSettings(page, "Redes");
-  await page.getByLabel("Instagram").fill("@openfightlatam_e2e");
+  await page.getByLabel("Instagram").fill("@showboxpromotions_e2e");
   await save(page);
 
   await page.goto("/");
   const footer = page.getByRole("contentinfo");
-  await expect(footer.getByRole("link", { name: "Instagram", exact: true })).toHaveAttribute("href", "https://www.instagram.com/openfightlatam_e2e");
+  await expect(footer.getByRole("link", { name: "Instagram", exact: true })).toHaveAttribute("href", "https://www.instagram.com/showboxpromotions_e2e");
   // Lo que no tiene perfil no aparece.
   await expect(footer.getByRole("link", { name: "TikTok" })).toHaveCount(0);
 });
@@ -51,7 +51,7 @@ test("la home declara a la promotora con el Instagram guardado en sameAs", async
   await expect(scripts.first()).toBeAttached();
   const data = (await scripts.allTextContents()).map((text) => JSON.parse(text));
   const organization = data.find((item) => item["@type"] === "Organization");
-  expect(organization.sameAs).toContain("https://www.instagram.com/openfightlatam_e2e");
+  expect(organization.sameAs).toContain("https://www.instagram.com/showboxpromotions_e2e");
 });
 
 test("el código de Google guardado en SEO se dibuja en las páginas del sitio; pegar la etiqueta entera guarda solo el código", async ({ page }) => {
@@ -70,7 +70,7 @@ test("un enlace de red que no es válido se rechaza junto al campo y no se guard
   await page.getByLabel("TikTok").fill("javascript:alert(1)");
   await page.getByRole("button", { name: "Guardar cambios" }).click();
 
-  await expect(page.getByText("Escribe el usuario (p. ej. @openfightlatam) o el enlace completo del perfil")).toBeVisible();
+  await expect(page.getByText("Escribe el usuario (p. ej. @showboxpromotions) o el enlace completo del perfil")).toBeVisible();
   await page.goto("/");
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "TikTok" })).toHaveCount(0);
 });
@@ -110,13 +110,13 @@ test("el editor de los textos no ofrece fotos ni videos", async ({ page }) => {
 
 test("/contacto muestra los datos de contacto guardados", async ({ page }) => {
   await openSettings(page, "Contacto");
-  await page.getByLabel("Correo de contacto").fill("hola@openfightlatam.cl");
+  await page.getByLabel("Correo de contacto").fill("hola@showbox.test");
   await page.getByLabel("WhatsApp").fill("+593 99 123 4567");
   await save(page);
 
   await page.goto("/contacto");
   await expect(page.getByRole("heading", { name: "Contacto", level: 1 })).toBeVisible();
-  await expect(page.getByRole("link", { name: "hola@openfightlatam.cl" })).toHaveAttribute("href", "mailto:hola@openfightlatam.cl");
+  await expect(page.getByRole("link", { name: "hola@showbox.test" })).toHaveAttribute("href", "mailto:hola@showbox.test");
   await expect(page.getByRole("link", { name: /WhatsApp/ })).toHaveAttribute("href", "https://wa.me/56912345678");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/contacto$/);
   await expect(robots(page)).toHaveCount(0);

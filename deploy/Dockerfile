@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-# Imagen de producción de Guerra Campal (Next.js `standalone`). El contexto de build es la RAÍZ del repositorio:
+# Imagen de producción de ShowBox Promotions (Next.js `standalone`). El contexto de build es la RAÍZ del repositorio:
 #   docker compose -f deploy/docker-compose.prod.yml build app
 # Guía completa: docs/vps-migration.md
 

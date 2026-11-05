@@ -29,7 +29,7 @@ function Details({ fighter }: { fighter: FighterProfileDTO }) {
     { label: "Estatura", value: fighter.heightCm ? formatHeight(fighter.heightCm) : null },
     { label: "Alcance", value: fighter.reachCm ? formatHeight(fighter.reachCm) : null },
     { label: "Guardia", value: fighter.stance ? STANCE_LABELS[fighter.stance] : null },
-    { label: "Disciplina base", value: fighter.baseDiscipline },
+    { label: "Estilo", value: fighter.baseDiscipline },
     { label: "Gimnasio", value: fighter.gym },
     { label: "Entrenador", value: fighter.coach },
     { label: "Estado", value: CAREER_STATUS_LABELS[fighter.careerStatus] },

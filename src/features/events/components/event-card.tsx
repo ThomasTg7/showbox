@@ -1,3 +1,4 @@
+import { ArenaBackdrop } from "@/components/brand/arena-backdrop";
 import { BRAND } from "@/domain/brand";
 import Link from "next/link";
 import { MediaImage } from "@/components/media/media-image";
@@ -20,11 +21,12 @@ type EventCardProps = {
 function Poster({ event, priority }: { event: EventCardDTO; priority: boolean }) {
   const image = event.posterMedia ?? event.heroMobileMedia ?? event.heroMedia;
   return (
-    <div className="relative aspect-[4/5] w-full overflow-hidden bg-[linear-gradient(170deg,#1c1c1c,#0a0a0a_70%)]">
+    <div className="relative isolate aspect-[4/5] w-full overflow-hidden bg-black">
       {image ? (
         <MediaImage media={image} sizes={EVENT_CARD_SIZES} priority={priority} className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-sb motion-safe:group-hover:scale-105" />
       ) : (
         <div aria-hidden className="absolute inset-0 grid place-items-center">
+          <ArenaBackdrop />
           <span className="font-display text-[clamp(120px,22vw,220px)] leading-none text-transparent [-webkit-text-stroke:2px_rgba(255,59,71,.45)]">{event.number ?? BRAND.shortName}</span>
         </div>
       )}

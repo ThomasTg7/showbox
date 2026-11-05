@@ -36,7 +36,7 @@ function isEmpty(record: ManualRecord): boolean {
 
 const hasFights = (record: ComputedRecord): boolean => !isEmpty(record);
 
-const RECORD_CLASS = "font-display text-[clamp(44px,12vw,88px)] leading-none tabular-nums whitespace-nowrap text-white";
+const RECORD_CLASS = "font-display text-[clamp(40px,11vw,84px)] leading-none tabular-nums whitespace-nowrap text-white";
 
 function TotalRecord({ record, title }: { record: ManualRecord; title: string }) {
   const extra = noContestsLabel(record.noContests);

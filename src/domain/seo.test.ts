@@ -15,7 +15,7 @@ import {
   websiteJsonLd,
 } from "./seo";
 
-const SITE = "https://openfightlatam.cl";
+const SITE = "https://showbox.test";
 const FALLBACK = `${SITE}/og-default.jpg`;
 
 function media(overrides: Partial<MediaDTO> = {}): MediaDTO {
@@ -239,8 +239,8 @@ describe("ogImage", () => {
   });
 
   it("keeps an absolute storage URL (R2) untouched", () => {
-    const remote = media({ variants: [{ width: 1200, height: 630, url: "https://media.openfightlatam.cl/x-1200.webp" }] });
-    expect(ogImage(remote, SITE, 1200).url).toBe("https://media.openfightlatam.cl/x-1200.webp");
+    const remote = media({ variants: [{ width: 1200, height: 630, url: "https://media.showbox.test/x-1200.webp" }] });
+    expect(ogImage(remote, SITE, 1200).url).toBe("https://media.showbox.test/x-1200.webp");
   });
 
   it("falls back to the brand image when there is no media", () => {
@@ -380,11 +380,11 @@ describe("articleJsonLd", () => {
 });
 
 describe("organizationJsonLd and websiteJsonLd", () => {
-  const socials = { instagram: "@openfightlatam", tiktok: "", youtube: "", facebook: "https://facebook.com/gc", x: "" };
+  const socials = { instagram: "@showboxpromotions", tiktok: "", youtube: "", facebook: "https://facebook.com/gc", x: "" };
 
   it("lists the usable social profiles and the contact that has a value", () => {
     const data = organizationJsonLd(
-      { socials, contact: { email: "hola@openfightlatam.cl", phone: "", whatsapp: "", address: "", notifyEmail: "" }, logoUrl: `${SITE}/logo.png` },
+      { socials, contact: { email: "hola@showbox.test", phone: "", whatsapp: "", address: "", notifyEmail: "" }, logoUrl: `${SITE}/logo.png` },
       SITE,
     );
     expect(data).toMatchObject({
@@ -393,8 +393,8 @@ describe("organizationJsonLd and websiteJsonLd", () => {
       name: "ShowBox Promotions",
       url: SITE,
       logo: `${SITE}/logo.png`,
-      sameAs: ["https://www.instagram.com/openfightlatam", "https://facebook.com/gc"],
-      email: "hola@openfightlatam.cl",
+      sameAs: ["https://www.instagram.com/showboxpromotions", "https://facebook.com/gc"],
+      email: "hola@showbox.test",
     });
     expect(data).not.toHaveProperty("telephone");
   });

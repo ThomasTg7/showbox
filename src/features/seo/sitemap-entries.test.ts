@@ -19,7 +19,7 @@ import { saveSetting } from "@/features/settings/service";
 import { createTestDb } from "@/test/db";
 import { getSitemapEntries } from "./sitemap-entries";
 
-const SITE = "https://openfightlatam.cl";
+const SITE = "https://showbox.test";
 const text = (value: string): PostBody => ({ type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: value }] }] });
 
 describe("getSitemapEntries", () => {
@@ -48,8 +48,8 @@ describe("getSitemapEntries", () => {
     const empty = await urls();
     for (const path of ["/nosotros", "/privacidad", "/contacto"]) expect(empty).not.toContain(`${SITE}${path}`);
 
-    await saveSetting(db, "about", { body: text("Somos OFL") }, "admin-1");
-    await saveSetting(db, "contact", { email: "hola@openfightlatam.cl" }, "admin-1");
+    await saveSetting(db, "about", { body: text("Somos ShowBox") }, "admin-1");
+    await saveSetting(db, "contact", { email: "hola@showbox.test" }, "admin-1");
     const privacyAt = new Date("2026-10-04T15:00:00.000Z");
     await saveSetting(db, "privacy", { body: text("Cuidamos tus datos") }, "admin-1", privacyAt);
 

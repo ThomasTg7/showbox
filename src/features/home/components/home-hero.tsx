@@ -1,5 +1,6 @@
 import { BRAND } from "@/domain/brand";
 import Link from "next/link";
+import { ArenaBackdrop } from "@/components/brand/arena-backdrop";
 import { BrandMark } from "@/components/brand/brand-mark";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui-gc/button";
@@ -17,19 +18,19 @@ export function HomeHero({ hero }: { hero: HomeHeroDTO }) {
   if (hero.kind === "brand") {
     return (
       <section data-site-hero aria-labelledby="home-title" className="relative isolate flex min-h-[max(640px,100svh)] flex-col items-center justify-end overflow-hidden bg-black px-[clamp(16px,4vw,64px)] pb-[clamp(56px,10vh,120px)] pt-[76px] text-center">
-        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_55%_at_50%_38%,#3a0d0c_0%,#0b0b0b_55%,#000_100%)]" />
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[14%] -z-[5] select-none text-center font-display text-[48vw] leading-[.85] whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,.07)]">
-          OFL
+        <ArenaBackdrop />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[14%] -z-[5] select-none text-center font-display text-[19vw] uppercase leading-[.85] whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,.07)]">
+          ShowBox
         </div>
-        <BrandMark className="absolute right-[10%] top-[15%] -z-[4] h-[55%] opacity-60" />
+        <BrandMark className="absolute inset-0 -z-[4] h-full w-full opacity-70" />
         <Logo size="lg" priority />
         <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-          <Tag tone="brand">Próximamente</Tag>
+          <Tag tone="ember">Próximamente</Tag>
         </div>
-        <h1 id="home-title" className="mt-4 font-display text-[clamp(52px,11vw,150px)] uppercase leading-[.95] text-white">
+        <h1 id="home-title" className="sb-chrome-text sb-punch-in mt-4 font-display text-[clamp(34px,9vw,120px)] uppercase leading-[.95] text-white">
           {BRAND.name}
         </h1>
-        <p className="mt-4 max-w-xl font-cond text-[clamp(15px,1.6vw,19px)] font-semibold uppercase tracking-[.1em] text-white/90">Pronto anunciaremos el próximo evento. Mientras tanto, conoce a nuestros boxeadores.</p>
+        <p className="sb-spaced mt-4 max-w-xl text-[clamp(11px,1.2vw,13px)] leading-relaxed text-white/85">Pronto anunciaremos la próxima velada. Mientras tanto, conoce a nuestros boxeadores.</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button variant="primary" asChild>
             <Link href="/boxeadores">Ver boxeadores</Link>

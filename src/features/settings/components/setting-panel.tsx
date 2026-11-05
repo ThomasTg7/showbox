@@ -58,11 +58,11 @@ export function SettingPanel({ settingKey, settings, ogMedia, privacyUpdatedLabe
           {() => (
             <div className="grid gap-4 md:grid-cols-2">
               <p className="max-w-prose text-muted-foreground md:col-span-2">Escribe el usuario (@usuario) o pega el enlace del perfil. Deja vacío lo que no tengan: no aparece en el sitio.</p>
-              <TextField name="instagram" label="Instagram" placeholder="@openfightlatam" autoCapitalize="none" />
-              <TextField name="tiktok" label="TikTok" placeholder="@openfightlatam" autoCapitalize="none" />
+              <TextField name="instagram" label="Instagram" placeholder="@showboxpromotions" autoCapitalize="none" />
+              <TextField name="tiktok" label="TikTok" placeholder="@showboxpromotions" autoCapitalize="none" />
               <TextField name="youtube" label="YouTube" placeholder="Enlace del canal" autoCapitalize="none" />
               <TextField name="facebook" label="Facebook" placeholder="Enlace de la página" autoCapitalize="none" />
-              <TextField name="x" label="X (Twitter)" placeholder="@openfightlatam" autoCapitalize="none" />
+              <TextField name="x" label="X (Twitter)" placeholder="@showboxpromotions" autoCapitalize="none" />
             </div>
           )}
         </SettingForm>

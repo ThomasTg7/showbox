@@ -32,7 +32,7 @@ export function TicketsList({ events }: { events: EventCardDTO[] }) {
               <p className="flex items-center gap-2.5 font-cond text-[13px] font-extrabold uppercase tracking-[.2em] sb-gradient-text before:block before:h-[3px] before:w-7 before:bg-brand">
                 {formatShortDate(start)} · {formatTime(start)} hrs
               </p>
-              <h2 id={`tickets-${event.slug}`} className="font-display text-[clamp(38px,6vw,80px)] uppercase leading-[.9] text-white">
+              <h2 id={`tickets-${event.slug}`} className="font-display text-[clamp(30px,6vw,72px)] uppercase leading-[.9] text-white">
                 {event.name}
               </h2>
               {main ? (

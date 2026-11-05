@@ -14,8 +14,8 @@ describe("Analytics", () => {
   });
 
   it("draws the Umami script with its website id", () => {
-    const html = renderToStaticMarkup(<Analytics config={{ provider: "umami", src: "https://stats.openfightlatam.cl/script.js", websiteId: "abc-123" }} />);
-    expect(html).toContain('src="https://stats.openfightlatam.cl/script.js"');
+    const html = renderToStaticMarkup(<Analytics config={{ provider: "umami", src: "https://stats.showbox.test/script.js", websiteId: "abc-123" }} />);
+    expect(html).toContain('src="https://stats.showbox.test/script.js"');
     expect(html).toContain('data-website-id="abc-123"');
     expect(html).toContain("defer");
   });

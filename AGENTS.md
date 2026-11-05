@@ -1,8 +1,9 @@
-# Open Fight Latam — Reglas del proyecto
+# ShowBox Promotions — Reglas del proyecto
 
-Plataforma web para la promotora de MMA Open Fight Latam (OFL). Copia independiente de Guerra Campal. Sitio público estilo UFC + panel de administración propio.
+Plataforma web para la promotora de **boxeo** ShowBox Promotions (Ecuador). Copia independiente de la plataforma de Open Fight Latam (MMA), adaptada a boxeo. Sitio público estilo afiche de velada + panel de administración propio.
 
-- Spec de marca vigente: `docs/superpowers/specs/2026-10-11-ofl-redesign-design.md` (aprobado por el usuario).
+- Identidad y adaptación a boxeo vigentes: `docs/SHOWBOX.md` (manda sobre el spec OFL en marca y dominio deportivo).
+- Spec de marca anterior (OFL, histórico): `docs/superpowers/specs/2026-10-11-ofl-redesign-design.md`.
 - Spec funcional heredado: `docs/superpowers/specs/2026-09-28-guerra-campal-design.md`
 - Planes: `docs/superpowers/plans/` (ejecutar en orden 00 → 07)
 - Flujo de trabajo (ejecución + revisión): `docs/WORKFLOW.md`
@@ -15,7 +16,7 @@ Plataforma web para la promotora de MMA Open Fight Latam (OFL). Copia independie
 2. **Tests primero** (TDD como indica cada tarea). Nada se da por terminado sin correr `pnpm test`, `pnpm lint`, `pnpm typecheck` y los e2e de la tarea, y ver que pasan.
 3. **Portabilidad.** Solo Postgres estándar vía `DATABASE_URL`. Prohibido usar SDKs o features propietarias de Supabase/Neon/Vercel que impidan migrar a un VPS (excepto `@vercel/analytics`, detrás de `ANALYTICS_PROVIDER`).
 4. **Seguridad del admin.** Toda server action y ruta del admin llama `requireAdmin()` en el servidor. Validar todo input con Zod. Registrar auditoría en toda escritura.
-5. **Código en inglés, interfaz en español (es-CL).**
+5. **Código en inglés, interfaz en español (es-EC).** Zona horaria fija `America/Guayaquil`; montos en USD.
 
 ## Arquitectura
 
@@ -55,10 +56,11 @@ Plataforma web para la promotora de MMA Open Fight Latam (OFL). Copia independie
 
 ## UI/UX — Sitio público (vista del cliente)
 
-- Seguir el spec aprobado de OFL: negro, blanco, rojo `#C51B3A`, violeta `#643374`, acento `#C59BE5`; Anton + Barlow Condensed + Barlow; mayúsculas, bordes rectos y fotografía protagonista. La maqueta de Guerra Campal queda como referencia histórica.
+- Seguir la identidad ShowBox (`docs/SHOWBOX.md`): negro, blanco/plata, rojo del logo `#FF1226` (botones `#E3101F`, rótulos `#8E1B17`); Archivo (titulares anchos y fechas condensadas en cursiva) + Montserrat; mayúsculas, bordes rectos, escenario de arena (humo, focos, grano) y fotografía protagonista. Las maquetas de OFL y Guerra Campal quedan como referencia histórica.
+- Dominio deportivo: boxeo. No hay sumisiones; métodos KO/TKO (incluye RTD), decisión, decisión técnica, descalificación y sin resultado; rounds 3–12 de 3 min; tarjetas de 10 puntos.
 - Móvil primero, sin scroll horizontal en ningún ancho ≥ 320 px.
 - Animaciones fluidas pero al servicio del contenido: la información (fecha, cartelera, récord, entradas) debe ser legible sin esperar ninguna animación.
-- Accesibilidad: contraste AA, foco visible, textos alternativos, un solo `h1` por página, navegación por teclado. Texto sobre rojo OFL siempre blanco; texto sobre blanco siempre oscuro.
+- Accesibilidad: contraste AA, foco visible, textos alternativos, un solo `h1` por página, navegación por teclado. Texto sobre rojo ShowBox siempre blanco; texto sobre blanco siempre oscuro.
 - Toda página con datos tiene estado vacío digno (p. ej. "Pronto anunciaremos el próximo evento").
 
 ## Verificación antes de cerrar una tarea

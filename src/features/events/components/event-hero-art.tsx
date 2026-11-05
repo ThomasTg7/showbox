@@ -1,3 +1,4 @@
+import { ArenaBackdrop } from "@/components/brand/arena-backdrop";
 import { BrandMark } from "@/components/brand/brand-mark";
 import type { CSSProperties } from "react";
 import { BRAND } from "@/domain/brand";
@@ -47,16 +48,18 @@ function FaceOffFighter({ fighter, side }: { fighter: BoutFighterDTO; side: "red
 export function EventHeroArt({ event, main }: { event: EventPageDTO; main: BoutDTO | null }) {
   return (
     <div className="absolute inset-0 isolate overflow-hidden">
+      <ArenaBackdrop className="z-0" />
       <div aria-hidden className="sb-hero-pulse absolute inset-0" />
       {event.heroMedia || event.heroMobileMedia ? <HeroPicture desktop={event.heroMedia} mobile={event.heroMobileMedia} /> : null}
       {!event.heroMedia ? (
         <div className={event.heroMobileMedia ? "hidden md:block" : undefined}>
-          <div data-slot="hero-watermark" aria-hidden className="absolute inset-x-0 top-[10%] text-center font-display text-[50vw] leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,.08)] lg:text-[33vw]">{BRAND.shortName}</div>
-          <BrandMark className="absolute left-1/2 top-0 h-full -translate-x-1/2 opacity-70" />
+          <div data-slot="hero-watermark" aria-hidden className="absolute inset-x-0 top-[16%] text-center font-display text-[19vw] uppercase leading-none tracking-[-.02em] text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,.08)]">{BRAND.shortName}</div>
+          <BrandMark className="absolute left-1/2 top-0 h-full w-full -translate-x-1/2 opacity-80" />
           {main ? <><FaceOffFighter fighter={main.red} side="red" /><FaceOffFighter fighter={main.blue} side="blue" /></> : null}
         </div>
       ) : null}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,transparent_15%,rgba(0,0,0,.2)_35%,rgba(0,0,0,.8)_65%,#000_100%)]" />
+      <div aria-hidden className="sb-grain pointer-events-none absolute inset-0 z-[3]" />
     </div>
   );
 }

@@ -178,7 +178,7 @@ describe("RecordSummary", () => {
     expect(formatRecord({ wins: 3, losses: 1, draws: 0, noContests: 2 })).toBe("3-1-0");
   });
 
-  it("shows only the total record when there are no fights in OFL, and no amateur block without amateur record", () => {
+  it("shows only the total record when there are no fights in ShowBox, and no amateur block without amateur record", () => {
     const { container } = render(<RecordSummary manual={{ pro: profile.proRecord, amateur: empty }} computed={noFights} />);
     expect(container.querySelector('[data-level="pro"] [data-record="total"]')).toHaveTextContent("12-2-0");
     expect(container.querySelector('[data-record="gc"]')).toBeNull();
@@ -187,7 +187,7 @@ describe("RecordSummary", () => {
     expect(container).not.toHaveTextContent("Sin peleas");
   });
 
-  it("stacks the OFL record under the total, labelled in full on every screen", () => {
+  it("stacks the ShowBox record under the total, labelled in full on every screen", () => {
     const { container } = render(
       <RecordSummary manual={{ pro: profile.proRecord, amateur: empty }} computed={{ pro: { ...emptyComputed, wins: 3, losses: 1 }, amateur: emptyComputed }} />,
     );
@@ -215,7 +215,7 @@ describe("RecordSummary", () => {
     expect(container).not.toHaveTextContent("Récord total");
   });
 
-  it("shows the average fight time in the OFL column, only when there is one", () => {
+  it("shows the average fight time in the ShowBox column, only when there is one", () => {
     const withTime = { ...emptyComputed, wins: 2, losses: 1, avgFightSeconds: 522 };
     const { container } = render(<RecordSummary manual={{ pro: profile.proRecord, amateur: empty }} computed={{ pro: withTime, amateur: emptyComputed }} />);
     expect(container.querySelector('[data-record="gc"]')).toHaveTextContent("Tiempo promedio");

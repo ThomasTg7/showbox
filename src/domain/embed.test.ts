@@ -12,7 +12,7 @@ describe("parseEmbedUrl", () => {
   });
 
   it("recognizes an Instagram post that carries the account in the path", () => {
-    expect(parseEmbedUrl("https://www.instagram.com/openfightlatam/p/C8abc123/")).toEqual({ provider: "instagram", id: "C8abc123" });
+    expect(parseEmbedUrl("https://www.instagram.com/showboxpromotions/p/C8abc123/")).toEqual({ provider: "instagram", id: "C8abc123" });
   });
 
   it("recognizes YouTube short links, shorts, watch and embed urls", () => {
@@ -59,7 +59,7 @@ describe("parseEmbedUrl", () => {
     expect(parseEmbedUrl("https://example.com/watch?v=dQw4w9WgXcQ")).toBeNull();
     expect(parseEmbedUrl("https://www.youtube.com/watch")).toBeNull();
     expect(parseEmbedUrl("https://www.youtube.com/watch?v=corto")).toBeNull();
-    expect(parseEmbedUrl("https://www.instagram.com/openfightlatam/")).toBeNull();
+    expect(parseEmbedUrl("https://www.instagram.com/showboxpromotions/")).toBeNull();
     expect(parseEmbedUrl("https://www.tiktok.com/@gc")).toBeNull();
     expect(parseEmbedUrl("javascript:alert(1)")).toBeNull();
     expect(parseEmbedUrl("")).toBeNull();

@@ -12,21 +12,21 @@ import type { HomeDTO, HomeEvent, HomeHero, HomeStats } from "./dto";
 import { pickHighlights, pickHomeRankingCards } from "./highlights";
 
 /**
- * Las cifras de la banda: solo eventos finalizados y públicos y sus peleas terminadas. Finalizaciones = KO/TKO
- * (incluye RTD). Una consulta (los conteos de SQL son `bigint`: se castean a `int`).
+ * Las cifras de la banda: solo eventos finalizados y públicos y sus peleas terminadas. Rounds = los disputados en
+ * esas peleas (el de la detención cuenta); KO/TKO incluye los RTD. Una consulta (los conteos de SQL son `bigint`: se castean a `int`).
  */
 export async function getHomeStats(db: Db): Promise<HomeStats> {
   const [row] = await db
     .select({
       events: sql<number>`count(distinct ${events.id})::int`,
       bouts: sql<number>`count(${bouts.id})::int`,
-      finishes: sql<number>`(count(${bouts.id}) filter (where ${bouts.method} in ('ko_tko')))::int`,
+      rounds: sql<number>`coalesce(sum(${bouts.endRound}), 0)::int`,
       koTko: sql<number>`(count(${bouts.id}) filter (where ${bouts.method} = 'ko_tko'))::int`,
     })
     .from(events)
     .leftJoin(bouts, and(eq(bouts.eventId, events.id), eq(bouts.boutStatus, "completed")))
     .where(and(publicScope(events), eq(events.eventStatus, "completed")));
-  return { events: row?.events ?? 0, bouts: row?.bouts ?? 0, finishes: row?.finishes ?? 0, koTko: row?.koTko ?? 0 };
+  return { events: row?.events ?? 0, bouts: row?.bouts ?? 0, rounds: row?.rounds ?? 0, koTko: row?.koTko ?? 0 };
 }
 
 /**

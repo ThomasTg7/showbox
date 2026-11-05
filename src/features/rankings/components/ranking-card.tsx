@@ -25,11 +25,11 @@ export function RankingCard({ division, champion, entries, updatedAt }: RankingC
   const leaderName = leader?.name ?? "Vacante";
 
   return (
-    <article aria-label={isP4p ? "Ranking libra por libra" : `Ranking ${title}`} className="flex flex-col border border-border bg-[#101010]">
-      <div className="relative grid min-h-[150px] grid-cols-[1fr_120px] overflow-hidden border-b-[3px] border-brand bg-[linear-gradient(120deg,#1a1405,#0f0f0f_60%)]">
+    <article aria-label={isP4p ? "Ranking libra por libra" : `Ranking ${title}`} className="flex min-w-0 flex-col border border-border bg-[#101010]">
+      <div className="relative grid min-h-[150px] grid-cols-[minmax(0,1fr)_120px] overflow-hidden border-b-[3px] border-brand-bright bg-[linear-gradient(120deg,#3a0d0c,#0f0f0f_62%)]">
         <div className="relative z-10 p-[22px]">
           <p className="font-cond text-xs font-extrabold uppercase tracking-[.12em] text-accent-bright">{belt}</p>
-          <h2 className="my-2 font-display text-[30px] uppercase leading-[1.05] text-white">{title}</h2>
+          <h2 className="my-2 font-display text-[clamp(22px,6vw,28px)] uppercase leading-[1.05] text-white [overflow-wrap:anywhere]">{title}</h2>
           <p className="flex flex-wrap items-center gap-x-2.5 font-cond text-xl font-bold uppercase text-white">
             {leader ? (
               <Link href={`/boxeadores/${leader.slug}`} className="underline-offset-4 outline-none hover:underline focus-visible:underline focus-visible:decoration-brand focus-visible:decoration-[3px]">

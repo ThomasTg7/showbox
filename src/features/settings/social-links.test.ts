@@ -5,8 +5,8 @@ const EMPTY = { instagram: "", tiktok: "", youtube: "", facebook: "", x: "" };
 
 describe("socialLinks", () => {
   it("lists only the networks that have a profile, in a fixed order, with their link", () => {
-    expect(socialLinks({ ...EMPTY, x: "@gc", instagram: "@openfightlatam", facebook: "https://facebook.com/gc" })).toEqual([
-      { network: "instagram", label: "Instagram", href: "https://www.instagram.com/openfightlatam" },
+    expect(socialLinks({ ...EMPTY, x: "@gc", instagram: "@showboxpromotions", facebook: "https://facebook.com/gc" })).toEqual([
+      { network: "instagram", label: "Instagram", href: "https://www.instagram.com/showboxpromotions" },
       { network: "facebook", label: "Facebook", href: "https://facebook.com/gc" },
       { network: "x", label: "X", href: "https://x.com/gc" },
     ]);

@@ -64,7 +64,7 @@ export default async function BoutPage({ params }: PageProps<"/eventos/[slug]/pe
           <p className="mt-6 font-cond text-[13px] font-extrabold uppercase tracking-[.2em] text-muted-foreground">
             {segmentName} · {formatShortDate(new Date(event.startsAt))}
           </p>
-          <h1 className="mt-2 font-display text-[clamp(40px,9vw,96px)] uppercase leading-[.9] text-white">
+          <h1 className="mt-2 font-display text-[clamp(30px,8.5vw,88px)] uppercase leading-[.9] text-white">
             {bout.red.lastName} <span className="sb-gradient-text">vs</span> {bout.blue.lastName}
           </h1>
           <p className="mt-3 flex flex-wrap gap-x-3 font-cond text-sm font-semibold uppercase tracking-[.1em] text-white/80">
