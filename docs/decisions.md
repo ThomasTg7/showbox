@@ -1109,3 +1109,10 @@ Verificado sin cambios: la caché pública nunca sirve un borrador, uno en la pa
 - **Por qué:** solicitud directa posterior a los planes históricos. El afiche entregado y su adaptación ImageGen se registran mediante los mismos servicios de medios del panel, con variantes WebP y validación de formatos. Se conserva Postgres estándar y el almacenamiento local.
 - **Impacto:** sin cambios de esquema ni permisos. Configuración y archivos de operación locales en `.local-runtime/`, fuera de herramientas de código. La instalación usa cachés nuevas por los enlaces de Windows trasladados; quedaron restos cuya eliminación bloqueó la revisión automática. Los planes 00–07 siguen como histórico y las siguientes tareas deben conservar las acciones compartidas y los formatos de portada independientes.
 - **Estado:** implementado. Evidencias y limitaciones en `docs/reports/showbox-local-refresh.md`.
+
+## [ShowBox] Navbar geométrico, portada horizontal y entradas al pie — 2026-11-05
+
+- **Qué:** sustituir el marco redondeado del navbar por una estructura angular con biseles y placa central en relieve; agrupar opciones cerca del logo centrado. En PC, los controles de las portadas de inicio/evento forman una sola fila; las tarjetas y la disposición móvil se conservan. La barra de entradas se fija abajo en todos los anchos, con espacio de seguridad para el pie de página.
+- **Por qué:** aclaración expresa del usuario: las tarjetas de vista previa ya estaban aprobadas; el ajuste pendiente era la portada en PC, un navbar con mayor trabajo geométrico y corregir la barra que aparecía arriba.
+- **Impacto:** exclusivamente presentación y pruebas de navegador. Sin cambios de datos, esquema, autenticación, dependencias o consultas. Las siguientes tareas deben conservar las distribuciones independientes de portada y tarjeta. Los recortes decorativos no recortan el foco y las transiciones respetan movimiento reducido.
+- **Estado:** implementado; evidencia y alcance de comprobación en `docs/reports/showbox-geometric-navigation.md`.

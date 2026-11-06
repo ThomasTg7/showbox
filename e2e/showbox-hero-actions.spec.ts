@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 for (const width of [320, 375, 430, 1440]) {
-  test(`cartelera y entradas alineadas, con Dónde ver a todo el ancho a ${width}px`, async ({ page }) => {
+  test(`acciones de portada horizontales en PC y apiladas en móvil a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const path of ["/eventos/showbox-fight-night-5", "/"]) {
@@ -17,9 +17,15 @@ for (const width of [320, 375, 430, 1440]) {
       const detailBox = (await details.boundingBox())!;
       expect(Math.abs(ticketBox.y - detailBox.y)).toBeLessThan(1);
       expect(Math.abs(ticketBox.width - detailBox.width)).toBeLessThan(1);
-      expect(watchBox.y).toBeGreaterThanOrEqual(ticketBox.y + ticketBox.height);
-      expect(Math.abs(watchBox.x - detailBox.x)).toBeLessThan(1);
-      expect(Math.abs(watchBox.width - (ticketBox.x + ticketBox.width - detailBox.x))).toBeLessThan(1);
+      if (width >= 1024) {
+        expect(Math.abs(watchBox.y - ticketBox.y)).toBeLessThan(1);
+        expect(Math.abs(watchBox.width - ticketBox.width)).toBeLessThan(1);
+        expect(watchBox.x).toBeGreaterThanOrEqual(ticketBox.x + ticketBox.width);
+      } else {
+        expect(watchBox.y).toBeGreaterThanOrEqual(ticketBox.y + ticketBox.height);
+        expect(Math.abs(watchBox.x - detailBox.x)).toBeLessThan(1);
+        expect(Math.abs(watchBox.width - (ticketBox.x + ticketBox.width - detailBox.x))).toBeLessThan(1);
+      }
       expect(ticketBox.height).toBeGreaterThanOrEqual(44);
       expect(watchBox.height).toBeGreaterThanOrEqual(44);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
@@ -41,6 +47,14 @@ for (const width of [375, 1440]) {
     expect(logo.width).toBeLessThanOrEqual(112);
     expect(Math.abs(logo.x + logo.width / 2 - width / 2)).toBeLessThanOrEqual(1);
     expect(Math.abs(logo.y + logo.height / 2 - (bar.y + bar.height / 2))).toBeLessThanOrEqual(1);
+    if (width >= 1024) {
+      const links = await header.getByRole('navigation', { name: 'Principal' }).getByRole('link').all();
+      const boxes = await Promise.all(links.map(link => link.boundingBox()));
+      const leftEdge = Math.max(...boxes.filter(box => box && box.x < logo.x).map(box => box!.x + box!.width));
+      const rightEdge = Math.min(...boxes.filter(box => box && box.x > logo.x).map(box => box!.x));
+      expect(logo.x - leftEdge).toBeLessThanOrEqual(56);
+      expect(rightEdge - logo.x - logo.width).toBeLessThanOrEqual(56);
+    }
     const card = page.locator('[data-event="showbox-fight-night-5"]');
     const details = card.getByRole('link', { name: 'Ver evento', exact: true });
     const tickets = card.getByRole('link', { name: 'Comprar entradas' });
@@ -54,6 +68,25 @@ for (const width of [375, 1440]) {
     const channel = page.getByRole('dialog').getByRole('link', { name: 'Ir a ver en YouTube · ShowBox Promotions' });
     await expect(channel).toHaveAttribute('href', 'https://www.youtube.com/@ShowBoxPromotionsEC');
     await expect(page.getByTestId('youtube-platform-icon')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+  });
+}
+
+for (const width of [375, 1440]) {
+  test(`la barra de entradas aparece al pie de la pantalla tras pasar la portada a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/eventos/showbox-fight-night-5');
+    const bar = page.locator('[data-slot="event-sticky-bar"]');
+    await expect(bar).toHaveAttribute('inert', '');
+    await page.locator('#cartelera').scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollTo(0, document.getElementById('cartelera')!.offsetTop + 200));
+    await expect(bar).toHaveAttribute('data-visible', 'true');
+    const box = (await bar.boundingBox())!;
+    expect(box.y).toBeGreaterThan(700);
+    expect(900 - box.y - box.height).toBeGreaterThanOrEqual(0);
+    expect(900 - box.y - box.height).toBeLessThanOrEqual(20);
+    await expect(bar.getByRole('link', { name: 'Entradas' })).toHaveAttribute('href', /example\.com\/entradas/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
   });
 }

@@ -44,16 +44,16 @@ export function Header() {
         inert={hidden && !menuOpen}
         data-hidden={hidden && !menuOpen}
         className={cn(
-          "sb-header fixed inset-x-3 top-3 z-[100] mx-auto flex h-14 max-w-[1240px] items-center rounded-[10px] border border-white/15 bg-black/90 shadow-[0_12px_40px_rgba(0,0,0,.35)] backdrop-blur-xl lg:inset-x-6 lg:top-4 lg:h-16",
+          "sb-header fixed inset-x-3 top-3 z-[100] isolate mx-auto flex h-14 max-w-[1040px] items-center lg:inset-x-6 lg:top-5 lg:h-16",
           hidden && !menuOpen && "pointer-events-none",
         )}
       >
         <div className="relative flex h-full w-full items-center px-3 lg:px-5">
-          <Link href="/" aria-label={`${BRAND.name} inicio`} className="absolute left-1/2 top-1/2 flex min-h-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+          <Link href="/" aria-label={`${BRAND.name} inicio`} className="sb-header-brand absolute left-1/2 top-1/2 z-10 flex min-h-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
             <Logo size="sm" className="w-[96px] lg:w-[112px]" />
           </Link>
-          <nav aria-label="Principal" className="hidden w-full items-center justify-between lg:flex">
-            {[NAV_LINKS.slice(0, 3), NAV_LINKS.slice(3)].map((group, index) => <div key={index} className="flex items-center gap-5 xl:gap-7">
+          <nav aria-label="Principal" className="hidden w-full grid-cols-[minmax(0,1fr)_184px_minmax(0,1fr)] items-center lg:grid">
+            {[NAV_LINKS.slice(0, 3), NAV_LINKS.slice(3)].map((group, index) => <div key={index} className={cn("flex items-center gap-1 xl:gap-2", index === 0 ? "justify-end" : "col-start-3 justify-start")}>
             {group.map((link) => (
               <Link
                 key={link.href}
