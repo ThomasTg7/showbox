@@ -102,7 +102,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           href={link.href}
           onClick={onClose}
           aria-current={active ? "page" : undefined}
-          className={cn("font-display uppercase text-[13vw] leading-[1.05] hover:text-accent-bright focus-visible:text-accent-bright", active ? "text-accent-bright" : "text-white")}
+          className={cn("flex min-h-11 w-fit max-w-full items-center whitespace-nowrap font-display text-[clamp(28px,9vw,56px)] uppercase leading-[1.1] tracking-[-.02em] hover:text-accent-bright focus-visible:text-accent-bright", active ? "text-accent-bright" : "text-white")}
         >
           {link.label}
         </Link>

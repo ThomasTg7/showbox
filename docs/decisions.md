@@ -1116,3 +1116,17 @@ Verificado sin cambios: la caché pública nunca sirve un borrador, uno en la pa
 - **Por qué:** aclaración expresa del usuario: las tarjetas de vista previa ya estaban aprobadas; el ajuste pendiente era la portada en PC, un navbar con mayor trabajo geométrico y corregir la barra que aparecía arriba.
 - **Impacto:** exclusivamente presentación y pruebas de navegador. Sin cambios de datos, esquema, autenticación, dependencias o consultas. Las siguientes tareas deben conservar las distribuciones independientes de portada y tarjeta. Los recortes decorativos no recortan el foco y las transiciones respetan movimiento reducido.
 - **Estado:** implementado; evidencia y alcance de comprobación en `docs/reports/showbox-geometric-navigation.md`.
+
+## [ShowBox] Tres acciones de la cartelera resumida en una fila en PC — 2026-11-05
+
+- **Qué:** aplicar una fila horizontal de tres controles al bloque blanco de la cartelera resumida de inicio desde 1024 px. El grupo admite hasta 640 px y distribuye sus controles con el mismo ancho. La disposición móvil se conserva.
+- **Por qué:** la captura del usuario precisó el bloque exacto: «Ver evento», «Entradas» y «Dónde ver» de `HomeCardSummary`, además de las acciones de portada ya corregidas.
+- **Impacto:** clase específica de esa sección, sin afectar tarjetas de eventos, navbar, barra inferior ni datos. Las siguientes tareas deben preservar esta distribución independiente.
+- **Verificación:** regresión reproducida antes del ajuste (Dónde ver 58 px más abajo); e2e específicos en 375, 1024 y 1440 px y revisión visual del bloque exacto en Chrome. Captura: `.local-runtime/outputs/showbox-cartelera-botones-pc.jpg`.
+
+## [ShowBox] Anclaje inferior persistente y ajuste de navegación — 2026-11-05
+
+- **Qué:** fijar la posición de la barra de entradas mediante su atributo estable `data-slot`, incluyendo páginas prefetched que todavía conservan utilidades de posición superiores. La barra queda a 16 px del borde inferior en PC y pegada al pie con zona segura en móvil. Subir el navbar a 12 px en PC y 8 px en móvil; reducir su altura móvil a 48 px. Ajustar el tamaño del menú para mostrar «Boxeadores» completo y expandir el subrayado de los enlaces desde el centro.
+- **Por qué:** el usuario seguía viendo entradas arriba. Se reprodujo en una pestaña existente al navegar desde el listado: la página prefetched contenía clases antiguas que las pruebas con navegación directa no cubrían. La solicitud también precisa el espaciado y el comportamiento de la navegación.
+- **Impacto:** presentación sin cambios de datos, esquema, permisos ni dependencias. El CSS controla posición y visibilidad de la barra para evitar conflictos entre utilidades; se mantienen `inert`, observación de la portada, navegación por teclado y movimiento reducido. Conservar la regresión de navegación desde el listado y la simulación de clases antiguas.
+- **Verificación:** 1.204 pruebas unitarias, lint y typecheck correctos; 23 pruebas de navegador correctas, con menú en 320/375/430 px, posiciones de navbar, subrayado centrado, acciones en PC y barra inferior. Revisión visual en la misma pestaña que reproducía el fallo y en móvil. Capturas: `.local-runtime/outputs/showbox-entradas-abajo-pc.jpg` y `.local-runtime/outputs/showbox-menu-boxeadores-completo.jpg`.

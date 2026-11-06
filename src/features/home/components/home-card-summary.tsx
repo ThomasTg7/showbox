@@ -32,7 +32,7 @@ export function HomeCardSummary({ event, rankLabels, kind }: HomeCardSummaryProp
             }
             tone="light"
             action={
-              <EventActions eventName={event.name} detailsHref={`/eventos/${event.slug}`} ticketHref={!isLast ? event.ticketUrl ?? undefined : undefined} ticketExternal platforms={event.watchPlatforms} tone="light" className="max-w-[360px]" />
+              <EventActions eventName={event.name} detailsHref={`/eventos/${event.slug}`} ticketHref={!isLast ? event.ticketUrl ?? undefined : undefined} ticketExternal platforms={event.watchPlatforms} tone="light" className="sb-card-summary-actions max-w-[360px]" />
             }
           />
         </div>

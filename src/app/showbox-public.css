@@ -12,6 +12,8 @@
 
 .sb-header {
   --nav-cut: 12px;
+  top: 8px;
+  height: 48px;
   filter: drop-shadow(0 12px 20px rgb(0 0 0 / .5));
   transition: transform 520ms cubic-bezier(.2,.8,.2,1), opacity 360ms ease;
 }
@@ -41,7 +43,7 @@
 .sb-header-brand::before {
   content: "";
   position: absolute;
-  inset: -8px -20px;
+  inset: -2px -20px;
   z-index: -1;
   pointer-events: none;
   clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
@@ -52,7 +54,7 @@
 .sb-header-brand::after {
   content: "";
   position: absolute;
-  bottom: -5px;
+  bottom: -1px;
   width: 28px;
   height: 2px;
   background: var(--color-brand-bright);
@@ -61,8 +63,15 @@
 }
 
 @media (min-width: 1024px) {
+  .sb-header { top: 12px; height: 64px; }
   .sb-header-brand::before { inset: -14px -24px; }
   .sb-header-brand::after { bottom: -10px; }
+
+  .sb-site .sb-card-summary-actions {
+    display: flex;
+    max-width: 640px;
+  }
+  .sb-site .sb-card-summary-actions .sb-event-action { flex: 1; }
 
   /* The cover has its own desktop arrangement; cards retain their stacked controls. */
   .sb-site .sb-hero [data-slot="event-actions"] {
@@ -82,9 +91,37 @@
   .sb-site .sb-hero .sb-event-action:hover { background: var(--color-brand-press); }
 }
 
-.sb-ticket-bar {
+/* This anchor also overrides top-position utilities in an already prefetched event page. */
+.sb-ticket-bar,
+[data-slot="event-sticky-bar"] {
+  position: fixed;
+  top: auto;
+  bottom: 0;
+  inset-inline: 0;
+  z-index: 99;
+  transition: transform 450ms var(--ease-sb), opacity 450ms var(--ease-sb);
   background: linear-gradient(180deg, #242326, #111113 48%, #08080a);
   box-shadow: inset 0 1px rgb(255 255 255 / .08), 0 -8px 32px rgb(0 0 0 / .3);
+}
+
+[data-slot="event-sticky-bar"][data-visible="false"] {
+  opacity: 0;
+  transform: translateY(calc(100% + 24px));
+}
+
+[data-slot="event-sticky-bar"][data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (min-width: 768px) {
+  [data-slot="event-sticky-bar"] {
+    top: auto;
+    bottom: 16px;
+    inset-inline: 24px;
+    max-width: 1040px;
+    margin-inline: auto;
+  }
 }
 
 .sb-site:has([data-slot="event-sticky-bar"]) { padding-bottom: 80px; }
@@ -116,7 +153,8 @@
 .sb-site [data-tone="light"] .sb-event-action:hover { background: #111; border-color: #111; color: white; }
 
 @media (prefers-reduced-motion: reduce) {
-  .sb-header { transition: none; }
+  .sb-header,
+  [data-slot="event-sticky-bar"] { transition: none; }
 }
 
 /* Titulares de acento: el rojo del logo, con un leve degradado como el brillo de los afiches. */
@@ -164,17 +202,22 @@
 .sb-nav-link::after {
   content: "";
   position: absolute;
-  inset: auto 10px 6px;
-  height: 2px;
+  inset: auto 10px 5px;
+  height: 3px;
   background: var(--color-brand-bright);
-  transform: scaleX(0) skewX(-20deg);
-  transform-origin: left;
+  transform: scaleX(0);
+  transform-origin: center;
   transition: transform 220ms var(--ease-sb);
 }
 
 .sb-nav-link:hover::after,
+.sb-nav-link:focus-visible::after,
 .sb-nav-link[aria-current="page"]::after {
-  transform: scaleX(1) skewX(-20deg);
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-nav-link::after { transition: none; }
 }
 
 .sb-hero {

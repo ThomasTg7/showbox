@@ -37,9 +37,7 @@ export function EventStickyBar({ name, meta, ticketHref, external = false, heroI
       data-visible={visible}
       // `inert`: oculta a lectores de pantalla y saca del orden de foco lo que no se ve.
       inert={!visible}
-      className={`sb-ticket-bar fixed inset-x-0 bottom-0 z-[99] border-t border-white/20 pb-[env(safe-area-inset-bottom)] transition-[transform,opacity] duration-[450ms] ease-sb motion-reduce:transition-none md:inset-x-6 md:bottom-4 md:mx-auto md:max-w-[1040px] md:border md:pb-0 ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-[calc(100%+24px)] opacity-0"
-      }`}
+      className="sb-ticket-bar border-t border-white/20 pb-[env(safe-area-inset-bottom)] md:border md:pb-0"
     >
       <div className="mx-auto flex h-16 w-full max-w-[1320px] items-center gap-4 px-[clamp(16px,4vw,64px)] md:h-14 md:gap-6">
         <div className="min-w-0 flex-1 md:flex md:items-baseline md:gap-6">

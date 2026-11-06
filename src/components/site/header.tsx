@@ -44,7 +44,7 @@ export function Header() {
         inert={hidden && !menuOpen}
         data-hidden={hidden && !menuOpen}
         className={cn(
-          "sb-header fixed inset-x-3 top-3 z-[100] isolate mx-auto flex h-14 max-w-[1040px] items-center lg:inset-x-6 lg:top-5 lg:h-16",
+          "sb-header fixed inset-x-3 z-[100] isolate mx-auto flex max-w-[1040px] items-center lg:inset-x-6",
           hidden && !menuOpen && "pointer-events-none",
         )}
       >

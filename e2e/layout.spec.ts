@@ -1,5 +1,39 @@
 import { expect, test } from "@playwright/test";
 
+for (const width of [320, 375, 430]) {
+  test(`Boxeadores se lee completo dentro del menú móvil a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 812 });
+    await page.goto('/eventos');
+    await page.getByRole('button', { name: 'Menú', exact: true }).click();
+    const link = page.getByRole('navigation', { name: 'Menú móvil' }).getByRole('link', { name: 'Boxeadores', exact: true });
+    await expect(link).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    const text = await link.evaluate(element => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rect = range.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, height: rect.height };
+    });
+    expect(text.left).toBeGreaterThanOrEqual(16);
+    expect(text.right).toBeLessThanOrEqual(width - 16);
+    expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+  });
+}
+
+test('el subrayado del navbar se expande desde el centro de la palabra', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/eventos');
+  const link = page.getByRole('navigation', { name: 'Principal' }).getByRole('link', { name: 'Noticias', exact: true });
+  const underline = await link.evaluate(element => {
+    const style = getComputedStyle(element, '::after');
+    return { width: parseFloat(style.width), origin: parseFloat(style.transformOrigin.split(' ')[0]) };
+  });
+  expect(Math.abs(underline.origin - underline.width / 2)).toBeLessThan(1);
+  await link.hover();
+  await expect.poll(() => link.evaluate(element => new DOMMatrixReadOnly(getComputedStyle(element, '::after').transform).a)).toBeGreaterThan(.99);
+});
+
 const MOBILE_VIEWPORTS = [
   { width: 320, height: 700 },
   { width: 375, height: 812 },
