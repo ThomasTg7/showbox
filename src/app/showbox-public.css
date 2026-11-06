@@ -228,14 +228,33 @@
 
 @media (max-width: 767px) {
   .sb-hero-image { object-position: var(--hero-mobile-position); }
+  .sb-hero[data-mobile-cover="true"] {
+    min-height: max(780px, 100svh);
+    padding-top: 0;
+  }
   .sb-hero[data-mobile-cover="true"] .sb-hero-image {
-    height: auto;
-    aspect-ratio: 4 / 5;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
   }
   .sb-hero[data-mobile-cover="true"] .sb-hero-art-shade {
-    background: linear-gradient(180deg, transparent calc(125vw - 24px), #000 calc(125vw + 1px));
+    background: linear-gradient(180deg, rgb(0 0 0 / .08) 15%, rgb(0 0 0 / .2) 30%, rgb(0 0 0 / .74) 48%, rgb(0 0 0 / .9) 75%, rgb(0 0 0 / .96) 100%);
   }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-content {
+    padding-top: clamp(300px, 78vw, 380px);
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
+  }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-billing { margin-bottom: 14px; }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-matchup { font-size: clamp(32px, 9vw, 42px); }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-matchup > span:nth-child(2) { margin-block: 4px; font-size: .27em; }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-rule { margin-top: 16px; height: 3px; width: 48px; }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-date { margin-top: 16px; font-size: clamp(25px, 6.5vw, 32px); }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-venue { margin-top: 10px; line-height: 1.6; letter-spacing: .16em; }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-countdown { margin-block: 18px; }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-countdown > div { border-color: rgb(255 255 255 / .24); background: rgb(0 0 0 / .35); }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-countdown small { color: rgb(255 255 255 / .8); }
+  .sb-site .sb-hero[data-mobile-cover="true"] .sb-event-action { background: rgb(0 0 0 / .4); border-color: rgb(255 255 255 / .38); }
+  .sb-site .sb-hero[data-mobile-cover="true"] .sb-event-action[aria-label="Comprar entradas"] { background: var(--color-brand); border-color: var(--color-brand); }
+  .sb-site .sb-hero[data-mobile-cover="true"] .sb-event-action:hover { background: var(--color-brand-press); }
 }
 
 .sb-hero-pulse {

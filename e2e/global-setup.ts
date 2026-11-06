@@ -17,6 +17,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { ACCOUNT_ADMIN_EMAIL, ACCOUNT_ADMIN_PASSWORD, SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD } from "./fixtures/admin";
 import { createE2eCard } from "./fixtures/events";
+import { seedEventCovers } from "./fixtures/event-covers";
 
 async function waitForPostgres(): Promise<void> {
   for (let attempt = 0; attempt < 30; attempt += 1) {
@@ -52,6 +53,7 @@ export default async function globalSetup(): Promise<void> {
   await seedDivisions(db);
   await seedFighters(db);
   await seedEvents(db);
+  await seedEventCovers(db);
   await seedPosts(db);
   await seedRankings(db);
   await seedSponsors(db);

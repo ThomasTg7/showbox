@@ -1,5 +1,38 @@
 import { expect, test } from "@playwright/test";
 
+for (const width of [320, 375, 430]) {
+  test(`portada móvil integra fotografía, información y acciones a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 812 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const path of ['/eventos/showbox-fight-night-5', '/']) {
+      await page.goto(path);
+      const hero = page.locator('#event-hero');
+      const image = hero.locator('[data-slot="event-hero-picture"] img');
+      await expect(image).toBeVisible();
+      await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+      const heroBox = (await hero.boundingBox())!;
+      const imageBox = (await image.boundingBox())!;
+      expect(Math.abs(imageBox.height - heroBox.height)).toBeLessThan(1);
+      expect(heroBox.height).toBeLessThanOrEqual(900);
+      const title = (await hero.getByRole('heading', { level: 1 }).boundingBox())!;
+      expect(title.y).toBeLessThan(imageBox.y + imageBox.height * .7);
+      expect(title.y).toBeGreaterThan(imageBox.y + 260);
+      await expect(hero.getByText('Próximo', { exact: true })).toBeVisible();
+      await expect(hero.getByRole('timer', { name: 'Cuenta regresiva' })).toBeVisible();
+      for (const control of await hero.locator('[data-slot="event-actions"]').getByRole('link').all()) {
+        const box = (await control.boundingBox())!;
+        expect(box.y + box.height).toBeLessThanOrEqual(imageBox.y + imageBox.height);
+      }
+      const watch = hero.getByRole('button', { name: 'Dónde ver', exact: true });
+      const watchBox = (await watch.boundingBox())!;
+      expect(watchBox.y + watchBox.height).toBeLessThanOrEqual(imageBox.y + imageBox.height);
+      await watch.click();
+      await expect(page.getByRole('dialog').getByRole('link', { name: 'Ir a ver en YouTube · ShowBox Promotions' })).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+    }
+  });
+}
+
 for (const width of [375, 1024, 1440]) {
   test(`acciones de la cartelera resumida en una fila solo en PC a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
