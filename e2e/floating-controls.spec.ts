@@ -1,6 +1,25 @@
 import { expect, test } from "@playwright/test";
 
 for (const width of [375, 1440]) {
+  test(`navbar oculto en la portada principal hasta subir a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await expect(page.locator("#event-hero")).toBeVisible();
+    const header = page.locator(".sb-header");
+    await expect(header).toHaveAttribute("data-hidden", "true");
+    await page.locator("main").dispatchEvent("pointermove", { pointerType: "mouse" });
+    await page.locator("main").dispatchEvent("pointerdown", { pointerType: "touch" });
+    await expect(header).toHaveAttribute("data-hidden", "true");
+    await page.evaluate(async () => {
+      window.scrollTo(0, 400);
+      await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    });
+    await expect(header).toHaveAttribute("data-hidden", "true");
+    await page.evaluate(() => window.scrollBy(0, -48));
+    await expect(header).toHaveAttribute("data-hidden", "false");
+  });
+
   test(`controles flotantes se ocultan en reposo y vuelven al interactuar a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -13,6 +32,15 @@ for (const width of [375, 1440]) {
     const tickets = page.locator('[data-slot="event-sticky-bar"]');
     await expect(header).toHaveAttribute("data-hidden", "true");
     await expect(tickets).toHaveAttribute("data-visible", "true");
+    await page.locator("main").dispatchEvent("pointermove", { pointerType: "mouse" });
+    await expect(header).toHaveAttribute("data-hidden", "true");
+    await page.locator("main").dispatchEvent("pointerdown", { pointerType: "touch" });
+    await expect(header).toHaveAttribute("data-hidden", "true");
+    if (width >= 1024) {
+      await tickets.hover();
+      await expect(header).toHaveAttribute("data-hidden", "true");
+      await page.mouse.move(width - 10, 450);
+    }
     await page.locator("main").dispatchEvent("pointermove", { pointerType: "touch" });
     await expect(header).toHaveAttribute("data-hidden", "true");
     await page.evaluate(() => window.scrollBy(0, -48));

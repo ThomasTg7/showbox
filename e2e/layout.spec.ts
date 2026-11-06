@@ -52,9 +52,7 @@ for (const viewport of MOBILE_VIEWPORTS) {
 
 test("el botón Menú abre el menú móvil y muestra Boxeadores", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
-  await page.locator("#cartelera").scrollIntoViewIfNeeded();
-  await expect(page.locator(".sb-header")).not.toHaveAttribute("inert", "");
+  await page.goto("/eventos");
 
   await page.getByRole("button", { name: "Menú" }).click();
 
@@ -64,9 +62,7 @@ test("el botón Menú abre el menú móvil y muestra Boxeadores", async ({ page 
 
 test("con teclado: el menú recibe el foco, Escape lo cierra y el foco vuelve al botón", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
-  await page.locator("#cartelera").scrollIntoViewIfNeeded();
-  await expect(page.locator(".sb-header")).not.toHaveAttribute("inert", "");
+  await page.goto("/eventos");
 
   const menuButton = page.getByRole("button", { name: "Menú" });
   await menuButton.focus();
@@ -82,9 +78,7 @@ test("con teclado: el menú recibe el foco, Escape lo cierra y el foco vuelve al
 
 test("con el menú abierto, Tab no sale del menú", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/");
-  await page.locator("#cartelera").scrollIntoViewIfNeeded();
-  await expect(page.locator(".sb-header")).not.toHaveAttribute("inert", "");
+  await page.goto("/eventos");
   await page.getByRole("button", { name: "Menú" }).click();
 
   const mobileMenu = page.getByRole("navigation", { name: "Menú móvil" });
@@ -96,9 +90,7 @@ test("con el menú abierto, Tab no sale del menú", async ({ page }) => {
 
 test("el nav muestra los 5 links en escritorio", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-  await page.locator("#cartelera").scrollIntoViewIfNeeded();
-  await expect(page.locator(".sb-header")).not.toHaveAttribute("inert", "");
+  await page.goto("/eventos");
 
   const nav = page.getByRole("navigation", { name: "Principal" });
 

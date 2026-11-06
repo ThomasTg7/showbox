@@ -6,14 +6,18 @@ const IDLE_MS = 4_000;
 const TICKET_IDLE_MS = 3_000;
 const IDLE_HIDDEN = 1;
 const SCROLL_HIDDEN = 2;
-const INTERACTION_HELD = 4;
+const NAV_INTERACTION_HELD = 4;
 const TICKET_IDLE_HIDDEN = 8;
+const TICKET_INTERACTION_HELD = 16;
+const NAV_REVEALED = 32;
 const listeners = new Set<() => void>();
 const holds = new Set<string>();
 let concealed = false;
 let ticketsConcealed = false;
 let scrollingDown = false;
 let scrollAnchor = 0;
+let navRoute: string | undefined;
+let navRevealed = false;
 let timer: ReturnType<typeof setTimeout> | undefined;
 let lastPointerMove = 0;
 
@@ -34,10 +38,9 @@ function armTimer() {
 }
 
 function reveal() {
-  const changed = concealed || ticketsConcealed || scrollingDown;
+  const changed = concealed || ticketsConcealed;
   concealed = false;
   ticketsConcealed = false;
-  scrollingDown = false;
   if (changed) listeners.forEach(listener => listener());
   armTimer();
 }
@@ -46,16 +49,28 @@ function onScroll() {
   const y = Math.max(0, window.scrollY);
   const delta = y - scrollAnchor;
   let nextDown = scrollingDown;
+  let nextRevealed = navRevealed;
   if (y <= 24 || Math.abs(delta) >= 8) {
     nextDown = y > 24 && delta > 0;
+    if (delta <= -8) nextRevealed = true;
     scrollAnchor = y;
   }
-  const changed = concealed || ticketsConcealed || nextDown !== scrollingDown;
+  const changed = concealed || ticketsConcealed || nextDown !== scrollingDown || nextRevealed !== navRevealed;
   concealed = false;
   ticketsConcealed = false;
   scrollingDown = nextDown;
+  navRevealed = nextRevealed;
   if (changed) listeners.forEach(listener => listener());
   armTimer();
+}
+
+function keyboardActivity(event: KeyboardEvent) {
+  reveal();
+  if (event.key !== "Tab" && event.key !== "Escape") return;
+  const changed = scrollingDown || !navRevealed;
+  scrollingDown = false;
+  navRevealed = true;
+  if (changed) listeners.forEach(listener => listener());
 }
 
 function hold(key: string, active: boolean) {
@@ -79,7 +94,7 @@ function pointerMove(event: PointerEvent) {
   reveal();
 }
 
-const activityEvents = ["pointerdown", "keydown", "focus"] as const;
+const activityEvents = ["pointerdown", "focus"] as const;
 
 /** One browser subscription/timer shared by the navbar and ticket bar. */
 function subscribe(listener: () => void) {
@@ -87,6 +102,7 @@ function subscribe(listener: () => void) {
   if (listeners.size === 1) {
     scrollAnchor = Math.max(0, window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("keydown", keyboardActivity);
     activityEvents.forEach(event => window.addEventListener(event, reveal, { passive: true }));
     window.addEventListener("pointermove", pointerMove, { passive: true });
     armTimer();
@@ -95,6 +111,7 @@ function subscribe(listener: () => void) {
     listeners.delete(listener);
     if (listeners.size) return;
     window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("keydown", keyboardActivity);
     activityEvents.forEach(event => window.removeEventListener(event, reveal));
     window.removeEventListener("pointermove", pointerMove);
     clearTimeout(timer);
@@ -103,20 +120,37 @@ function subscribe(listener: () => void) {
     ticketsConcealed = false;
     scrollingDown = false;
     scrollAnchor = 0;
+    navRoute = undefined;
+    navRevealed = false;
     lastPointerMove = 0;
   };
 }
 
-const getSnapshot = () => (concealed ? IDLE_HIDDEN : 0) | (ticketsConcealed ? TICKET_IDLE_HIDDEN : 0) | (scrollingDown ? SCROLL_HIDDEN : 0) | (holds.size ? INTERACTION_HELD : 0);
+function getSnapshot() {
+  let snapshot = (concealed ? IDLE_HIDDEN : 0) | (ticketsConcealed ? TICKET_IDLE_HIDDEN : 0) | (scrollingDown ? SCROLL_HIDDEN : 0) | (navRevealed ? NAV_REVEALED : 0);
+  for (const key of holds) snapshot |= key.startsWith("navbar:") ? NAV_INTERACTION_HELD : TICKET_INTERACTION_HELD;
+  return snapshot;
+}
 const getServerSnapshot = () => 0;
 
-/** Activity restores controls; hover, focus and an open menu pause auto-hide. */
-export function useFloatingControls(pinned = false, kind: "navbar" | "tickets" = "tickets") {
-  const id = useId();
+/** Activity restores idle controls without clearing the navbar's downward-scroll state. */
+export function useFloatingControls(pinned = false, kind: "navbar" | "tickets" = "tickets", routeKey?: string) {
+  const id = `${kind}:${useId()}`;
   const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const hidden = kind === "navbar"
     ? Boolean(snapshot & (IDLE_HIDDEN | SCROLL_HIDDEN))
     : Boolean(snapshot & TICKET_IDLE_HIDDEN);
+  const initialCoverHidden = kind === "navbar" && routeKey === "/" && (navRoute !== routeKey || !(snapshot & NAV_REVEALED));
+  const held = snapshot & (kind === "navbar" ? NAV_INTERACTION_HELD : TICKET_INTERACTION_HELD);
+  useEffect(() => {
+    if (kind !== "navbar" || routeKey === undefined || routeKey === navRoute) return;
+    navRoute = routeKey;
+    navRevealed = false;
+    scrollingDown = false;
+    scrollAnchor = Math.max(0, window.scrollY);
+    reveal();
+    listeners.forEach(listener => listener());
+  }, [kind, routeKey]);
   useEffect(() => {
     hold(`${id}:pinned`, pinned);
     return () => hold(`${id}:pinned`, false);
@@ -127,7 +161,7 @@ export function useFloatingControls(pinned = false, kind: "navbar" | "tickets" =
   }, [id]);
 
   return {
-    hidden: hidden && !pinned && !(snapshot & INTERACTION_HELD),
+    hidden: !pinned && (initialCoverHidden || (hidden && !held)),
     interactionProps: {
       onPointerEnter: (event: ReactPointerEvent<HTMLElement>) => {
         if (event.pointerType !== "touch") hold(`${id}:hover`, true);
