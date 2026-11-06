@@ -117,7 +117,7 @@
 @media (min-width: 768px) {
   [data-slot="event-sticky-bar"] {
     top: auto;
-    bottom: 4px;
+    bottom: 0;
     inset-inline: 24px;
     max-width: 1040px;
     margin-inline: auto;

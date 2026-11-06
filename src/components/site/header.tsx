@@ -12,7 +12,7 @@ import { useFloatingControls } from "./use-floating-controls";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { hidden, interactionProps } = useFloatingControls(menuOpen);
+  const { hidden, interactionProps } = useFloatingControls(menuOpen, "navbar");
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
 

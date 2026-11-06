@@ -3,12 +3,55 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, it, vi } from "vitest";
 import { useFloatingControls } from "./use-floating-controls";
 
-function Control({ name, pinned = false }: { name: string; pinned?: boolean }) {
-  const { hidden, interactionProps } = useFloatingControls(pinned);
+function Control({ name, pinned = false, directional = false }: { name: string; pinned?: boolean; directional?: boolean }) {
+  const { hidden, interactionProps } = useFloatingControls(pinned, directional ? "navbar" : "tickets");
   return <div data-testid={name} data-hidden={hidden} {...interactionProps}><button>{name}</button></div>;
 }
 
-afterEach(() => { cleanup(); vi.useRealTimers(); });
+afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); });
+
+it("hides tickets after three idle seconds while the navbar retains its four-second delay", () => {
+  vi.useFakeTimers();
+  render(<><Control name="nav" directional /><Control name="tickets" /></>);
+  act(() => { vi.advanceTimersByTime(3_100); });
+  expect(screen.getByTestId("tickets")).toHaveAttribute("data-hidden", "true");
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "false");
+  act(() => { vi.advanceTimersByTime(1_000); });
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "true");
+  fireEvent.pointerDown(window);
+  expect(screen.getByTestId("tickets")).toHaveAttribute("data-hidden", "false");
+});
+it("hides only the directional navbar on downward scroll and restores it upward, ignoring small jitter", () => {
+  vi.useFakeTimers();
+  vi.stubGlobal("scrollY", 0);
+  render(<><Control name="nav" directional /><Control name="tickets" /></>);
+  vi.stubGlobal("scrollY", 160);
+  fireEvent.scroll(window);
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "true");
+  expect(screen.getByTestId("tickets")).toHaveAttribute("data-hidden", "false");
+  vi.stubGlobal("scrollY", 157);
+  fireEvent.scroll(window);
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "true");
+  vi.stubGlobal("scrollY", 148);
+  fireEvent.scroll(window);
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "false");
+  vi.stubGlobal("scrollY", 0);
+  fireEvent.scroll(window);
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "false");
+});
+
+it("keeps a directional control visible while its menu or keyboard focus is in use", () => {
+  vi.stubGlobal("scrollY", 0);
+  const view = render(<Control name="nav" directional pinned />);
+  vi.stubGlobal("scrollY", 200);
+  fireEvent.scroll(window);
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "false");
+  view.rerender(<Control name="nav" directional />);
+  fireEvent.focus(screen.getByRole("button"));
+  vi.stubGlobal("scrollY", 300);
+  fireEvent.scroll(window);
+  expect(screen.getByTestId("nav")).toHaveAttribute("data-hidden", "false");
+});
 
 it("shares one idle cycle and restores both controls on scroll, touch and keyboard", () => {
   vi.useFakeTimers();
