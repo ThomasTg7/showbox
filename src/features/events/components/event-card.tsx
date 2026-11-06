@@ -3,6 +3,7 @@ import { BRAND } from "@/domain/brand";
 import Link from "next/link";
 import { MediaImage } from "@/components/media/media-image";
 import { Tag } from "@/components/ui-gc/tag";
+import { AutoFitText } from "@/components/ui-gc/auto-fit-text";
 import { EVENT_STATUS_LABELS } from "@/domain/bout-enums";
 import { formatShortDate, formatTime } from "@/lib/format-date";
 import type { EventCardDTO } from "../dto";
@@ -67,8 +68,8 @@ export function EventCard({ event, variant, priority = false }: EventCardProps) 
         </p>
         {main ? (
           <p className="font-cond text-base font-bold uppercase tracking-[.06em] text-white">
-            {main.red.lastName} <span className="sb-gradient-text">vs</span> {main.blue.lastName}
-            {measure ? <span className="font-semibold text-muted-foreground"> · {measure}</span> : null}
+            <AutoFitText>{main.red.lastName} <span className="sb-gradient-text">vs</span> {main.blue.lastName}
+            {measure ? <span className="font-semibold text-muted-foreground"> · {measure}</span> : null}</AutoFitText>
           </p>
         ) : (
           <p className="font-cond text-base font-semibold uppercase tracking-[.06em] text-muted-foreground">Cartelera por anunciar</p>

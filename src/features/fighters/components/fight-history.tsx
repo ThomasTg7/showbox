@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { AutoFitText } from "@/components/ui-gc/auto-fit-text";
 import { BOUT_LEVEL_LABELS, type BoutLevel } from "@/domain/bout-enums";
 import type { FightHistoryRow } from "@/features/events/dto";
 import { formatDate } from "@/lib/format-date";
@@ -71,13 +72,15 @@ export function FightHistory({ rows }: { rows: FightHistoryRow[] }) {
               </span>
               <div className="col-span-2 min-w-0 sm:col-span-1">
                 <p className="font-display text-[28px] uppercase leading-none text-white">
-                  {row.opponent.isPublic ? (
-                    <Link href={`/boxeadores/${row.opponent.slug}`} className="underline-offset-4 hover:underline focus-visible:underline">
-                      {opponentName}
-                    </Link>
-                  ) : (
-                    opponentName
-                  )}
+                  <AutoFitText minFontSize={16}>
+                    {row.opponent.isPublic ? (
+                      <Link href={`/boxeadores/${row.opponent.slug}`} className="underline-offset-4 hover:underline focus-visible:underline">
+                        {opponentName}
+                      </Link>
+                    ) : (
+                      opponentName
+                    )}
+                  </AutoFitText>
                 </p>
                 <p className="mt-1 font-cond text-sm font-semibold uppercase tracking-[.06em] text-muted-foreground">{BOUT_LEVEL_LABELS[row.level]}</p>
               </div>

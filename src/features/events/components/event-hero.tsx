@@ -1,5 +1,6 @@
 import { Logo } from "@/components/brand/logo";
 import { Tag } from "@/components/ui-gc/tag";
+import { AutoFitText } from "@/components/ui-gc/auto-fit-text";
 import { formatPosterDate, formatTime } from "@/lib/format-date";
 import type { EventPageDTO } from "../dto";
 import { pickMainBout } from "../main-bout";
@@ -26,7 +27,7 @@ export function EventHero({ event, ticketHref, ticketExternal = false, showCount
             <Tag tone="ember">{event.name}</Tag><Tag tone={status.tone}>{status.label}</Tag>
           </div>
           <h1 id="event-title" className="sb-hero-matchup sb-punch-in font-display text-[clamp(36px,7.4vw,96px)] uppercase leading-[.98] tracking-[-.025em] text-white [overflow-wrap:anywhere] drop-shadow-[0_6px_24px_rgba(0,0,0,.65)] lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:gap-x-6">
-            {main ? <><span data-slot="hero-red" className="sb-chrome-text block">{main.red.lastName}</span><span className="my-2 block font-cond text-[.3em] font-bold tracking-[.12em] sb-gradient-text">VS</span><span data-slot="hero-blue" className="sb-chrome-text block">{main.blue.lastName}</span></> : event.name}
+            {main ? <><span data-slot="hero-red" className="sb-chrome-text block min-w-0 max-w-full"><AutoFitText minFontSize={24}>{main.red.lastName}</AutoFitText></span><span className="my-2 block font-cond text-[.3em] font-bold tracking-[.12em] sb-gradient-text">VS</span><span data-slot="hero-blue" className="sb-chrome-text block min-w-0 max-w-full"><AutoFitText minFontSize={24}>{main.blue.lastName}</AutoFitText></span></> : event.name}
           </h1>
           <div aria-hidden className="sb-hero-rule mx-auto mt-7" />
           <p className="sb-hero-date sb-poster-date mt-5 text-[clamp(26px,4.4vw,46px)] leading-none text-white">

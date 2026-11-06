@@ -36,7 +36,7 @@ export function BoutDetailCorner({ fighter, side, won, rankLabel, gender }: Bout
         </div>
       </div>
       <span className="font-cond text-[11px] font-extrabold uppercase tracking-[.14em] text-neutral-500">{CORNER_NAME[side]}</span>
-      <h2 className="font-display text-[clamp(26px,6.5vw,52px)] uppercase leading-[.95] break-words text-black">
+      <h2 className="w-full min-w-0 font-display text-[clamp(26px,6.5vw,52px)] uppercase leading-[.95] text-black">
         {fighter.isPublic ? (
           <Link href={`/boxeadores/${fighter.slug}`} className="underline-offset-4 outline-none hover:underline focus-visible:underline focus-visible:decoration-brand focus-visible:decoration-[3px]">
             <FighterName firstName={fighter.firstName} lastName={fighter.lastName} />

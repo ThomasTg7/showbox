@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AutoFitText } from "@/components/ui-gc/auto-fit-text";
 import { MediaImage } from "@/components/media/media-image";
 import { pickFighterPhoto } from "@/domain/fighter-photo";
 import { FighterSilhouette } from "@/features/fighters/components/fighter-silhouette";
@@ -42,9 +43,9 @@ export function CornerFigure({ fighter, side, won, rankLabel, gender }: { fighte
 /** El nombre de la esquina: al centro en celular (uno sobre otro con «vs»), junto a su foto en PC (nombre y apellido en dos líneas). */
 export function CornerName({ fighter, side }: { fighter: BoutFighterDTO; side: Side }) {
   const name = (
-    <>
+    <AutoFitText>
       <span className="lg:block">{fighter.firstName}</span> <span className="lg:block">{fighter.lastName}</span>
-    </>
+    </AutoFitText>
   );
   return (
     <h3

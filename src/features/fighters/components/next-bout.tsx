@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AutoFitText } from "@/components/ui-gc/auto-fit-text";
 import type { FightHistoryRow, NextBoutDTO, OpponentDTO } from "@/features/events/dto";
 import { boutMeasure, roundsLabel } from "@/features/events/public-format";
 import { formatDate, formatLongDate, formatTime } from "@/lib/format-date";
@@ -55,8 +56,7 @@ function BoutCard({ kicker, opponent, chips, event }: { kicker: string; opponent
           {kicker}
         </h2>
         <p className="mt-1.5 font-display text-[clamp(26px,4vw,40px)] uppercase leading-none text-white">
-          <span className="mr-2 text-[.5em] text-muted-foreground">vs</span>
-          <OpponentName opponent={opponent} />
+          <AutoFitText minFontSize={16}><span className="mr-2 text-[.5em] text-muted-foreground">vs</span><OpponentName opponent={opponent} /></AutoFitText>
         </p>
         <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">{chips}</div>
       </div>
