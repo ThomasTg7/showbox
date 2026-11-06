@@ -3,34 +3,18 @@ import { BRAND } from "@/domain/brand";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Logo } from "@/components/brand/logo";
 import { cn } from "@/lib/cn";
 import { MobileMenu } from "./mobile-menu";
 import { isActiveNavLink, NAV_LINKS } from "./nav-links";
+import { useFloatingControls } from "./use-floating-controls";
 
 export function Header() {
-  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { hidden, interactionProps } = useFloatingControls(menuOpen);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-
-  useEffect(() => {
-    function onScroll() {
-      const hero = document.querySelector("[data-site-hero]");
-      setHidden(Boolean(hero && hero.getBoundingClientRect().bottom > 80));
-    }
-    const observer = new MutationObserver(onScroll);
-    observer.observe(document.querySelector("main") ?? document.body, { childList: true, subtree: true });
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [pathname]);
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
@@ -41,6 +25,7 @@ export function Header() {
   return (
     <>
       <header
+        {...interactionProps}
         inert={hidden && !menuOpen}
         data-hidden={hidden && !menuOpen}
         className={cn(

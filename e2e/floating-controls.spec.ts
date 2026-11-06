@@ -1,0 +1,51 @@
+import { expect, test } from "@playwright/test";
+
+for (const width of [375, 1440]) {
+  test(`controles flotantes se ocultan en reposo y vuelven al interactuar a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.clock.install();
+    await page.goto("/eventos/showbox-fight-night-5");
+    await page.locator("#cartelera").scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollBy(0, 220));
+    const header = page.locator(".sb-header");
+    const tickets = page.locator('[data-slot="event-sticky-bar"]');
+    await expect(header).toHaveAttribute("data-hidden", "false");
+    await expect(tickets).toHaveAttribute("data-visible", "true");
+    const box = (await tickets.boundingBox())!;
+    expect(900 - box.y - box.height).toBeLessThanOrEqual(4);
+    await page.clock.runFor(4_500);
+    await expect(header).toHaveAttribute("data-hidden", "true");
+    await expect(tickets).toHaveAttribute("data-visible", "false");
+    await expect(tickets).toHaveAttribute("inert", "");
+    await page.locator("main").dispatchEvent("pointerdown", { pointerType: "touch" });
+    await expect(header).toHaveAttribute("data-hidden", "false");
+    await expect(tickets).toHaveAttribute("data-visible", "true");
+    if (width < 1024) {
+      await page.getByRole("button", { name: "Menú", exact: true }).click();
+      await page.clock.runFor(6_000);
+      await expect(page.getByRole("navigation", { name: "Menú móvil" })).toBeVisible();
+      await expect(header).toHaveAttribute("data-hidden", "false");
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("button", { name: "Menú", exact: true })).toBeFocused();
+    } else {
+      const link = header.getByRole("link", { name: "Noticias", exact: true });
+      await link.hover();
+      await page.clock.runFor(6_000);
+      await expect(header).toHaveAttribute("data-hidden", "false");
+      await link.focus();
+      await page.clock.runFor(6_000);
+      await expect(link).toBeFocused();
+      await expect(header).toHaveAttribute("data-hidden", "false");
+    }
+  });
+}
+
+test("el navbar puede recuperarse con teclado después del reposo", async ({ page }) => {
+  await page.clock.install();
+  await page.goto("/eventos");
+  await page.clock.runFor(4_500);
+  await expect(page.locator(".sb-header")).toHaveAttribute("data-hidden", "true");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".sb-header")).toHaveAttribute("data-hidden", "false");
+});

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui-gc/button";
+import { useFloatingControls } from "@/components/site/use-floating-controls";
 
 type EventStickyBarProps = {
   name: string;
@@ -20,19 +21,22 @@ type EventStickyBarProps = {
  * Mientras no se ve queda `inert`: sus enlaces no reciben foco. Solo se animan transform y opacity.
  */
 export function EventStickyBar({ name, meta, ticketHref, external = false, heroId }: EventStickyBarProps) {
-  const [visible, setVisible] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const { hidden, interactionProps } = useFloatingControls();
+  const visible = pastHero && !hidden;
 
   useEffect(() => {
     const hero = document.getElementById(heroId);
     if (!hero) return;
     // Visible solo cuando el hero quedó arriba (se hizo scroll más allá de él), no cuando aún está por llegar.
-    const observer = new IntersectionObserver(([entry]) => setVisible(!entry?.isIntersecting && (entry?.boundingClientRect.bottom ?? 1) <= 0));
+    const observer = new IntersectionObserver(([entry]) => setPastHero(!entry?.isIntersecting && (entry?.boundingClientRect.bottom ?? 1) <= 0));
     observer.observe(hero);
     return () => observer.disconnect();
   }, [heroId]);
 
   return (
     <div
+      {...interactionProps}
       data-slot="event-sticky-bar"
       data-visible={visible}
       // `inert`: oculta a lectores de pantalla y saca del orden de foco lo que no se ve.
