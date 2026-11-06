@@ -1,14 +1,13 @@
 import { Logo } from "@/components/brand/logo";
-import { SmoothAnchor } from "@/components/motion/smooth-anchor";
-import { Button } from "@/components/ui-gc/button";
 import { Tag } from "@/components/ui-gc/tag";
+import { cn } from "@/lib/cn";
 import { formatPosterDate, formatTime } from "@/lib/format-date";
 import type { EventPageDTO } from "../dto";
 import { pickMainBout } from "../main-bout";
 import { eventStatusTag } from "../public-format";
 import { Countdown } from "./countdown";
 import { EventHeroArt } from "./event-hero-art";
-import { WatchEventButton } from "./watch-event-button";
+import { EventActions } from "./event-actions";
 
 export const EVENT_HERO_ID = "event-hero";
 type EventHeroProps = { event: EventPageDTO; ticketHref?: string; ticketExternal?: boolean; showCountdown: boolean };
@@ -18,11 +17,10 @@ export function EventHero({ event, ticketHref, ticketExternal = false, showCount
   const main = pickMainBout(event.segments.flatMap((segment) => segment.bouts), (bout) => bout.status === "cancelled");
   const start = new Date(event.startsAt);
   const status = eventStatusTag(event.eventStatus);
-  const watchLabel = <><span className="min-[400px]:hidden">Ver</span><span className="hidden min-[400px]:inline">Dónde ver</span></>;
   return (
-    <section id={EVENT_HERO_ID} data-site-hero aria-labelledby="event-title" className="sb-hero relative isolate flex min-h-[max(760px,100svh)] items-end overflow-hidden pt-24 text-center lg:min-h-[max(850px,100svh)]">
+    <section id={EVENT_HERO_ID} data-site-hero data-mobile-cover={Boolean(event.heroMobileMedia)} aria-labelledby="event-title" className={cn("sb-hero relative isolate flex min-h-[max(760px,100svh)] items-end overflow-hidden text-center lg:min-h-[max(850px,100svh)]", event.heroMobileMedia ? "pt-0 md:pt-24" : "pt-24")}>
       <EventHeroArt event={event} main={main} />
-      <div className="relative z-[4] mx-auto w-full max-w-[1320px] px-[clamp(16px,4vw,64px)] pb-12 pt-56 lg:pb-12 lg:pt-40">
+      <div className={cn("relative z-[4] mx-auto w-full max-w-[1320px] px-[clamp(16px,4vw,64px)] pb-12 lg:pb-12 lg:pt-40", event.heroMobileMedia ? "pt-[calc(125vw+24px)] md:pt-40" : "pt-56")}>
         <div className="mx-auto max-w-[960px]">
           <div className="mb-6 hidden justify-center lg:flex"><Logo size="md" /></div>
           <div className="mb-5 flex flex-wrap items-center justify-center gap-2">
@@ -38,11 +36,8 @@ export function EventHero({ event, ticketHref, ticketExternal = false, showCount
           </p>
           <p className="sb-spaced mt-3 text-[11px] text-white/80 sm:text-xs">{event.venue.name}{event.venue.city ? ` · ${event.venue.city}` : ""}</p>
           {showCountdown ? <Countdown target={event.startsAt} className="my-6 justify-center" /> : <div className="h-6" />}
-          <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
-            {ticketHref ? <Button variant="primary" className="order-1 min-w-0 whitespace-nowrap px-4 sm:px-7" asChild><a href={ticketHref} aria-label="Comprar entradas" {...(ticketExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}><span className="min-[400px]:hidden">Entradas</span><span className="hidden min-[400px]:inline">Comprar entradas</span></a></Button> : null}
-            <Button variant="ghost" className="order-3 col-span-2 sm:order-2" asChild><SmoothAnchor href="#cartelera">{event.eventStatus === "completed" ? "Ver cartelera y resultados" : "Ver cartelera completa"}</SmoothAnchor></Button>
-            <WatchEventButton eventName={event.name} platforms={event.watchPlatforms ?? (event.streamUrl ? [{ name: "Transmisión oficial", url: event.streamUrl, media: null }] : [])} ariaLabel="Dónde ver" className={`order-2 min-w-0 whitespace-nowrap px-4 sm:order-3 sm:px-7 ${!ticketHref ? "col-span-2" : ""}`}>{watchLabel}</WatchEventButton>
-          </div>
+          <EventActions eventName={event.name} detailsHref="#cartelera" detailsLabel={event.eventStatus === "completed" ? "Ver resultados" : "Ver cartelera"} ticketHref={ticketHref} ticketExternal={ticketExternal}
+            platforms={event.watchPlatforms ?? (event.streamUrl ? [{ name: "Transmisión oficial", url: event.streamUrl, media: null }] : [])} className="mx-auto max-w-[480px]" />
         </div>
       </div>
     </section>

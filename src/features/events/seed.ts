@@ -3,6 +3,7 @@ import type { Db } from "@/db";
 import { divisions } from "@/db/schema/divisions";
 import { bouts, cardSegments, events, type TicketTier } from "@/db/schema/events";
 import { fighters } from "@/db/schema/fighters";
+import { eventWatchPlatforms } from "@/db/schema/event-watch-platforms";
 import { DEFAULT_ROUND_SECONDS, DEFAULT_SCHEDULED_ROUNDS, type BoutLevel, type ScheduledRounds } from "@/domain/bout-enums";
 import { validateBoutResult, type BoutResultInput } from "@/domain/bout-result";
 import { slugify } from "@/domain/slug";
@@ -276,6 +277,9 @@ export async function seedEvents(db: Db, now: Date = new Date()): Promise<void> 
       .returning({ id: events.id });
 
     // Un evento que ya existía conserva su cartelera tal como está.
-    if (created) await insertCard(db, created.id, definition.date, definition.segments, lookups);
+    if (created) {
+      await insertCard(db, created.id, definition.date, definition.segments, lookups);
+      await db.insert(eventWatchPlatforms).values({ eventId: created.id, name: "YouTube · ShowBox Promotions", url: "https://www.youtube.com/@ShowBoxPromotionsEC", sortOrder: 0 });
+    }
   }
 }

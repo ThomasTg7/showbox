@@ -40,7 +40,7 @@ for (const width of [375, 1440]) {
 
     await page.goto("/eventos");
     const card = page.locator(`[data-event="${slug}"]`);
-    await card.getByRole("button", { name: "Ver", exact: true }).click();
+    await card.getByRole("button", { name: "Dónde ver", exact: true }).click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toContainText(name);
     await expect(dialog.getByRole("link", { name: "Ir a ver en Twitch ShowBox" })).toHaveAttribute("href", "https://twitch.tv/showbox-e2e");
@@ -51,7 +51,7 @@ for (const width of [375, 1440]) {
     await page.screenshot({ path: `test-results/event-watch-modal-${width}.png` });
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
-    await expect(card.getByRole("button", { name: "Ver", exact: true })).toBeFocused();
+    await expect(card.getByRole("button", { name: "Dónde ver", exact: true })).toBeFocused();
     if (width === 1440) {
       const before = await page.evaluate(() => scrollY);
       await page.mouse.move(700, 600);
@@ -83,6 +83,6 @@ for (const width of [375, 1440]) {
 
 test("el botón Ver de la cartelera resumida abre las opciones del evento", async ({ page }) => {
   await page.goto("/");
-  await page.locator("#cartelera").getByRole("button", { name: "Ver", exact: true }).click();
+  await page.locator("#cartelera").getByRole("button", { name: "Dónde ver", exact: true }).click();
   await expect(page.getByRole("dialog")).toContainText("ShowBox Fight Night 5");
 });

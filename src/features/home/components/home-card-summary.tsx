@@ -1,10 +1,9 @@
-import Link from "next/link";
 import { SectionHeading } from "@/components/ui-gc/section-heading";
 import { BoutAccordion } from "@/features/events/components/bout-accordion";
 import { BoutRow } from "@/features/events/components/bout-row";
 import { EventSchedule } from "@/features/events/components/event-schedule";
 import { FightCardTabs } from "@/features/events/components/fight-card-tabs";
-import { WatchEventButton } from "@/features/events/components/watch-event-button";
+import { EventActions } from "@/features/events/components/event-actions";
 import type { HomeEvent } from "../dto";
 
 type HomeCardSummaryProps = HomeEvent & { kind: "next-event" | "last-event" };
@@ -33,12 +32,7 @@ export function HomeCardSummary({ event, rankLabels, kind }: HomeCardSummaryProp
             }
             tone="light"
             action={
-              <div className="flex flex-wrap items-center gap-4">
-                <Link href={`/eventos/${event.slug}`} className="inline-flex min-h-11 items-center border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-black">
-                  Ver evento <span aria-hidden>→</span>
-                </Link>
-                <WatchEventButton eventName={event.name} platforms={event.watchPlatforms} />
-              </div>
+              <EventActions eventName={event.name} detailsHref={`/eventos/${event.slug}`} ticketHref={!isLast ? event.ticketUrl ?? undefined : undefined} ticketExternal platforms={event.watchPlatforms} tone="light" className="max-w-[360px]" />
             }
           />
         </div>

@@ -54,7 +54,7 @@ pnpm create-admin admin@showbox.test "ShowBox2026!seguro"
 ```
 
 ```bash
-pnpm dev --port 3002
+pnpm dev --hostname localhost --port 3002
 ```
 
 ### 4. Abrir

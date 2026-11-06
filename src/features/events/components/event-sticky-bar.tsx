@@ -37,8 +37,8 @@ export function EventStickyBar({ name, meta, ticketHref, external = false, heroI
       data-visible={visible}
       // `inert`: oculta a lectores de pantalla y saca del orden de foco lo que no se ve.
       inert={!visible}
-      className={`fixed inset-x-0 bottom-0 z-[99] border-t border-border bg-surface transition-transform duration-[450ms] ease-sb motion-reduce:transition-none md:bottom-auto md:top-[76px] md:border-b md:border-t-0 ${
-        visible ? "translate-y-0" : "translate-y-full md:-translate-y-[calc(100%+76px)]"
+      className={`fixed inset-x-0 bottom-0 z-[99] border-t border-border bg-surface transition-transform duration-[450ms] ease-sb motion-reduce:transition-none md:inset-x-3 md:bottom-auto md:top-[76px] md:mx-auto md:max-w-[1240px] md:rounded-lg md:border lg:inset-x-6 lg:top-[88px] ${
+        visible ? "translate-y-0" : "translate-y-full md:-translate-y-[calc(100%+88px)]"
       }`}
     >
       <div className="mx-auto flex h-16 w-full max-w-[1320px] items-center gap-4 px-[clamp(16px,4vw,64px)] md:h-14 md:gap-6">

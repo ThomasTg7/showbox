@@ -64,7 +64,7 @@ export function RankingSwitch({ panels, kickers }: RankingSwitchProps) {
         </div>
       ))}
       <p className="mt-8">
-        <Link href={active === "amateur" ? "/rankings?nivel=amateur" : "/rankings"} className="inline-flex min-h-11 items-center border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white">
+        <Link href={active === "amateur" ? "/rankings?nivel=amateur" : "/rankings"} className="inline-flex min-h-11 items-center gap-4 border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white">
           Ver todos los rankings <span aria-hidden>→</span>
         </Link>
       </p>

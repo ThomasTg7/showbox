@@ -7,7 +7,7 @@ import { EVENT_STATUS_LABELS } from "@/domain/bout-enums";
 import { formatShortDate, formatTime } from "@/lib/format-date";
 import type { EventCardDTO } from "../dto";
 import { boutMeasure } from "../public-format";
-import { WatchEventButton } from "./watch-event-button";
+import { EventActions } from "./event-actions";
 
 export const EVENT_CARD_SIZES = "(min-width: 1024px) 320px, (min-width: 640px) 40vw, 92vw";
 
@@ -35,7 +35,7 @@ function Poster({ event, priority }: { event: EventCardDTO; priority: boolean })
   );
 }
 
-/** Tarjeta de un evento en `/eventos`. Toda la tarjeta es un enlace a la página del evento; «Entradas» va aparte. */
+/** Event information and three independent actions; no stretched link can cover the controls. */
 export function EventCard({ event, variant, priority = false }: EventCardProps) {
   const start = new Date(event.startsAt);
   const main = event.mainBout;
@@ -58,7 +58,7 @@ export function EventCard({ event, variant, priority = false }: EventCardProps) 
           {main?.isTitleFight ? <Tag tone="outline">Pelea por el título</Tag> : null}
         </div>
         <h3 className={`font-display uppercase leading-[.95] text-white ${upcoming ? "text-[clamp(30px,5vw,56px)]" : "text-[clamp(26px,4vw,34px)]"}`}>
-          <Link href={`/eventos/${event.slug}`} className="outline-none after:absolute after:inset-0">
+          <Link href={`/eventos/${event.slug}`}>
             {event.name}
           </Link>
         </h3>
@@ -73,22 +73,7 @@ export function EventCard({ event, variant, priority = false }: EventCardProps) 
         ) : (
           <p className="font-cond text-base font-semibold uppercase tracking-[.06em] text-muted-foreground">Cartelera por anunciar</p>
         )}
-        {upcoming && event.eventStatus !== "cancelled" ? (
-          <div className="mt-auto flex flex-wrap items-center gap-3 pt-3">
-            <span className="border-b-2 border-brand font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white">Ver evento</span>
-            {event.ticketUrl ? (
-              <a
-                href={event.ticketUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative z-10 bg-brand px-5 py-3 font-cond text-sm font-extrabold uppercase tracking-[.08em] text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-hover"
-              >
-                Entradas
-              </a>
-            ) : null}
-          </div>
-        ) : null}
-        {event.eventStatus !== "cancelled" ? <div className="relative z-10 mt-2"><WatchEventButton eventName={event.name} platforms={event.watchPlatforms} className="px-5 py-3" /></div> : null}
+        {event.eventStatus !== "cancelled" ? <EventActions eventName={event.name} detailsHref={`/eventos/${event.slug}`} ticketHref={upcoming ? event.ticketUrl ?? undefined : undefined} ticketExternal platforms={event.watchPlatforms} className="mt-auto pt-3" /> : null}
       </div>
     </article>
   );

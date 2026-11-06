@@ -5,13 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/logo";
-import { Button } from "@/components/ui-gc/button";
 import { cn } from "@/lib/cn";
 import { MobileMenu } from "./mobile-menu";
 import { isActiveNavLink, NAV_LINKS } from "./nav-links";
 
 export function Header() {
-  const [solid, setSolid] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -19,10 +17,8 @@ export function Header() {
 
   useEffect(() => {
     function onScroll() {
-      const y = window.scrollY;
-      setSolid(y > 40);
       const hero = document.querySelector("[data-site-hero]");
-      setHidden(Boolean(hero && hero.getBoundingClientRect().bottom > 76));
+      setHidden(Boolean(hero && hero.getBoundingClientRect().bottom > 80));
     }
     const observer = new MutationObserver(onScroll);
     observer.observe(document.querySelector("main") ?? document.body, { childList: true, subtree: true });
@@ -46,37 +42,34 @@ export function Header() {
     <>
       <header
         inert={hidden && !menuOpen}
+        data-hidden={hidden && !menuOpen}
         className={cn(
-          // Fondo sólido como capa aparte con opacity: solo se animan transform y opacity.
-          "sb-header fixed top-0 left-0 right-0 z-[100] h-[76px] flex items-center transition-transform duration-300 ease-sb",
-          "before:absolute before:inset-0 before:-z-10 before:bg-black/90 before:backdrop-blur-md before:border-b before:border-border before:opacity-0 before:transition-opacity before:duration-300",
-          solid && "before:opacity-100",
-          hidden && !menuOpen && "-translate-y-full",
+          "sb-header fixed inset-x-3 top-3 z-[100] mx-auto flex h-14 max-w-[1240px] items-center rounded-[10px] border border-white/15 bg-black/90 shadow-[0_12px_40px_rgba(0,0,0,.35)] backdrop-blur-xl lg:inset-x-6 lg:top-4 lg:h-16",
+          hidden && !menuOpen && "pointer-events-none",
         )}
       >
-        <div className="max-w-[1320px] mx-auto w-full px-[clamp(16px,4vw,64px)] flex items-center gap-8">
-          <Link href="/" aria-label={`${BRAND.name} inicio`}>
-            <Logo />
+        <div className="relative flex h-full w-full items-center px-3 lg:px-5">
+          <Link href="/" aria-label={`${BRAND.name} inicio`} className="absolute left-1/2 top-1/2 flex min-h-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+            <Logo size="sm" className="w-[96px] lg:w-[112px]" />
           </Link>
-          <nav aria-label="Principal" className="hidden lg:flex gap-8 mr-auto">
-            {NAV_LINKS.map((link) => (
+          <nav aria-label="Principal" className="hidden w-full items-center justify-between lg:flex">
+            {[NAV_LINKS.slice(0, 3), NAV_LINKS.slice(3)].map((group, index) => <div key={index} className="flex items-center gap-5 xl:gap-7">
+            {group.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={isActiveNavLink(pathname, link.href) ? "page" : undefined}
                 className={cn(
-                  "sb-nav-link font-cond font-bold uppercase tracking-[.06em] text-[15px]",
+                  "sb-nav-link font-cond text-[12px] font-bold uppercase tracking-[.08em] xl:text-[13px]",
                   isActiveNavLink(pathname, link.href) ? "text-accent-bright" : "text-white/85 hover:text-white",
                 )}
               >
                 {link.label}
               </Link>
             ))}
+            </div>)}
           </nav>
-          <div className="flex items-center gap-4 ml-auto lg:ml-0">
-            <Button asChild variant="primary" className="hidden lg:inline-flex">
-              <Link href="/entradas">Comprar entradas</Link>
-            </Button>
+          <div className="ml-auto flex items-center lg:absolute lg:right-4">
             <button
               ref={menuButtonRef}
               type="button"

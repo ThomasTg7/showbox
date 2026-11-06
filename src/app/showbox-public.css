@@ -11,7 +11,37 @@
 }
 
 .sb-header {
-  border-top: 3px solid var(--color-brand-bright);
+  transition: transform 520ms cubic-bezier(.2,.8,.2,1), opacity 360ms ease;
+}
+
+.sb-header[data-hidden="true"] {
+  opacity: 0;
+  transform: translateY(calc(-100% - 24px));
+}
+
+.sb-site .sb-event-action {
+  min-width: 0;
+  min-height: 48px;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 16px;
+  border: 1px solid rgb(255 255 255 / .25);
+  background: rgb(255 255 255 / .055);
+  color: white;
+  box-shadow: none;
+  font-size: 12px;
+  letter-spacing: .07em;
+  text-align: left;
+}
+
+.sb-site .sb-event-action::before { display: none; }
+.sb-site .sb-event-action > svg { flex-shrink: 0; }
+.sb-site .sb-event-action:hover { background: var(--color-brand); border-color: var(--color-brand); color: white; }
+.sb-site [data-tone="light"] .sb-event-action { background: white; border-color: #ccc; color: #111; }
+.sb-site [data-tone="light"] .sb-event-action:hover { background: #111; border-color: #111; color: white; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-header { transition: none; }
 }
 
 /* Titulares de acento: el rojo del logo, con un leve degradado como el brillo de los afiches. */
@@ -78,6 +108,14 @@
 
 @media (max-width: 767px) {
   .sb-hero-image { object-position: var(--hero-mobile-position); }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-image {
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: contain;
+  }
+  .sb-hero[data-mobile-cover="true"] .sb-hero-art-shade {
+    background: linear-gradient(180deg, transparent calc(125vw - 24px), #000 calc(125vw + 1px));
+  }
 }
 
 .sb-hero-pulse {

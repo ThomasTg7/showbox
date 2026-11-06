@@ -38,7 +38,7 @@ test.describe("home con movimiento", () => {
     // El reloj aparece al hidratar; la fecha escrita ya está en el HTML.
     await expect(page.getByRole("timer", { name: "Cuenta regresiva" })).toContainText(/\d\d/);
     await expect(page.getByRole("link", { name: /Comprar entradas/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Ver cartelera completa/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Ver cartelera/ })).toBeVisible();
   });
 
   test("tiene todas las secciones de la maqueta con sus textos", async ({ page }) => {

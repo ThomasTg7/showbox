@@ -58,7 +58,7 @@ export function EventHeroArt({ event, main }: { event: EventPageDTO; main: BoutD
           {main ? <><FaceOffFighter fighter={main.red} side="red" /><FaceOffFighter fighter={main.blue} side="blue" /></> : null}
         </div>
       ) : null}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,transparent_15%,rgba(0,0,0,.2)_35%,rgba(0,0,0,.8)_65%,#000_100%)]" />
+      <div aria-hidden className="sb-hero-art-shade pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,transparent_15%,rgba(0,0,0,.2)_35%,rgba(0,0,0,.8)_65%,#000_100%)]" />
       <div aria-hidden className="sb-grain pointer-events-none absolute inset-0 z-[3]" />
     </div>
   );

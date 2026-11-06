@@ -29,7 +29,7 @@ export function FightersPin({ fighters }: { fighters: HomeFighterHighlight[] }) 
             title="Boxeadores"
             titleId="home-fighters-title"
             action={
-              <Link href="/boxeadores" className="inline-flex min-h-11 items-center border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white">
+              <Link href="/boxeadores" className="inline-flex min-h-11 items-center gap-4 border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white">
                 Ver todos <span aria-hidden>→</span>
               </Link>
             }

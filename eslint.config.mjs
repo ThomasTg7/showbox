@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     ".next-review*/**",
     // Local agent review artifacts are outside the application source.
     ".superpowers/**",
+    ".local-runtime/**",
     "out/**",
     "build/**",
     "next-env.d.ts",

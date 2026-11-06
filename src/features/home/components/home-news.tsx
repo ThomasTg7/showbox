@@ -22,7 +22,7 @@ export function HomeNews({ news }: { news: HomeDTO["news"] }) {
           title="Noticias"
           titleId="home-news-title"
           action={
-            <Link href="/noticias" className="inline-flex min-h-11 items-center border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-black">
+            <Link href="/noticias" className="inline-flex min-h-11 items-center gap-4 border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-black">
               Todas las noticias <span aria-hidden>→</span>
             </Link>
           }
