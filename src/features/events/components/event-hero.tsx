@@ -35,7 +35,7 @@ export function EventHero({ event, ticketHref, ticketExternal = false, showCount
           </p>
           <p className="sb-hero-venue sb-spaced mt-3 text-[11px] text-white/80 sm:text-xs">{event.venue.name}{event.venue.city ? ` · ${event.venue.city}` : ""}</p>
           {showCountdown ? <Countdown target={event.startsAt} className="sb-hero-countdown my-6 justify-center" /> : <div className="h-6" />}
-          <EventActions eventName={event.name} detailsHref="#cartelera" detailsLabel={event.eventStatus === "completed" ? "Ver resultados" : "Ver cartelera"} ticketHref={ticketHref} ticketExternal={ticketExternal}
+          <EventActions layout="hero" eventName={event.name} detailsHref="#cartelera" detailsLabel={event.eventStatus === "completed" ? "Ver resultados" : "Ver cartelera completa"} ticketHref={ticketHref} ticketExternal={ticketExternal}
             platforms={event.watchPlatforms ?? (event.streamUrl ? [{ name: "Transmisión oficial", url: event.streamUrl, media: null }] : [])} className="mx-auto max-w-[480px]" />
         </div>
       </div>

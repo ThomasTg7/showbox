@@ -5,6 +5,10 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { withEffectiveStatus } from "@/domain/event-night";
 import { HOME_TITLE, organizationJsonLd, websiteJsonLd } from "@/domain/seo";
 import { formatShortDate } from "@/lib/format-date";
+import { EventStickyBar } from "@/features/events/components/event-sticky-bar";
+import { EVENT_HERO_ID } from "@/features/events/components/event-hero";
+import { getHomeTicketOffer } from "@/features/home/home-ticket-offer";
+import { getCachedLatestTicketEvent } from "@/features/events/cached-queries";
 import { siteOrigin } from "@/lib/site-urls";
 import { pickMainBout } from "@/features/events/main-bout";
 import { getHomeData } from "@/features/home/cached-queries";
@@ -44,10 +48,11 @@ function marqueeItems(hero: HomeHeroDTO): string[] {
 }
 
 export default async function HomePage() {
-  const [home, socials, contact] = await Promise.all([getHomeData(), getCachedSetting("socials"), getCachedSetting("contact")]);
+  const [home, socials, contact, ticketEvent] = await Promise.all([getHomeData(), getCachedSetting("socials"), getCachedSetting("contact"), getCachedLatestTicketEvent()]);
   // A su hora de inicio el evento de la portada se ve «en vivo» solo (la home se regenera cada 5 min como máximo).
   const hero = home.hero.kind === "brand" ? home.hero : { ...home.hero, event: withEffectiveStatus(home.hero.event, new Date()) };
   const siteUrl = siteOrigin();
+  const ticketOffer = getHomeTicketOffer(ticketEvent ? { kind: "next-event", event: ticketEvent } : { kind: "brand" });
 
   return (
     <>
@@ -56,6 +61,7 @@ export default async function HomePage() {
       <IntroLoader />
       <ScrollReveal />
       <HomeHero hero={hero} />
+      {ticketOffer ? <EventStickyBar {...ticketOffer} heroId={EVENT_HERO_ID} /> : null}
       <Marquee items={marqueeItems(hero)} />
       {hero.kind !== "brand" ? <HomeCardSummary event={hero.event} rankLabels={hero.rankLabels} kind={hero.kind} /> : null}
       <HomeNews news={home.news} />

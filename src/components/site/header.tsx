@@ -9,11 +9,14 @@ import { cn } from "@/lib/cn";
 import { MobileMenu } from "./mobile-menu";
 import { isActiveNavLink, NAV_LINKS } from "./nav-links";
 import { useFloatingControls } from "./use-floating-controls";
+import { useCoverVisibility } from "./use-cover-visibility";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { hidden, interactionProps } = useFloatingControls(menuOpen, "navbar", pathname);
+  const { hidden: activityHidden, keyboardNavigation, interactionProps } = useFloatingControls(menuOpen, "navbar", pathname);
+  const coverVisible = useCoverVisibility(pathname);
+  const hidden = activityHidden || (coverVisible && !keyboardNavigation && !menuOpen);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const closeMenu = useCallback(() => {

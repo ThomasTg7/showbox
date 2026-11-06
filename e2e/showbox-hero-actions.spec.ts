@@ -68,23 +68,25 @@ for (const width of [320, 375, 430, 1440]) {
       await page.goto(path);
       const hero = page.locator("#event-hero");
       const tickets = hero.getByRole("link", { name: "Comprar entradas", exact: true });
-      const details = hero.getByRole("link", { name: "Ver cartelera", exact: true });
+      const details = hero.getByRole("link", { name: "Ver cartelera completa", exact: true });
       const watch = hero.getByRole("button", { name: "Dónde ver", exact: true });
       await expect(tickets).toBeVisible();
       await expect(watch).toBeVisible();
       const ticketBox = (await tickets.boundingBox())!;
       const watchBox = (await watch.boundingBox())!;
       const detailBox = (await details.boundingBox())!;
-      expect(Math.abs(ticketBox.y - detailBox.y)).toBeLessThan(1);
-      expect(Math.abs(ticketBox.width - detailBox.width)).toBeLessThan(1);
       if (width >= 1024) {
+        expect(Math.abs(ticketBox.y - detailBox.y)).toBeLessThan(1);
+        expect(Math.abs(ticketBox.width - detailBox.width)).toBeLessThan(1);
         expect(Math.abs(watchBox.y - ticketBox.y)).toBeLessThan(1);
         expect(Math.abs(watchBox.width - ticketBox.width)).toBeLessThan(1);
-        expect(watchBox.x).toBeGreaterThanOrEqual(ticketBox.x + ticketBox.width);
+        expect(detailBox.x).toBeGreaterThanOrEqual(ticketBox.x + ticketBox.width);
       } else {
-        expect(watchBox.y).toBeGreaterThanOrEqual(ticketBox.y + ticketBox.height);
+        expect(Math.abs(watchBox.y - ticketBox.y)).toBeLessThan(1);
+        expect(Math.abs(watchBox.width - ticketBox.width)).toBeLessThan(1);
+        expect(detailBox.y).toBeGreaterThanOrEqual(ticketBox.y + ticketBox.height);
         expect(Math.abs(watchBox.x - detailBox.x)).toBeLessThan(1);
-        expect(Math.abs(watchBox.width - (ticketBox.x + ticketBox.width - detailBox.x))).toBeLessThan(1);
+        expect(Math.abs(detailBox.width - (ticketBox.x + ticketBox.width - watchBox.x))).toBeLessThan(1);
       }
       expect(ticketBox.height).toBeGreaterThanOrEqual(44);
       expect(watchBox.height).toBeGreaterThanOrEqual(44);

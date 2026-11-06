@@ -1,23 +1,54 @@
 import { expect, test } from "@playwright/test";
 
 for (const width of [375, 1440]) {
-  test(`navbar oculto en la portada principal hasta subir a ${width}px`, async ({ page }) => {
+  test(`navbar oculto mientras se ve la portada de inicio o evento a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
+    for (const path of ["/", "/eventos/showbox-fight-night-5"]) {
+      await page.goto(path);
+      await expect(page.locator("#event-hero")).toBeVisible();
+      const header = page.locator(".sb-header");
+      await expect(header).toHaveAttribute("data-hidden", "true");
+      await expect(page.locator('[data-slot="event-sticky-bar"]')).toHaveAttribute("data-visible", "false");
+      await page.locator("main").dispatchEvent("pointermove", { pointerType: "mouse" });
+      await page.locator("main").dispatchEvent("pointerdown", { pointerType: "touch" });
+      await page.evaluate(async () => {
+        window.scrollTo(0, 400);
+        await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        window.scrollBy(0, -48);
+      });
+      await expect(header).toHaveAttribute("data-hidden", "true");
+      await expect(page.locator('[data-slot="event-sticky-bar"]')).toHaveAttribute("data-visible", "false");
+      await page.evaluate(async () => {
+        window.scrollTo(0, document.getElementById("event-hero")!.offsetHeight + 220);
+        await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        window.scrollBy(0, -48);
+      });
+      await expect(header).toHaveAttribute("data-hidden", "false");
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect(header).toHaveAttribute("data-hidden", "true");
+      await expect(page.locator('[data-slot="event-sticky-bar"]')).toHaveAttribute("data-visible", "false");
+    }
+  });
+
+  test(`inicio anuncia el último próximo evento con entradas y se oculta tras 3 segundos a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.clock.install();
     await page.goto("/");
-    await expect(page.locator("#event-hero")).toBeVisible();
-    const header = page.locator(".sb-header");
-    await expect(header).toHaveAttribute("data-hidden", "true");
-    await page.locator("main").dispatchEvent("pointermove", { pointerType: "mouse" });
+    const banner = page.locator('[data-slot="event-sticky-bar"]');
+    await expect(banner).toHaveAttribute("data-visible", "false");
+    await page.evaluate(() => window.scrollTo(0, document.getElementById("event-hero")!.offsetHeight + 220));
+    await expect(banner).toHaveAttribute("data-visible", "true");
+    await expect(banner).toContainText("Evento E2E Entradas Agotadas");
+    await expect(banner.getByRole("link", { name: "Entradas", exact: true })).toHaveAttribute("href", "https://tickets.example.cl/agotadas");
+    const box = (await banner.boundingBox())!;
+    expect(Math.abs(900 - box.y - box.height)).toBeLessThan(1);
+    await page.clock.runFor(3_100);
+    await expect(banner).toHaveAttribute("data-visible", "false");
     await page.locator("main").dispatchEvent("pointerdown", { pointerType: "touch" });
-    await expect(header).toHaveAttribute("data-hidden", "true");
-    await page.evaluate(async () => {
-      window.scrollTo(0, 400);
-      await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
-    });
-    await expect(header).toHaveAttribute("data-hidden", "true");
-    await page.evaluate(() => window.scrollBy(0, -48));
-    await expect(header).toHaveAttribute("data-hidden", "false");
+    await expect(banner).toHaveAttribute("data-visible", "true");
+    await expect(page.locator(".sb-header")).toHaveAttribute("data-hidden", "true");
   });
 
   test(`controles flotantes se ocultan en reposo y vuelven al interactuar a ${width}px`, async ({ page }) => {
@@ -25,6 +56,7 @@ for (const width of [375, 1440]) {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.clock.install();
     await page.goto("/eventos/showbox-fight-night-5");
+    await expect(page.locator(".sb-header")).toHaveAttribute("data-hidden", "true");
     await expect(page.locator('[data-slot="event-sticky-bar"]')).toHaveAttribute("inert", "");
     await page.locator("#cartelera").scrollIntoViewIfNeeded();
     await page.evaluate(() => window.scrollBy(0, 220));

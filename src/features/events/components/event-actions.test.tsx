@@ -8,6 +8,15 @@ beforeAll(stubBrowserApis);
 afterEach(cleanup);
 
 describe("EventActions", () => {
+  it("places the broadcast control first and the full card link last on a cover", () => {
+    const { container } = render(<EventActions layout="hero" eventName="ShowBox 5" detailsHref="#cartelera" detailsLabel="Ver cartelera completa" ticketHref="https://tickets.example.com/5" />);
+    const controls = [...container.querySelector('[data-slot="event-actions"]')!.children];
+    expect(controls[0]).toBe(screen.getByRole("button", { name: "Dónde ver" }));
+    expect(controls[1]).toBe(screen.getByRole("link", { name: "Comprar entradas" }));
+    expect(controls[2]).toBe(screen.getByRole("link", { name: "Ver cartelera completa" }));
+    expect(controls[2]).toHaveClass("col-span-2");
+    expect(controls[0]).not.toHaveClass("col-span-2");
+  });
   it("keeps event navigation, external tickets and broadcast options as independent controls", () => {
     render(<EventActions eventName="ShowBox 5" detailsHref="/eventos/showbox-5" ticketHref="https://tickets.example.com/5" ticketExternal platforms={[{ name: "YouTube ShowBox", url: "https://www.youtube.com/@ShowBoxPromotionsEC", media: null }]} />);
     expect(screen.getByRole("link", { name: "Ver evento" })).toHaveAttribute("href", "/eventos/showbox-5");

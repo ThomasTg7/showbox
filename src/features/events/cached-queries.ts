@@ -5,6 +5,7 @@ import { FIGHTERS_LIST_TAG } from "@/features/fighters/cache";
 import { MEDIA_ANY_TAG, mediaCacheTag } from "@/features/media/cache";
 import { EVENTS_LIST_TAG, eventCacheTag } from "./cache";
 import { getNextEvent, getPublicEventBySlug, getPublicEventRef, listPublicEvents } from "./queries";
+import { getLatestTicketEvent } from "./ticket-queries";
 
 // Lecturas del sitio público, cacheadas con etiquetas para invalidarlas desde la action que escribe.
 // La vista previa nunca pasa por aquí: la página lee el borrador directo de la base.
@@ -17,6 +18,12 @@ const REVALIDATE_SECONDS = 300;
 // etiqueta, escribe en la caché los datos de antes de guardar el resultado; con 300 s la página en vivo quedaría vieja
 // minutos aunque la persona que la mira se refresque cada 20 s. Con 10 s el desfase máximo es ese más el refresco.
 const LIVE_REVALIDATE_SECONDS = 10;
+
+export function getCachedLatestTicketEvent() {
+  return unstable_cache(() => getLatestTicketEvent(db), ["events-latest-ticketed"], {
+    tags: [EVENTS_LIST_TAG], revalidate: REVALIDATE_SECONDS,
+  })();
+}
 
 // Las tarjetas y la cartelera muestran nombre, foto, bandera y récord de los boxeadores: una edición de boxeador
 // (`fighters`) o de imagen (`media`) las refresca.
