@@ -20,7 +20,11 @@ export function SmoothAnchor({ href, onClick, ...props }: ComponentPropsWithoutR
     if (!target) return;
 
     event.preventDefault();
-    if (lenis && !reducedMotion) lenis.scrollTo(target, { duration: 1.3 });
+    if (lenis && !reducedMotion) {
+      // Native scrolling (including focusing an offscreen link) can precede Lenis's next frame.
+      lenis.resize();
+      lenis.scrollTo(target, { duration: 1.3 });
+    }
     else target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     window.history.replaceState(null, "", href);
   }

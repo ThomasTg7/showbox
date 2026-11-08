@@ -56,6 +56,10 @@ for (const width of [375, 1440]) {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.clock.install();
     await page.goto("/eventos/showbox-fight-night-5");
+    await page.evaluate(() => document.fonts.ready);
+    await expect.poll(() => page.locator('#event-hero [data-fit-text]').evaluateAll(elements =>
+      elements.length > 0 && elements.every(element => element.getAttribute("data-fit-ready") === "true"),
+    )).toBe(true);
     await expect(page.locator(".sb-header")).toHaveAttribute("data-hidden", "true");
     await expect(page.locator('[data-slot="event-sticky-bar"]')).toHaveAttribute("inert", "");
     await page.locator("#cartelera").scrollIntoViewIfNeeded();

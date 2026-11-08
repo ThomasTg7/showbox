@@ -19,6 +19,11 @@ const top = (locator: ReturnType<Page["locator"]>) => locator.evaluate((element)
 
 test("«Ver cartelera» se desliza hasta la cartelera en vez de saltar", async ({ page }) => {
   await page.goto("/eventos/showbox-fight-night-5");
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForFunction(() => {
+    const link = document.querySelector('#event-hero a[href="#cartelera"]');
+    return link !== null && Object.keys(link).some((key) => key.startsWith("__reactProps"));
+  });
   const target = await page.evaluate(() => document.getElementById("cartelera")!.getBoundingClientRect().top + window.scrollY);
   await page.locator("#event-hero").getByRole("link", { name: "Ver cartelera" }).click();
 
@@ -35,11 +40,11 @@ test("las pestañas de bloque usan rojo ShowBox y la activa cambia de color", as
   const prelim = page.getByRole("tab", { name: "Preliminares" });
   const background = (tab: typeof estelar) => tab.evaluate((element) => getComputedStyle(element).backgroundColor);
   // Inactiva: rojo ShowBox con texto blanco. Activa: negra.
-  await expect.poll(() => background(prelim)).toBe("rgb(197, 27, 58)");
-  await expect.poll(() => background(estelar)).not.toBe("rgb(197, 27, 58)");
+  await expect.poll(() => background(prelim)).toBe("rgb(227, 16, 31)");
+  await expect.poll(() => background(estelar)).not.toBe("rgb(227, 16, 31)");
   await prelim.click();
-  await expect.poll(() => background(estelar)).toBe("rgb(197, 27, 58)");
-  await expect.poll(() => background(prelim)).not.toBe("rgb(197, 27, 58)");
+  await expect.poll(() => background(estelar)).toBe("rgb(227, 16, 31)");
+  await expect.poll(() => background(prelim)).not.toBe("rgb(227, 16, 31)");
 });
 
 test("tocar una pelea despliega los datos de los dos; abrir otra cierra la anterior; un enlace no la abre", async ({ page }) => {
@@ -56,13 +61,12 @@ test("tocar una pelea despliega los datos de los dos; abrir otra cierra la anter
   // Al medio el dato y a los lados el valor de cada uno, en la misma fila. El alcance está en Cevallos y Quiñónez.
   const rows = first.locator('[data-slot="bout-comparison"] tbody tr');
   await expect(rows.nth(0).locator("th")).toHaveText("Récord");
-  await expect(rows.nth(0).locator("td").first()).toHaveText("12-2-0");
-  await expect(rows.nth(0).locator("td").last()).toHaveText("10-1-0");
-  await expect(rows.filter({ hasText: "País" })).toContainText("Chile");
-  await expect(rows.filter({ hasText: "País" })).toContainText("Argentina");
-  await expect(rows.filter({ hasText: "Altura" })).toContainText("180 cm");
-  await expect(rows.filter({ hasText: "Peso" })).toContainText("70.3 kg");
-  await expect(rows.filter({ hasText: "Alcance" })).toContainText("184 cm");
+  await expect(rows.nth(0).locator("td").first()).toHaveText("14-1-0");
+  await expect(rows.nth(0).locator("td").last()).toHaveText("12-1-1");
+  await expect(rows.filter({ hasText: "País" }).locator("td")).toHaveText(["Ecuador", "Ecuador"]);
+  await expect(rows.filter({ hasText: "Altura" }).locator("td")).toHaveText(["175 cm", "177 cm"]);
+  await expect(rows.filter({ hasText: "Peso" }).locator("td")).toHaveText(["63.5 kg", "63.5 kg"]);
+  await expect(rows.filter({ hasText: "Alcance" }).locator("td")).toHaveText(["180 cm", "183 cm"]);
   const cellTops = await rows.nth(0).locator("td, th").evaluateAll((cells) => cells.map((cell) => Math.round(cell.getBoundingClientRect().top)));
   expect(new Set(cellTops).size).toBe(1);
 
@@ -213,6 +217,9 @@ test("la portada de la ficha ocupa justo la pantalla: ni corta ni larga", async 
     await page.setViewportSize({ width, height });
     await page.goto("/boxeadores/jordan-quinonez");
     const hero = page.locator('section[aria-labelledby="fighter-name"]');
+    await page.evaluate(() => document.fonts.ready);
+    await expect(hero.locator('[data-fit-text]')).toHaveCount(2);
+    await expect.poll(() => hero.locator('[data-fit-text]').evaluateAll(elements => elements.every(element => element.getAttribute("data-fit-ready") === "true"))).toBe(true);
     await expect(hero.getByRole("heading", { level: 1 })).toBeVisible();
     const box = (await hero.boundingBox())!;
     expect(Math.abs(box.height - height), `alto de la portada a ${width}×${height}`).toBeLessThanOrEqual(1);

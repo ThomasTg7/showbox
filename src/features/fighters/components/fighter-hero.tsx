@@ -27,7 +27,7 @@ export function FighterHero({ fighter, figures, rankingTags = [] }: FighterHeroP
       <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-black pt-[76px]" aria-labelledby="fighter-name">
         <ArenaBackdrop />
         <div className="mx-auto flex w-full max-w-[1320px] flex-1 flex-col px-[clamp(16px,4vw,64px)] lg:grid lg:grid-cols-[1.15fr_.85fr] lg:gap-8">
-          <div className="relative z-10 order-2 min-w-0 pb-6 pt-2 short:pb-3 short:pt-0 lg:order-1 lg:self-end lg:pb-12 lg:pt-8">
+          <div className="relative z-10 order-2 min-w-0 pb-6 pt-2 short:pb-2 short:pt-0 lg:order-1 lg:self-end lg:pb-12 lg:pt-8">
             <div className="mb-5 flex flex-wrap gap-2 short:mb-2 short:gap-1.5" data-slot="fighter-tags">
               <Tag tone="brand">{divisionTitle(fighter.division)}</Tag>
               <Tag tone="outline">{CAREER_STATUS_LABELS[fighter.careerStatus]}</Tag>
@@ -43,9 +43,9 @@ export function FighterHero({ fighter, figures, rankingTags = [] }: FighterHeroP
             {/* Como los afiches: el nombre en un rótulo rojo espaciado y el apellido gigante, cromado. */}
             <h1 id="fighter-name" className="sb-punch-in my-3 uppercase short:my-1">
               <AutoFitText className="sb-label w-fit text-[clamp(12px,1.6vw,17px)]">{fighter.firstName}</AutoFitText>{" "}
-              <AutoFitText minFontSize={24} className="sb-chrome-text mt-2 font-display text-[clamp(34px,5.6vw,90px)] leading-[1.02] tracking-[-.02em] short:text-[34px]">{fighter.lastName}</AutoFitText>
+              <AutoFitText minFontSize={24} className="sb-chrome-text mt-2 font-display text-[clamp(34px,5.6vw,90px)] leading-[1.02] tracking-[-.02em] short:mt-1 short:text-[34px]">{fighter.lastName}</AutoFitText>
             </h1>
-            <p data-slot="fighter-record-bar" aria-label={`Récord profesional ${formatRecord(fighter.proRecord)}`} className="mb-4 inline-flex bg-brand-ember px-5 py-1.5 font-display text-[clamp(22px,3vw,34px)] leading-none tracking-[.08em] text-white">
+            <p data-slot="fighter-record-bar" aria-label={`Récord profesional ${formatRecord(fighter.proRecord)}`} className="mb-4 inline-flex bg-brand-ember px-5 py-1.5 font-display text-[clamp(22px,3vw,34px)] leading-none tracking-[.08em] text-white short:mb-2">
               {formatRecord(fighter.proRecord)}
             </p>
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-cond text-[15px] font-semibold uppercase tracking-[.08em] text-muted-foreground sm:text-base">

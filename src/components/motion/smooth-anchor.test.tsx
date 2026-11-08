@@ -3,6 +3,9 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SmoothAnchor } from "./smooth-anchor";
 
+const { getLenis } = vi.hoisted(() => ({ getLenis: vi.fn() }));
+vi.mock("./smooth-scroll", () => ({ useLenis: getLenis }));
+
 const scrollIntoView = vi.fn();
 
 function mockReducedMotion(reduced: boolean) {
@@ -11,6 +14,7 @@ function mockReducedMotion(reduced: boolean) {
 
 beforeEach(() => {
   scrollIntoView.mockClear();
+  getLenis.mockReset().mockReturnValue(null);
   Element.prototype.scrollIntoView = scrollIntoView;
   mockReducedMotion(false);
 });
@@ -26,6 +30,17 @@ function renderAnchor() {
 }
 
 describe("SmoothAnchor", () => {
+  it("synchronizes Lenis with native scroll before resolving the target", () => {
+    const resize = vi.fn();
+    const scrollTo = vi.fn();
+    getLenis.mockReturnValue({ resize, scrollTo });
+    renderAnchor();
+    fireEvent.click(screen.getByRole("link", { name: "Ver cartelera" }));
+    expect(resize).toHaveBeenCalledOnce();
+    expect(scrollTo).toHaveBeenCalledWith(document.getElementById("cartelera"), { duration: 1.3 });
+    expect(resize.mock.invocationCallOrder[0]).toBeLessThan(scrollTo.mock.invocationCallOrder[0]!);
+  });
+
   it("scrolls to the section smoothly instead of jumping", () => {
     renderAnchor();
     const link = screen.getByRole("link", { name: "Ver cartelera" });

@@ -15,6 +15,10 @@ const eslintConfig = defineConfig([
     // Local agent review artifacts are outside the application source.
     ".superpowers/**",
     ".local-runtime/**",
+    // Playwright recreates these generated directories while tests are running.
+    "test-results/**",
+    "playwright-report/**",
+    "blob-report/**",
     "out/**",
     "build/**",
     "next-env.d.ts",

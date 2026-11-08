@@ -72,9 +72,15 @@ for (const width of [320, 375, 430, 1440]) {
       const watch = hero.getByRole("button", { name: "Dónde ver", exact: true });
       await expect(tickets).toBeVisible();
       await expect(watch).toBeVisible();
-      const ticketBox = (await tickets.boundingBox())!;
-      const watchBox = (await watch.boundingBox())!;
-      const detailBox = (await details.boundingBox())!;
+      await expect(details).toBeVisible();
+      await page.evaluate(() => document.fonts.ready);
+      // Sample the complete row in one frame: font fitting can move the hero between separate protocol calls.
+      const boxes = await hero.locator('[data-slot="event-actions"] > .sb-event-action').evaluateAll(elements => elements.map(element => {
+        const { x, y, width, height } = element.getBoundingClientRect();
+        return { x, y, width, height };
+      }));
+      expect(boxes).toHaveLength(3);
+      const [watchBox, ticketBox, detailBox] = [boxes[0]!, boxes[1]!, boxes[2]!];
       if (width >= 1024) {
         expect(Math.abs(ticketBox.y - detailBox.y)).toBeLessThan(1);
         expect(Math.abs(ticketBox.width - detailBox.width)).toBeLessThan(1);
