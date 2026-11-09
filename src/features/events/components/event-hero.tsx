@@ -1,3 +1,4 @@
+import { CoverMarker } from "@/components/site/cover-marker";
 import { Logo } from "@/components/brand/logo";
 import { Tag } from "@/components/ui-gc/tag";
 import { AutoFitText } from "@/components/ui-gc/auto-fit-text";
@@ -18,8 +19,9 @@ export function EventHero({ event, ticketHref, ticketExternal = false, showCount
   const start = new Date(event.startsAt);
   const status = eventStatusTag(event.eventStatus);
   return (
-    <section id={EVENT_HERO_ID} data-site-hero data-mobile-cover={Boolean(event.heroMobileMedia)} aria-labelledby="event-title" className="sb-hero relative isolate flex min-h-[max(760px,100svh)] items-end overflow-hidden pt-24 text-center lg:min-h-[max(850px,100svh)]">
+    <section id={EVENT_HERO_ID} data-mobile-cover={Boolean(event.heroMobileMedia)} aria-labelledby="event-title" className="sb-hero relative isolate flex min-h-[max(760px,100svh)] items-end overflow-hidden pt-24 text-center lg:min-h-[max(850px,100svh)]">
       <EventHeroArt event={event} main={main} />
+      <CoverMarker />
       <div className="sb-hero-content relative z-[4] mx-auto w-full max-w-[1320px] px-[clamp(16px,4vw,64px)] pb-12 pt-56 lg:pb-12 lg:pt-40">
         <div className="mx-auto max-w-[960px]">
           <div className="mb-6 hidden justify-center lg:flex"><Logo size="md" /></div>

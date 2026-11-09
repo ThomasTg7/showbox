@@ -46,7 +46,7 @@ test("/eventos/showbox-fight-night-5: careo, cartelera por bloques, horarios y b
   await expect(page.getByText("Pelea por el título").first()).toBeVisible();
 
   // Arriba del título solo van el nombre del evento y su estado.
-  const tags = page.locator("#event-hero [class*='tracking-[.1em]']");
+  const tags = page.locator("#event-hero .sb-hero-billing > *");
   await expect(tags).toHaveText(["ShowBox Fight Night 5", "Próximo"]);
 
   // La cuenta regresiva se arma al hidratar (el servidor no conoce la hora del navegador).
@@ -61,12 +61,12 @@ test("/eventos/showbox-fight-night-5: careo, cartelera por bloques, horarios y b
   const main = page.getByRole("tabpanel").locator("[data-bout]").first();
   await expect(main).toContainText("Bryan Cevallos");
   await expect(main).toContainText("Jordan Quiñónez");
-  await expect(main).toContainText("5 × 5 MIN");
-  await expect(main).toContainText("Peso Ligero");
+  await expect(main).toContainText("12 × 3 MIN");
+  await expect(main).toContainText("Peso Superligero");
   // Pelea sin resultado todavía: sin etiqueta de victoria ni línea de resultado.
   await expect(main.locator("[data-result-line]")).toHaveCount(0);
   await tabs.nth(1).click();
-  await expect(page.getByRole("tabpanel").getByText("Peso pactado 73.5 kg")).toBeVisible();
+  await expect(page.getByRole("tabpanel").getByText("Peso pactado 65.0 kg")).toBeVisible();
 
   // Los boxeadores públicos llevan a su ficha.
   await expect(page.getByRole("tabpanel").getByRole("link", { name: "Kevin Andrango" })).toHaveAttribute("href", "/boxeadores/kevin-andrango");
@@ -77,8 +77,8 @@ test("/eventos/showbox-fight-night-5: careo, cartelera por bloques, horarios y b
   await expect(schedule).toContainText("19:30 hrs");
   await expect(schedule).toContainText("Cartelera estelar");
   await expect(schedule).toContainText("21:30 hrs");
-  await expect(schedule).toContainText("Arena Santiago");
-  await expect(page.getByTitle("Mapa de Arena Santiago")).toHaveAttribute("src", /^https:\/\/www\.google\.com\/maps\?q=.*output=embed/);
+  await expect(schedule).toContainText("Quorum Paseo San Francisco");
+  await expect(page.getByTitle("Mapa de Quorum Paseo San Francisco")).toHaveAttribute("src", /^https:\/\/www\.google\.com\/maps\?q=.*output=embed/);
   await expect(page.getByRole("link", { name: "Cómo llegar" })).toHaveAttribute("href", /^https:\/\/www\.google\.com\/maps\/search\//);
 
   // La barra fija aparece tras pasar el hero y sale del orden de foco mientras no se ve.
@@ -96,19 +96,19 @@ test("/eventos/showbox-fight-night-5: careo, cartelera por bloques, horarios y b
 test("un evento pasado muestra los resultados de cada pelea, sin cuenta regresiva ni entradas", async ({ page }) => {
   await page.goto("/eventos/showbox-fight-night-4");
   await expect(page.getByRole("heading", { name: /Quiñónez\s*VS\s*Andrango/, level: 1 })).toBeVisible();
-  await expect(page.locator("#event-hero [class*='tracking-[.1em]']")).toHaveText(["ShowBox Fight Night 4", "Finalizado"]);
+  await expect(page.locator("#event-hero .sb-hero-billing > *")).toHaveText(["ShowBox Fight Night 4", "Finalizado"]);
   await expect(page.locator("[data-countdown]")).toHaveCount(0);
   await expect(page.getByRole("main").getByRole("link", { name: "Comprar entradas" })).toHaveCount(0);
 
   const main = page.getByRole("tabpanel").locator("[data-bout]").first();
-  await expect(main.locator("[data-result-line]")).toHaveText("Quiñónez vence a Andrango · KO · R2 2:03");
+  await expect(main.locator("[data-result-line]")).toHaveText("Quiñónez vence a Andrango · KO · R7 2:03");
   await expect(main.locator('[data-corner="red"] [data-result="win"]')).toHaveText("Victoria");
   await expect(main.locator('[data-corner="blue"] [data-result="win"]')).toHaveCount(0);
 
   const results = page.locator("[data-result-line]");
   await expect(results.filter({ hasText: "Valencia vence a Mina · Decisión unánime" })).toHaveCount(1);
   await page.getByRole("tab", { name: "Preliminares" }).click();
-  await expect(results.filter({ hasText: "Chalá vence a Ortiz · Descalificación (Golpe bajo reiterado) · R2 0:58" })).toHaveCount(1);
+  await expect(results.filter({ hasText: "Chalá vence a Ortiz · Descalificación (Golpes bajos reiterados) · R4 0:58" })).toHaveCount(1);
 
   // Empate y sin resultado se distinguen de una victoria.
   await page.goto("/eventos/showbox-fight-night-2");
@@ -231,16 +231,16 @@ test("una pelea tiene su página con todo el detalle y, al final, las tarjetas d
   }
   await page.setViewportSize({ width: 1280, height: 720 });
   await expect(page.locator('[data-slot="bout-result"]')).toContainText("Decisión unánime");
-  await expect(page.locator('[data-slot="bout-result"]')).toContainText("Ricardo Salas");
+  await expect(page.locator('[data-slot="bout-result"]')).toContainText("Ricardo Salazar");
 
   const judge = page.getByRole("table", { name: "Tarjeta de Juez 3" });
   const total = judge.getByRole("row").filter({ has: page.getByRole("rowheader", { name: "Total" }) });
-  await expect(total.getByRole("cell")).toHaveText(["30", "27"]);
+  await expect(total.getByRole("cell")).toHaveText(["79", "73"]);
   // Anotada round por round: cada round con los dos puntajes.
   const round2 = judge.getByRole("row").filter({ has: page.getByRole("rowheader", { name: "2", exact: true }) });
   await expect(round2.getByRole("cell")).toHaveText(["10", "", "", "8"]);
   // Debajo de las tarjetas, el resultado con los puntajes del ganador primero.
-  await expect(page.locator('[data-slot="scorecards-verdict"]')).toContainText("29-28 · 29-28 · 30-27");
+  await expect(page.locator('[data-slot="scorecards-verdict"]')).toContainText("78-74 · 78-74 · 79-73");
   await expectNoHorizontalScroll(page);
 
   await page.goto("/eventos/showbox-fight-night-1/peleas/00000000-0000-4000-8000-000000000000");

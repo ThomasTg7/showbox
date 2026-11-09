@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui-gc/button";
-import { useFloatingControls } from "@/components/site/use-floating-controls";
+import { useTicketsVisibility } from "@/components/site/use-floating-controls";
 
 type EventStickyBarProps = {
   name: string;
@@ -12,27 +11,15 @@ type EventStickyBarProps = {
   ticketHref?: string;
   /** `true` si `ticketHref` sale del sitio (la ticketera). */
   external?: boolean;
-  /** `id` del hero: la barra aparece cuando ya se pasó de largo. */
-  heroId: string;
 };
 
 /**
- * Barra inferior con el nombre, la fecha, el lugar y las entradas, que aparece al pasar el hero.
+ * Barra inferior con el nombre, la fecha, el lugar y las entradas, que aparece al pasar la portada (`CoverMarker`) y se va en reposo.
  * Mientras no se ve queda `inert`: sus enlaces no reciben foco. Solo se animan transform y opacity.
  */
-export function EventStickyBar({ name, meta, ticketHref, external = false, heroId }: EventStickyBarProps) {
-  const [pastHero, setPastHero] = useState(false);
-  const { hidden, interactionProps } = useFloatingControls();
-  const visible = pastHero && !hidden;
-
-  useEffect(() => {
-    const hero = document.getElementById(heroId);
-    if (!hero) return;
-    // Visible solo cuando el hero quedó arriba (se hizo scroll más allá de él), no cuando aún está por llegar.
-    const observer = new IntersectionObserver(([entry]) => setPastHero(!entry?.isIntersecting && (entry?.boundingClientRect.bottom ?? 1) <= 0));
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, [heroId]);
+export function EventStickyBar({ name, meta, ticketHref, external = false }: EventStickyBarProps) {
+  const { hidden, interactionProps } = useTicketsVisibility();
+  const visible = !hidden;
 
   return (
     <div

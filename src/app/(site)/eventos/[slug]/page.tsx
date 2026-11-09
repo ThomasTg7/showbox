@@ -7,7 +7,7 @@ import { db } from "@/db";
 import { withEffectiveStatus } from "@/domain/event-night";
 import { eventJsonLd } from "@/domain/seo";
 import { getCachedPublicEvent } from "@/features/events/cached-queries";
-import { EVENT_HERO_ID, EventHero } from "@/features/events/components/event-hero";
+import { EventHero } from "@/features/events/components/event-hero";
 import { EventGallery } from "@/features/events/components/event-gallery";
 import { EventSchedule } from "@/features/events/components/event-schedule";
 import { EventStickyBar } from "@/features/events/components/event-sticky-bar";
@@ -100,7 +100,6 @@ export default async function EventPage({ params, searchParams }: PageProps<"/ev
       {event.eventStatus === "scheduled" ? <RefreshAt at={event.startsAt} /> : null}
       <EventHero event={event} ticketHref={ticketHref} ticketExternal={ticketExternal} showCountdown={showsCountdown(event, now.getTime())} />
       <EventStickyBar
-        heroId={EVENT_HERO_ID}
         name={event.name}
         meta={`${formatShortDate(start)} · ${formatTime(start)} hrs · ${event.venue.name}`}
         ticketHref={ticketHref}

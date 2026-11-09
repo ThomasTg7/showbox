@@ -1,5 +1,6 @@
 import { BRAND } from "@/domain/brand";
 import Link from "next/link";
+import { CoverMarker } from "@/components/site/cover-marker";
 import { ArenaBackdrop } from "@/components/brand/arena-backdrop";
 import { BrandMark } from "@/components/brand/brand-mark";
 import { Logo } from "@/components/brand/logo";
@@ -17,8 +18,9 @@ import type { HomeHero as HomeHeroDTO } from "../dto";
 export function HomeHero({ hero }: { hero: HomeHeroDTO }) {
   if (hero.kind === "brand") {
     return (
-      <section data-site-hero aria-labelledby="home-title" className="relative isolate flex min-h-[max(640px,100svh)] flex-col items-center justify-end overflow-hidden bg-black px-[clamp(16px,4vw,64px)] pb-[clamp(56px,10vh,120px)] pt-[76px] text-center">
+      <section aria-labelledby="home-title" className="relative isolate flex min-h-[max(640px,100svh)] flex-col items-center justify-end overflow-hidden bg-black px-[clamp(16px,4vw,64px)] pb-[clamp(56px,10vh,120px)] pt-[76px] text-center">
         <ArenaBackdrop />
+        <CoverMarker />
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[14%] -z-[5] select-none text-center font-display text-[19vw] uppercase leading-[.85] whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,.07)]">
           ShowBox
         </div>

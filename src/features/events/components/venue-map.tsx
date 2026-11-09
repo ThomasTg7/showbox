@@ -24,7 +24,7 @@ export function VenueMap({ name, address, city, lat, lng }: VenueMapProps) {
             href={mapLinkUrl(lat, lng)}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-fit border-b-2 border-brand font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white hover:text-brand"
+            className="w-fit border-b-2 border-brand font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white hover:text-brand-bright"
           >
             Cómo llegar
           </a>

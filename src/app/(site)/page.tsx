@@ -6,7 +6,6 @@ import { withEffectiveStatus } from "@/domain/event-night";
 import { HOME_TITLE, organizationJsonLd, websiteJsonLd } from "@/domain/seo";
 import { formatShortDate } from "@/lib/format-date";
 import { EventStickyBar } from "@/features/events/components/event-sticky-bar";
-import { EVENT_HERO_ID } from "@/features/events/components/event-hero";
 import { getHomeTicketOffer } from "@/features/home/home-ticket-offer";
 import { getCachedLatestTicketEvent } from "@/features/events/cached-queries";
 import { siteOrigin } from "@/lib/site-urls";
@@ -61,7 +60,7 @@ export default async function HomePage() {
       <IntroLoader />
       <ScrollReveal />
       <HomeHero hero={hero} />
-      {ticketOffer ? <EventStickyBar {...ticketOffer} heroId={EVENT_HERO_ID} /> : null}
+      {ticketOffer ? <EventStickyBar {...ticketOffer} /> : null}
       <Marquee items={marqueeItems(hero)} />
       {hero.kind !== "brand" ? <HomeCardSummary event={hero.event} rankLabels={hero.rankLabels} kind={hero.kind} /> : null}
       <HomeNews news={home.news} />

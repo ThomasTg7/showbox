@@ -25,7 +25,8 @@ function markSeen(): boolean {
 /**
  * Presentación ShowBox solo en la primera visita de la sesión y nunca con
  * «reducir movimiento». Aparece después de hidratar: el contenido y la imagen principal ya están pintados debajo, así que no
- * retrasa nada ni esconde información. No intercepta clics y los lectores de pantalla la ignoran.
+ * retrasa nada ni esconde información. No intercepta clics y los lectores de pantalla la ignoran. En móvil va arriba:
+ * abajo a la derecha tapaba el botón «Entradas» de la portada.
  */
 export function IntroLoader() {
   const reducedMotion = useReducedMotion();
@@ -53,7 +54,7 @@ export function IntroLoader() {
     <div
       data-slot="intro-loader"
       aria-hidden="true"
-      className={`pointer-events-none fixed bottom-5 right-5 z-[1000] grid h-28 w-40 place-items-center overflow-hidden border border-brand bg-black transition-[transform,opacity] duration-300 ease-sb ${phase === "leaving" ? "sb-intro-leaving" : ""}`}
+      className={`pointer-events-none fixed right-5 top-5 z-[1000] lg:bottom-5 lg:top-auto grid h-28 w-40 place-items-center overflow-hidden border border-brand bg-black transition-[transform,opacity] duration-300 ease-sb ${phase === "leaving" ? "sb-intro-leaving" : ""}`}
     >
       <BrandMark className="sb-intro-mark absolute h-28 opacity-50" />
       <div className="sb-intro-logo relative"><Logo size="md" /></div>

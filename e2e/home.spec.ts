@@ -53,7 +53,7 @@ test.describe("home con movimiento", () => {
     await expect(page.getByRole("heading", { name: "Boxeadores", level: 2 })).toBeVisible();
     await expect(page.getByRole("region", { name: "ShowBox Promotions en cifras" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Rankings", level: 2 })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Asegura\s+tu lugar/ })).toBeVisible();
+    await expect(page.locator("#entradas").getByRole("heading", { name: /Vive la\s+velada/, level: 2 })).toBeVisible();
     await expect(page.getByRole("region", { name: "Patrocinadores", exact: true })).toBeVisible();
     await expect(page.getByText("Patrocinadores oficiales")).toBeVisible();
   });
@@ -72,7 +72,7 @@ test.describe("home con movimiento", () => {
     await page.goto("/");
 
     const stats = page.getByRole("region", { name: "ShowBox Promotions en cifras" });
-    for (const label of ["Eventos", "Peleas", "Finalizaciones", "KO / TKO"]) {
+    for (const label of ["Eventos", "Peleas", "Rounds disputados", "KO / TKO"]) {
       await expect(stats.getByText(label, { exact: true })).toBeVisible();
     }
     await expect.poll(async () => Number(await stats.locator("dd").first().textContent())).toBeGreaterThan(0);
@@ -180,7 +180,7 @@ test.describe("home con «reducir movimiento»", () => {
     for (const heading of ["Noticias", "No te lo pierdas", "Boxeadores", "Rankings"]) {
       await expect(page.getByRole("heading", { name: heading, level: 2, exact: true })).toBeVisible();
     }
-    await expect(page.getByRole("heading", { name: /Asegura\s+tu lugar/ })).toBeVisible();
+    await expect(page.locator("#entradas").getByRole("heading", { name: /Vive la\s+velada/, level: 2 })).toBeVisible();
     // Las cifras traen su valor final desde el HTML.
     const stats = page.getByRole("region", { name: "ShowBox Promotions en cifras" });
     await expect.poll(async () => Number(await stats.locator("dd").first().textContent())).toBeGreaterThan(0);

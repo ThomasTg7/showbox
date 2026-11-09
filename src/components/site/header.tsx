@@ -8,15 +8,12 @@ import { Logo } from "@/components/brand/logo";
 import { cn } from "@/lib/cn";
 import { MobileMenu } from "./mobile-menu";
 import { isActiveNavLink, NAV_LINKS } from "./nav-links";
-import { useFloatingControls } from "./use-floating-controls";
-import { useCoverVisibility } from "./use-cover-visibility";
+import { useNavbarVisibility } from "./use-floating-controls";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { hidden: activityHidden, keyboardNavigation, interactionProps } = useFloatingControls(menuOpen, "navbar", pathname);
-  const coverVisible = useCoverVisibility(pathname);
-  const hidden = activityHidden || (coverVisible && !keyboardNavigation && !menuOpen);
+  const { hidden, interactionProps } = useNavbarVisibility(menuOpen, pathname);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const closeMenu = useCallback(() => {
@@ -29,11 +26,11 @@ export function Header() {
     <>
       <header
         {...interactionProps}
-        inert={hidden && !menuOpen}
-        data-hidden={hidden && !menuOpen}
+        inert={hidden}
+        data-hidden={hidden}
         className={cn(
           "sb-header fixed inset-x-3 z-[100] isolate mx-auto flex max-w-[1040px] items-center lg:inset-x-6",
-          hidden && !menuOpen && "pointer-events-none",
+          hidden && "pointer-events-none",
         )}
       >
         <div className="relative flex h-full w-full items-center px-3 lg:px-5">

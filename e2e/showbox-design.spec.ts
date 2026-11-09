@@ -51,10 +51,10 @@ test("la presentación ShowBox no intercepta clics y se muestra una vez por sesi
 
 test("el botón de entradas del listado conserva contraste al pasar el cursor", async ({ page }) => {
   await page.goto("/eventos");
-  const button = page.locator('[data-event="showbox-fight-night-5"]').getByRole("link", { name: "Entradas", exact: true });
+  const button = page.locator('[data-event="showbox-fight-night-5"]').getByRole("link", { name: "Comprar entradas", exact: true });
   await button.hover();
   await expect(button).toHaveCSS("color", "rgb(255, 255, 255)");
-  await expect(button).toHaveCSS("background-color", "rgb(167, 20, 49)");
+  await expect(button).toHaveCSS("background-color", "rgb(227, 16, 31)");
 });
 
 test("las transiciones permiten navegar y volver al inicio sin errores", async ({ page }) => {

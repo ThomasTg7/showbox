@@ -50,7 +50,7 @@ function useSlideOnScroll(sectionRef: React.RefObject<HTMLElement | null>, textR
 }
 
 /**
- * Banda oscura de cifras: eventos, peleas, finalizaciones y KO/TKO de la promotora, con contadores y un texto
+ * Banda oscura de cifras: eventos, peleas, rounds disputados y KO/TKO de la promotora, con contadores y un texto
  * gigante de fondo que se desliza. El HTML trae las cifras finales (se leen sin animación).
  */
 export function StatsBand({ stats }: { stats: HomeStats }) {
